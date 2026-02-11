@@ -2,10 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-refine-the-background-music-initialization-so-that-user-initiated-playback-starts-more-reliably-and-quickly-after-pressing-the-floating-play-button-without-changing-the-audio-asset-url-must-remain-exactly-assets-audio-background-dance-mp3",
-      "featureTitle": "Refine the background music initialization so that user-initiated playback starts more reliably and quickly after pressing the floating Play button, without changing the audio asset URL (must remain exactly \"/assets/audio/background-dance.mp3\").",
+      "featureId": "feature-remove-the-floating-background-music-play-button-from-the-ui-so-that-the-site-never-renders-a-play-button-when-background-music-is-not-currently-playing",
+      "featureTitle": "Remove the floating background-music Play button from the UI so that the site never renders a Play button when background music is not currently playing.",
       "files": [
-        "frontend/src/hooks/useBackgroundMusic.ts"
+        "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -15,16 +15,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-29"
+        "REQ-32"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-an-explicit-starting-loading-ui-state-for-background-music-playback-attempts-that-prevents-duplicate-play-requests-and-provides-clear-english-feedback-during-startup-e-g-disable-the-play-button-while-a-start-attempt-is-in-flight-and-surface-a-short-loading-indicator-text",
-      "featureTitle": "Add an explicit “starting/loading” UI state for background music playback attempts that prevents duplicate play requests and provides clear English feedback during startup (e.g., disable the Play button while a start attempt is in flight, and surface a short loading indicator/text).",
+      "featureId": "feature-keep-the-existing-background-music-mute-and-volume-controls-available-only-when-background-music-is-already-playing-without-adding-any-new-way-to-start-playback",
+      "featureTitle": "Keep the existing background-music mute and volume controls available only when background music is already playing, without adding any new way to start playback.",
       "files": [
-        "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
-        "frontend/src/hooks/useBackgroundMusic.ts"
+        "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -34,26 +33,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-30"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-improve-robustness-of-background-music-error-handling-and-retry-behavior-for-failed-starts-and-failed-loads-keeping-all-user-facing-error-text-in-english-and-leaving-the-page-usable",
-      "featureTitle": "Improve robustness of background music error handling and retry behavior for failed starts and failed loads, keeping all user-facing error text in English and leaving the page usable.",
-      "files": [
-        "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
-        "frontend/src/hooks/useBackgroundMusic.ts"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-31"
+        "REQ-33"
       ],
       "confidence": "high"
     }

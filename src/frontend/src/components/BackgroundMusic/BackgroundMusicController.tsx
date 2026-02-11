@@ -1,42 +1,15 @@
-import { Volume2, VolumeX, Play, AlertCircle, Loader2 } from 'lucide-react';
+import { Volume2, VolumeX } from 'lucide-react';
 import { useBackgroundMusic } from '../../hooks/useBackgroundMusic';
 import { Button } from '../ui/button';
 import { Slider } from '../ui/slider';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 export function BackgroundMusicController() {
-  const { isPlaying, isMuted, volume, error, isStarting, toggleMute, setVolume, userInitiatedPlay } = useBackgroundMusic();
+  const { isPlaying, isMuted, volume, setVolume, toggleMute } = useBackgroundMusic();
 
-  // Show play button whenever music is not playing (first visit or stopped)
+  // Only show controls when music is actually playing
   if (!isPlaying) {
-    return (
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
-        {error && (
-          <div className="bg-red-900/90 border border-red-500/50 text-red-100 px-4 py-2 rounded-lg shadow-lg backdrop-blur-sm flex items-start gap-2 max-w-xs">
-            <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
-            <p className="text-sm">{error}</p>
-          </div>
-        )}
-        <Button
-          onClick={userInitiatedPlay}
-          disabled={isStarting}
-          size="lg"
-          className="bg-neon-pink hover:bg-neon-pink/80 text-white shadow-lg shadow-neon-pink/50 rounded-full h-14 w-14 p-0 disabled:opacity-50 disabled:cursor-not-allowed"
-          aria-label={isStarting ? 'Starting music...' : 'Play background music'}
-        >
-          {isStarting ? (
-            <Loader2 className="h-6 w-6 animate-spin" />
-          ) : (
-            <Play className={`h-6 w-6 ${!isStarting ? 'animate-pulse' : ''}`} />
-          )}
-        </Button>
-        {isStarting && (
-          <div className="bg-gray-900/90 border border-neon-pink/30 text-neon-pink px-3 py-1.5 rounded-lg shadow-lg backdrop-blur-sm text-sm">
-            Starting music…
-          </div>
-        )}
-      </div>
-    );
+    return null;
   }
 
   // Show mute/volume controls when playing

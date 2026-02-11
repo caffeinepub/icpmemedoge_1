@@ -1,63 +1,36 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Background music startup reliability, loading state, and retry UX",
+  "title": "Remove floating background-music Play button UI",
   "requirements": [
     {
-      "id": "REQ-29",
-      "summary": "Make user-initiated background music start faster and more reliable while keeping the audio URL exactly \"/assets/audio/background-dance.mp3\" and preserving opt-in (no first-visit autoplay).",
+      "id": "REQ-32",
+      "summary": "Remove the floating background-music Play button and any related starting/loading UI so nothing is shown when music is not playing.",
       "acceptanceCriteria": [
-        "Pressing the floating Play button results in an audible start (or a clear error) within a reasonable time, without requiring multiple clicks in common browsers.",
-        "The audio file path used for playback remains exactly \"/assets/audio/background-dance.mp3\".",
-        "No background music autoplay is introduced for first-time visitors who have not opted in."
+        "When music is not playing, no floating Play button is visible anywhere on the page.",
+        "The previous 'starting' / loading indicator tied to pressing Play is not shown (because Play is no longer available).",
+        "The change is limited to UI behavior; it does not introduce any new user-facing text (all remaining user-facing text stays in English)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useBackgroundMusic.ts",
+          "path": "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
           "operation": "modify",
-          "description": "Refine the userInitiatedPlay flow to be more reliable/quick by (1) ensuring the Audio element is created and preloaded early, (2) awaiting readiness signals (e.g., canplay/canplaythrough) when needed, (3) handling play() promise hangs with a short timeout that surfaces a clear error, and (4) keeping the audio source string exactly \"/assets/audio/background-dance.mp3\". Preserve the existing opt-in behavior so autoplay is only attempted when a prior opt-in is present."
+          "description": "Remove the non-playing UI branch that renders the floating Play button, error toast, and the 'Starting music…' loading indicator; instead render nothing (null) when background music is not currently playing. Keep changes limited to UI behavior and do not add new user-facing text. Do not modify any files under frontend/src/components/ui and do not change the audio asset path used elsewhere (must remain exactly \"/assets/audio/background-dance.mp3\")."
         }
       ]
     },
     {
-      "id": "REQ-30",
-      "summary": "Add an explicit starting/loading UI state that disables the Play button during an in-flight start attempt and shows clear English feedback.",
+      "id": "REQ-33",
+      "summary": "Ensure mute and volume controls render and work only while background music is already playing, with no UI rendered otherwise and no new way to start playback.",
       "acceptanceCriteria": [
-        "While a playback start attempt is in progress, the Play button cannot be spam-clicked to create overlapping play() calls.",
-        "The UI clearly communicates the startup state in English (e.g., “Starting music…”), and returns to normal Play state if startup fails.",
-        "If startup succeeds, the UI immediately switches from Play to the existing mute/volume controls as it does today."
+        "If background music is playing (e.g., user previously opted in and autoplay succeeds), the mute and volume controls still render and work.",
+        "If background music is not playing, the background-music controller renders nothing (no error toast UI, no buttons)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useBackgroundMusic.ts",
-          "operation": "modify",
-          "description": "Add an explicit \"starting\" state to the hook (e.g., isStarting) and internal guarding so multiple rapid calls cannot trigger overlapping play() attempts. Ensure isStarting resets on success/failure and that failures restore the ability to retry."
-        },
-        {
           "path": "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
           "operation": "modify",
-          "description": "Update the floating controller UI to reflect the new starting/loading state: disable the Play button while starting, show concise English feedback (e.g., \"Starting music…\"), and ensure the UI transitions to the existing mute/volume controls immediately upon successful start. Do not edit any files under frontend/src/components/ui (Shadcn components are read-only in this environment). Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-31",
-      "summary": "Improve error handling and retry behavior for failed loads/starts with clear English messaging and without breaking mute/volume persistence.",
-      "acceptanceCriteria": [
-        "If playback fails to start or the audio fails to load, a clear English error is shown and the Play button remains available for retry.",
-        "A retry after a failure can succeed without requiring a page reload (when the underlying issue is resolved, e.g., transient load failure).",
-        "Existing mute/volume persistence behavior remains intact."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/hooks/useBackgroundMusic.ts",
-          "operation": "modify",
-          "description": "Harden audio error handling by distinguishing common failure modes (blocked start vs. load error), ensuring the app stays usable, and keeping all user-facing errors in English. Implement a safe retry strategy that can recover without reload (e.g., reset/recreate the Audio element on certain failures, re-apply persisted preferences from storage, and allow subsequent userInitiatedPlay attempts to succeed when the underlying issue clears). Maintain existing mute/volume persistence behavior via the existing backgroundMusicStorage utilities."
-        },
-        {
-          "path": "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
-          "operation": "modify",
-          "description": "Ensure error presentation remains clear and actionable in English, and that after an error the Play button is available for retry (including after a failed \"starting\" attempt). Do not edit any files under frontend/src/components/ui (Shadcn components are read-only in this environment). Verify the component's usage instructions before implementing."
+          "description": "Gate the controller UI strictly on isPlaying: render the existing mute and volume controls only when isPlaying is true, and render nothing for all non-playing states (including blocked/errored/starting). Ensure no remaining UI triggers exist for starting playback."
         }
       ]
     }

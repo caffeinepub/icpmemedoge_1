@@ -1,11 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Make background music start faster and more reliably after the user presses the floating Play button, while preserving opt-in behavior and the existing audio URL.
+**Goal:** Remove the floating background-music Play UI so the site never shows a Play button when background music is not playing.
 
 **Planned changes:**
-- Refine background music initialization and start flow to improve reliability and reduce time-to-audio after the user clicks Play (keeping the audio path exactly `/assets/audio/background-dance.mp3`).
-- Add a “Starting music…” / loading UI state that disables the Play button while a start attempt is in progress to prevent overlapping `play()` requests.
-- Improve error handling and retry behavior so failures show clear English messages, allow retry without reloading, and keep existing mute/volume persistence intact.
+- Remove/hide the floating background-music Play button and its associated “starting/loading” indicator so no Play-related UI can render.
+- Keep mute and volume controls available only while background music is already playing; render nothing for the background-music controller when music is not playing.
+- Preserve the existing audio asset path ("/assets/audio/background-dance.mp3") and make UI-only changes without introducing new user-facing text.
 
-**User-visible outcome:** Pressing Play starts music audibly (or shows a clear English error) without needing multiple clicks; during startup the Play button shows a loading state and can’t be spam-clicked; if startup fails the user can retry and the page remains usable.
+**User-visible outcome:** Visitors will no longer see any floating Play button (or Play loading indicator). If background music is already playing, mute and volume controls still appear and work; otherwise, no music controls are shown.

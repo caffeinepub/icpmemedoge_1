@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 29,
+  "projectStateVersion": 31,
   "summary": "Build a promotional presale website for the IcpMemeDoge memecoin featuring a special meme-dog hero image, flashy but readable design, a 24h countdown, and an ICP-based presale flow with automated payment detection, progress tracking to a 515,000 ICP cap, contributor address listing, and post-presale token crediting.",
   "architectural_notes": [
     "Integrate with the Internet Computer/ICP ledger (or an indexer) to monitor the presale address for incoming transfers and compute cumulative raised ICP.",
@@ -9,13 +9,14 @@
     "Decide on approach for animated hero dog (CSS animation on layered PNG/SVG, animated SVG, Lottie/WebM) and ensure it remains lightweight and doesn’t reduce readability/performance.",
     "Decide how to handle background audio on first visit (autoplay restrictions, user consent/controls, mute/volume, and accessibility considerations).",
     "Background audio requirement: autoplay a “cool 90s dance” track on initial page entry (while still respecting browser autoplay restrictions and providing user controls/consent as needed).",
-    "Background music should start only after an explicit user action (pressing the Play button), to comply with autoplay restrictions and user consent expectations."
+    "Background music should start only after an explicit user action (pressing the Play button), to comply with autoplay restrictions and user consent expectations.",
+    "User request: remove the background-music Play button UI; reassess how/if background audio can be started given autoplay restrictions and consent requirements."
   ],
   "known_issues": [
     "UI bug: 'ICP remaining' field should display the cap as '515.000 ICP' (German thousands separator) when no contributions are received; currently incorrect value/format.",
     "Deployment/build failed during packaging/push to network; deployment error needs repair/enablement."
   ],
-  "isFixRequest": true,
+  "isFixRequest": false,
   "existing_features": [
     {
       "id": "feature-create-a-single-page-presale-website-for-the-memecoin-name-icpmemedoge-with-a-hero-section-presale-status-section-contribution-instructions-contributors-list-and-tokenomics-section",
@@ -240,6 +241,22 @@
         "REQ-31"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-remove-the-floating-background-music-play-button-from-the-ui-so-that-the-site-never-renders-a-play-button-when-background-music-is-not-currently-playing",
+      "title": "Remove the floating background-music Play button from the UI so that the site never renders a Play button when background music is not currently playing.",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-keep-the-existing-background-music-mute-and-volume-controls-available-only-when-background-music-is-already-playing-without-adding-any-new-way-to-start-playback",
+      "title": "Keep the existing background-music mute and volume controls available only when background music is already playing, without adding any new way to start playback.",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -360,6 +377,12 @@
     {
       "id": "AR-27",
       "summary": "Refine/improve background music loading and playback start behavior (e.g., faster start, more reliable initialization) when the user presses the Play button",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Remove/delete the (floating) background-music Play button from the UI",
       "reqIds": [],
       "status": "pending"
     }

@@ -1,89 +1,55 @@
 {
   "kind": "build_request",
-  "title": "Refine background music loading and playback reliability",
+  "title": "Remove the floating background-music Play button",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-29",
-      "text": "Refine the background music initialization so that user-initiated playback starts more reliably and quickly after pressing the floating Play button, without changing the audio asset URL (must remain exactly \"/assets/audio/background-dance.mp3\").",
+      "id": "REQ-32",
+      "text": "Remove the floating background-music Play button from the UI so that the site never renders a Play button when background music is not currently playing.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-3",
-          "msg-4"
+          "msg-user-1"
         ],
         "quotes": [
-          "If you want, I can refine how the audio gets loaded next.",
-          "Refine please"
+          "Playbutton löschen"
         ]
       },
       "acceptanceCriteria": [
-        "Pressing the floating Play button results in an audible start (or a clear error) within a reasonable time, without requiring multiple clicks in common browsers.",
-        "The audio file path used for playback remains exactly \"/assets/audio/background-dance.mp3\".",
-        "No background music autoplay is introduced for first-time visitors who have not opted in."
+        "When music is not playing, no floating Play button is visible anywhere on the page.",
+        "The previous 'starting' / loading indicator tied to pressing Play is not shown (because Play is no longer available).",
+        "The change is limited to UI behavior; it does not introduce any new user-facing text (all remaining user-facing text stays in English)."
       ]
     },
     {
-      "id": "REQ-30",
-      "text": "Add an explicit “starting/loading” UI state for background music playback attempts that prevents duplicate play requests and provides clear English feedback during startup (e.g., disable the Play button while a start attempt is in flight, and surface a short loading indicator/text).",
+      "id": "REQ-33",
+      "text": "Keep the existing background-music mute and volume controls available only when background music is already playing, without adding any new way to start playback.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-user-1"
         ],
         "quotes": [
-          "Refine please"
+          "Playbutton löschen"
         ]
       },
       "acceptanceCriteria": [
-        "While a playback start attempt is in progress, the Play button cannot be spam-clicked to create overlapping play() calls.",
-        "The UI clearly communicates the startup state in English (e.g., “Starting music…”), and returns to normal Play state if startup fails.",
-        "If startup succeeds, the UI immediately switches from Play to the existing mute/volume controls as it does today."
-      ]
-    },
-    {
-      "id": "REQ-31",
-      "text": "Improve robustness of background music error handling and retry behavior for failed starts and failed loads, keeping all user-facing error text in English and leaving the page usable.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-3",
-          "msg-4"
-        ],
-        "quotes": [
-          "If you want, I can refine how the audio gets loaded next.",
-          "Refine please"
-        ]
-      },
-      "acceptanceCriteria": [
-        "If playback fails to start or the audio fails to load, a clear English error is shown and the Play button remains available for retry.",
-        "A retry after a failure can succeed without requiring a page reload (when the underlying issue is resolved, e.g., transient load failure).",
-        "Existing mute/volume persistence behavior remains intact."
+        "If background music is playing (e.g., user previously opted in and autoplay succeeds), the mute and volume controls still render and work.",
+        "If background music is not playing, the background-music controller renders nothing (no error toast UI, no buttons)."
       ]
     }
   ],
   "constraints": [
-    "Do not change the background music asset path; it must remain exactly \"/assets/audio/background-dance.mp3\".",
-    "Do not edit any files under frontend/src/components/ui (Shadcn components are read-only in this environment).",
-    "Keep background music opt-in behavior: do not autoplay on initial page load unless the visitor has previously opted in."
+    "Do not change the existing audio asset URL/path used by the app; it must remain exactly \"/assets/audio/background-dance.mp3\".",
+    "Do not modify any files under frontend/src/components/ui or any other immutable paths listed in SYSTEM_CONTEXT."
   ],
   "nonGoals": [
-    "Changing or adding additional audio files/URLs beyond the existing \"/assets/audio/background-dance.mp3\" path.",
-    "Backend changes (this refinement is frontend-only).",
-    "Changing the overall site layout, presale flow, or non-music-related UI features."
+    "Do not change the background music track or audio file contents.",
+    "Do not add a replacement UI/setting to start music playback.",
+    "No backend changes."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }
