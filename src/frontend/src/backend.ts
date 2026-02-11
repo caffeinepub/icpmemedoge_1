@@ -104,11 +104,12 @@ export interface backendInterface {
     getAllContributors(): Promise<Array<Contribution>>;
     getPresaleStatus(): Promise<{
         active: boolean;
+        depositAddress: string;
         totalIcp: bigint;
         remainingIcp: bigint;
     }>;
     getTotalAllocation(address: string): Promise<Allocation>;
-    updatePresaleProgress(newAmount: bigint, contributor: string): Promise<void>;
+    updatePresaleProgress(newAmount: bigint, contributor: string, depositAddress: string): Promise<void>;
 }
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
@@ -142,6 +143,7 @@ export class Backend implements backendInterface {
     }
     async getPresaleStatus(): Promise<{
         active: boolean;
+        depositAddress: string;
         totalIcp: bigint;
         remainingIcp: bigint;
     }> {
@@ -172,17 +174,17 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async updatePresaleProgress(arg0: bigint, arg1: string): Promise<void> {
+    async updatePresaleProgress(arg0: bigint, arg1: string, arg2: string): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.updatePresaleProgress(arg0, arg1);
+                const result = await this.actor.updatePresaleProgress(arg0, arg1, arg2);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.updatePresaleProgress(arg0, arg1);
+            const result = await this.actor.updatePresaleProgress(arg0, arg1, arg2);
             return result;
         }
     }

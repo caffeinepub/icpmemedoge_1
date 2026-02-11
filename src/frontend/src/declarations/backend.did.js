@@ -31,6 +31,7 @@ export const idlService = IDL.Service({
       [
         IDL.Record({
           'active' : IDL.Bool,
+          'depositAddress' : IDL.Text,
           'totalIcp' : IDL.Nat,
           'remainingIcp' : IDL.Nat,
         }),
@@ -38,7 +39,7 @@ export const idlService = IDL.Service({
       ['query'],
     ),
   'getTotalAllocation' : IDL.Func([IDL.Text], [Allocation], ['query']),
-  'updatePresaleProgress' : IDL.Func([IDL.Nat, IDL.Text], [], []),
+  'updatePresaleProgress' : IDL.Func([IDL.Nat, IDL.Text, IDL.Text], [], []),
 });
 
 export const idlInitArgs = [];
@@ -64,6 +65,7 @@ export const idlFactory = ({ IDL }) => {
         [
           IDL.Record({
             'active' : IDL.Bool,
+            'depositAddress' : IDL.Text,
             'totalIcp' : IDL.Nat,
             'remainingIcp' : IDL.Nat,
           }),
@@ -71,7 +73,7 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'getTotalAllocation' : IDL.Func([IDL.Text], [Allocation], ['query']),
-    'updatePresaleProgress' : IDL.Func([IDL.Nat, IDL.Text], [], []),
+    'updatePresaleProgress' : IDL.Func([IDL.Nat, IDL.Text, IDL.Text], [], []),
   });
 };
 

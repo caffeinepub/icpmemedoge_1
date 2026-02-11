@@ -22,10 +22,15 @@ export interface _SERVICE {
   'getAllContributors' : ActorMethod<[], Array<Contribution>>,
   'getPresaleStatus' : ActorMethod<
     [],
-    { 'active' : boolean, 'totalIcp' : bigint, 'remainingIcp' : bigint }
+    {
+      'active' : boolean,
+      'depositAddress' : string,
+      'totalIcp' : bigint,
+      'remainingIcp' : bigint,
+    }
   >,
   'getTotalAllocation' : ActorMethod<[string], Allocation>,
-  'updatePresaleProgress' : ActorMethod<[bigint, string], undefined>,
+  'updatePresaleProgress' : ActorMethod<[bigint, string, string], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

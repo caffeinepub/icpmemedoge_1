@@ -1,52 +1,90 @@
 {
   "kind": "build_request",
-  "title": "Remove the floating background-music Play button",
+  "title": "Add post-presale listings section (\"Listings after the presale\")",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-32",
-      "text": "Remove the floating background-music Play button from the UI so that the site never renders a Play button when background music is not currently playing.",
+      "id": "REQ-36",
+      "text": "Add a new landing-page section that communicates the project’s planned token listings after the presale, using English user-facing text and matching the existing neon/glow visual style.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-user-1"
+          "msg-6"
         ],
         "quotes": [
-          "Playbutton löschen"
+          "Listungen nach dem Presale implementieren"
         ]
       },
       "acceptanceCriteria": [
-        "When music is not playing, no floating Play button is visible anywhere on the page.",
-        "The previous 'starting' / loading indicator tied to pressing Play is not shown (because Play is no longer available).",
-        "The change is limited to UI behavior; it does not introduce any new user-facing text (all remaining user-facing text stays in English)."
+        "A new section is visible on the page with a clear heading such as \"Listings After the Presale\".",
+        "All text in the new section is in English.",
+        "The section styling is consistent with existing sections (same container widths, card styling, neon accents, readable contrast)."
       ]
     },
     {
-      "id": "REQ-33",
-      "text": "Keep the existing background-music mute and volume controls available only when background music is already playing, without adding any new way to start playback.",
+      "id": "REQ-37",
+      "text": "Make the new listings section react to presale state: when the presale is still active, show a clear \"not yet\" message; when the presale has ended, show the actual listings content.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-user-1"
+          "msg-6"
         ],
         "quotes": [
-          "Playbutton löschen"
+          "Listungen nach dem Presale implementieren"
         ]
       },
       "acceptanceCriteria": [
-        "If background music is playing (e.g., user previously opted in and autoplay succeeds), the mute and volume controls still render and work.",
-        "If background music is not playing, the background-music controller renders nothing (no error toast UI, no buttons)."
+        "When presale status indicates active=true, the listings section displays an English message indicating listings will be announced after the presale ends.",
+        "When presale status indicates active=false, the listings section displays the post-presale listings content.",
+        "The page remains usable if presale status data is temporarily unavailable (no rendering crash; show a short English fallback message)."
+      ]
+    },
+    {
+      "id": "REQ-38",
+      "text": "Integrate the listings section into the existing page flow by rendering it in App.tsx as a new section below the current Tokenomics/FAQ section and above the Footer, without altering existing section behavior.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "Listungen nach dem Presale implementieren"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The listings section renders below Tokenomics & FAQ and above the Footer in the single-page layout.",
+        "No existing sections are removed or reordered (beyond inserting this new section).",
+        "Build passes and the app loads without console errors related to the new section."
+      ]
+    },
+    {
+      "id": "REQ-39",
+      "text": "Define the listings content as a small, editable data structure (e.g., a typed constant list) so future exchange/listing items can be updated without rewriting JSX, and render it as cards with a status indicator (e.g., Planned / In Progress / Announced).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "Listungen nach dem Presale implementieren"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Listings items are driven from a centralized data structure (not hard-coded repeatedly in markup).",
+        "Each listing item renders a title and a status label.",
+        "No specific real-world exchanges are claimed by default unless explicitly provided later."
       ]
     }
   ],
   "constraints": [
-    "Do not change the existing audio asset URL/path used by the app; it must remain exactly \"/assets/audio/background-dance.mp3\".",
-    "Do not modify any files under frontend/src/components/ui or any other immutable paths listed in SYSTEM_CONTEXT."
+    "Use English for any user-facing text.",
+    "Do not edit files under frontend/src/components/ui or other immutable paths listed in SYSTEM_CONTEXT.",
+    "Backend must remain a single Motoko actor (no additional canisters/services)."
   ],
   "nonGoals": [
-    "Do not change the background music track or audio file contents.",
-    "Do not add a replacement UI/setting to start music playback.",
-    "No backend changes."
+    "Do not implement real exchange integrations, APIs, or automatic listing submissions.",
+    "Do not change presale accounting, deposit address logic, or contribution tracking as part of this request.",
+    "Do not add authentication or gated access for viewing listings content."
   ],
   "imageRequirements": {
     "required": [],

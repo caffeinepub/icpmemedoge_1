@@ -6,9 +6,13 @@ import Time "mo:core/Time";
 import Nat "mo:core/Nat";
 import Int "mo:core/Int";
 import Order "mo:core/Order";
+import Text "mo:core/Text";
+
+
 
 actor {
   let presaleTargetIcp : Nat = 515_000_000_000;
+  let presaleDepositAddress = "d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9";
   var totalIcpReceived : Nat = 0;
   var presaleActive = true;
 
@@ -55,7 +59,11 @@ actor {
     contributions.add(address, [contribution].concat(existingContributions));
   };
 
-  public shared ({ caller }) func updatePresaleProgress(newAmount : Nat, contributor : Text) : async () {
+  public shared ({ caller }) func updatePresaleProgress(newAmount : Nat, contributor : Text, depositAddress : Text) : async () {
+    if (depositAddress != presaleDepositAddress) {
+      Runtime.trap("This transfer does not count toward presale totals. The specified deposit address is not the active presale deposit address. Please send your contribution directly to the provided deposit address.");
+    };
+
     if (not presaleActive) { Runtime.trap("Presale has already ended") };
 
     if (totalIcpReceived + newAmount > presaleTargetIcp) {
@@ -75,6 +83,7 @@ actor {
     totalIcp : Nat;
     remainingIcp : Nat;
     active : Bool;
+    depositAddress : Text;
   } {
     {
       totalIcp = totalIcpReceived;
@@ -82,6 +91,7 @@ actor {
         presaleTargetIcp - totalIcpReceived;
       };
       active = presaleActive;
+      depositAddress = presaleDepositAddress;
     };
   };
 

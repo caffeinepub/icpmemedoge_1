@@ -22,9 +22,10 @@ export interface backendInterface {
     getAllContributors(): Promise<Array<Contribution>>;
     getPresaleStatus(): Promise<{
         active: boolean;
+        depositAddress: string;
         totalIcp: bigint;
         remainingIcp: bigint;
     }>;
     getTotalAllocation(address: string): Promise<Allocation>;
-    updatePresaleProgress(newAmount: bigint, contributor: string): Promise<void>;
+    updatePresaleProgress(newAmount: bigint, contributor: string, depositAddress: string): Promise<void>;
 }

@@ -3,6 +3,7 @@ import { PresaleStatusSection } from './components/presale/PresaleStatusSection'
 import { HowToContribute } from './components/presale/HowToContribute';
 import { ContributorsList } from './components/presale/ContributorsList';
 import { TokenomicsFaq } from './components/presale/TokenomicsFaq';
+import { PostPresaleListingsSection } from './components/presale/PostPresaleListingsSection';
 import { Footer } from './components/Footer';
 import { BackgroundMusicController } from './components/BackgroundMusic/BackgroundMusicController';
 
@@ -24,6 +25,7 @@ function App() {
           <HowToContribute />
           <ContributorsList />
           <TokenomicsFaq />
+          <PostPresaleListingsSection />
           <Footer />
         </div>
       </div>

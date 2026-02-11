@@ -1,5 +1,5 @@
 {
-  "frontend/src/App.tsx": "Main application component that composes all presale sections with animated neon background effects and includes the BackgroundMusicController for site-wide audio playback.",
+  "frontend/src/App.tsx": "Main application component that composes all presale sections including the new PostPresaleListingsSection between TokenomicsFaq and Footer, with animated neon background effects and BackgroundMusicController.",
   "frontend/src/components/presale/HeroSection.tsx": "Hero section displaying the IcpMemeDoge image with animated glowing headline, subtle floating animation on the hero image (respecting reduced-motion preferences), and key feature cards.",
   "frontend/src/components/presale/PresaleStatusSection.tsx": "Container section for presale status including countdown timer, parameters, progress bar, and deposit address.",
   "frontend/src/components/presale/PresaleProgress.tsx": "Displays presale progress with animated gradient bar, ICP received/remaining stats (remaining now formatted with dot separators like \"515.000 ICP\"), and presale ended state.",
@@ -9,7 +9,7 @@
   "frontend/src/components/presale/ContributorsList.tsx": "Table displaying all contributors with aggregated amounts and timestamps, auto-updating via polling.",
   "frontend/src/components/presale/TokenomicsFaq.tsx": "Tokenomics details (max supply, presale cap) and FAQ section with promotional claim.",
   "frontend/src/components/Footer.tsx": "Footer component with copyright and caffeine.ai attribution with UTM tracking.",
-  "frontend/src/constants/presale.ts": "Centralized presale constants including deposit address, cap, max supply, and polling interval.",
+  "frontend/src/constants/presale.ts": "Centralized presale constants including the updated deposit address (d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9), cap, max supply, and polling interval.",
   "frontend/src/hooks/useCountdown24h.ts": "React hook that manages a 24-hour countdown timer starting from page load.",
   "frontend/src/hooks/usePresaleStatus.ts": "React Query hook that fetches and auto-refreshes presale status from backend.",
   "frontend/src/hooks/useContributors.ts": "React Query hook that fetches and auto-refreshes contributors list from backend.",
@@ -19,5 +19,7 @@
   "frontend/src/utils/format.ts": "Number formatting utility that formats ICP amounts with dot thousands separators using German locale (e.g., 515000 → \"515.000\").",
   "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx": "Fixed-position music controller that renders nothing when music is not playing and displays only mute/volume controls with neon-styled UI when music is actively playing.",
   "frontend/src/hooks/useBackgroundMusic.ts": "React hook managing singleton HTMLAudioElement lifecycle with opt-in based autoplay, enhanced userInitiatedPlay() with readiness checks and timeout handling, explicit isStarting state to prevent overlapping play attempts, improved error handling with retry capability via audio element reset, and persistent mute/volume state via localStorage.",
-  "frontend/src/utils/backgroundMusicStorage.ts": "Storage helper for reading/writing background music preferences (mute state, volume, and opt-in flag) to localStorage with validation and safe defaults."
+  "frontend/src/utils/backgroundMusicStorage.ts": "Storage helper for reading/writing background music preferences (mute state, volume, and opt-in flag) to localStorage with validation and safe defaults.",
+  "frontend/src/constants/listingsAfterPresale.ts": "Defines the ListingItem interface and exports a centralized array of post-presale listing items with title, description, and status fields.",
+  "frontend/src/components/presale/PostPresaleListingsSection.tsx": "Renders a conditional listings section that shows a \"coming soon\" message when presale is active, displays listing cards with status badges when presale has ended, and provides a safe fallback during loading/error states."
 }

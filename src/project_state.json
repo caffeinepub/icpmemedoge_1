@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 31,
+  "projectStateVersion": 35,
   "summary": "Build a promotional presale website for the IcpMemeDoge memecoin featuring a special meme-dog hero image, flashy but readable design, a 24h countdown, and an ICP-based presale flow with automated payment detection, progress tracking to a 515,000 ICP cap, contributor address listing, and post-presale token crediting.",
   "architectural_notes": [
     "Integrate with the Internet Computer/ICP ledger (or an indexer) to monitor the presale address for incoming transfers and compute cumulative raised ICP.",
@@ -10,7 +10,9 @@
     "Decide how to handle background audio on first visit (autoplay restrictions, user consent/controls, mute/volume, and accessibility considerations).",
     "Background audio requirement: autoplay a “cool 90s dance” track on initial page entry (while still respecting browser autoplay restrictions and providing user controls/consent as needed).",
     "Background music should start only after an explicit user action (pressing the Play button), to comply with autoplay restrictions and user consent expectations.",
-    "User request: remove the background-music Play button UI; reassess how/if background audio can be started given autoplay restrictions and consent requirements."
+    "User request: remove the background-music Play button UI; reassess how/if background audio can be started given autoplay restrictions and consent requirements.",
+    "Presale deposit address is a configurable constant used both for UI display/copy and for ledger monitoring; must be updated consistently when changed.",
+    "Clarify and implement post-presale “Listungen” behavior: whether this is a static section (planned exchanges + dates/links) or dynamic updates/admin-managed content shown after presale ends."
   ],
   "known_issues": [
     "UI bug: 'ICP remaining' field should display the cap as '515.000 ICP' (German thousands separator) when no contributions are received; currently incorrect value/format.",
@@ -257,6 +259,46 @@
         "REQ-33"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-update-the-presale-icp-deposit-address-used-by-the-frontend-ui-to-exactly-d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9-including-the-copy-to-clipboard-value-so-the-displayed-address-matches-the-new-one-everywhere-it-is-shown",
+      "title": "Update the presale ICP deposit address used by the frontend UI to exactly: d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9 (including the copy-to-clipboard value), so the displayed address matches the new one everywhere it is shown.",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-new-landing-page-section-that-communicates-the-project-s-planned-token-listings-after-the-presale-using-english-user-facing-text-and-matching-the-existing-neon-glow-visual-style",
+      "title": "Add a new landing-page section that communicates the project’s planned token listings after the presale, using English user-facing text and matching the existing neon/glow visual style.",
+      "reqIds": [
+        "REQ-36"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-make-the-new-listings-section-react-to-presale-state-when-the-presale-is-still-active-show-a-clear-not-yet-message-when-the-presale-has-ended-show-the-actual-listings-content",
+      "title": "Make the new listings section react to presale state: when the presale is still active, show a clear \"not yet\" message; when the presale has ended, show the actual listings content.",
+      "reqIds": [
+        "REQ-37"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-integrate-the-listings-section-into-the-existing-page-flow-by-rendering-it-in-app-tsx-as-a-new-section-below-the-current-tokenomics-faq-section-and-above-the-footer-without-altering-existing-section-behavior",
+      "title": "Integrate the listings section into the existing page flow by rendering it in App.tsx as a new section below the current Tokenomics/FAQ section and above the Footer, without altering existing section behavior.",
+      "reqIds": [
+        "REQ-38"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-define-the-listings-content-as-a-small-editable-data-structure-e-g-a-typed-constant-list-so-future-exchange-listing-items-can-be-updated-without-rewriting-jsx-and-render-it-as-cards-with-a-status-indicator-e-g-planned-in-progress-announced",
+      "title": "Define the listings content as a small, editable data structure (e.g., a typed constant list) so future exchange/listing items can be updated without rewriting JSX, and render it as cards with a status indicator (e.g., Planned / In Progress / Announced).",
+      "reqIds": [
+        "REQ-39"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -383,6 +425,26 @@
     {
       "id": "AR-28",
       "summary": "Remove/delete the (floating) background-music Play button from the UI",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "Update the presale ICP deposit address displayed/monitored by the app to the new provided address: d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-31",
+      "summary": "Update the presale deposit address used for incoming-transfer detection/progress tracking so that only transfers sent to d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9 are counted toward presale totals and shown in the contributors list (i.e., stop monitoring the old address).",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-32",
+      "summary": "Implement “Listungen nach dem Presale” (post-presale listings) feature/content on the site",
       "reqIds": [],
       "status": "pending"
     }

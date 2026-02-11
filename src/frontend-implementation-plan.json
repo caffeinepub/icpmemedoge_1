@@ -1,36 +1,74 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Remove floating background-music Play button UI",
+  "title": "Add post-presale listings section (Listings After the Presale)",
   "requirements": [
     {
-      "id": "REQ-32",
-      "summary": "Remove the floating background-music Play button and any related starting/loading UI so nothing is shown when music is not playing.",
+      "id": "REQ-36",
+      "summary": "Create a new neon/glow-styled landing-page section describing planned token listings after the presale using English-only copy.",
       "acceptanceCriteria": [
-        "When music is not playing, no floating Play button is visible anywhere on the page.",
-        "The previous 'starting' / loading indicator tied to pressing Play is not shown (because Play is no longer available).",
-        "The change is limited to UI behavior; it does not introduce any new user-facing text (all remaining user-facing text stays in English)."
+        "A new section is visible on the page with a clear heading such as \"Listings After the Presale\".",
+        "All text in the new section is in English.",
+        "The section styling is consistent with existing sections (same container widths, card styling, neon accents, readable contrast)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
-          "operation": "modify",
-          "description": "Remove the non-playing UI branch that renders the floating Play button, error toast, and the 'Starting music…' loading indicator; instead render nothing (null) when background music is not currently playing. Keep changes limited to UI behavior and do not add new user-facing text. Do not modify any files under frontend/src/components/ui and do not change the audio asset path used elsewhere (must remain exactly \"/assets/audio/background-dance.mp3\")."
+          "path": "frontend/src/components/presale/PostPresaleListingsSection.tsx",
+          "operation": "create",
+          "description": "Add a new \"Listings After the Presale\" section component using the existing container/max-width patterns and neon card styling used by current sections; keep all user-facing text in English. Use shadcn-ui primitives (e.g., Badge) for status pills if available to match design consistency—Verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-33",
-      "summary": "Ensure mute and volume controls render and work only while background music is already playing, with no UI rendered otherwise and no new way to start playback.",
+      "id": "REQ-37",
+      "summary": "Make the listings section conditional on presale status (active vs ended) with a safe fallback when status is unavailable.",
       "acceptanceCriteria": [
-        "If background music is playing (e.g., user previously opted in and autoplay succeeds), the mute and volume controls still render and work.",
-        "If background music is not playing, the background-music controller renders nothing (no error toast UI, no buttons)."
+        "When presale status indicates active=true, the listings section displays an English message indicating listings will be announced after the presale ends.",
+        "When presale status indicates active=false, the listings section displays the post-presale listings content.",
+        "The page remains usable if presale status data is temporarily unavailable (no rendering crash; show a short English fallback message)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
+          "path": "frontend/src/components/presale/PostPresaleListingsSection.tsx",
           "operation": "modify",
-          "description": "Gate the controller UI strictly on isPlaying: render the existing mute and volume controls only when isPlaying is true, and render nothing for all non-playing states (including blocked/errored/starting). Ensure no remaining UI triggers exist for starting playback."
+          "description": "Integrate presale-state awareness by consuming the existing usePresaleStatus hook; render (1) a clear \"not yet\" message when status.active is true, (2) the listings cards when status.active is false, and (3) a short English fallback when status data is loading/errored/unavailable to avoid render crashes."
+        }
+      ]
+    },
+    {
+      "id": "REQ-38",
+      "summary": "Wire the new listings section into the single-page flow in App.tsx between Tokenomics/FAQ and Footer without changing existing sections.",
+      "acceptanceCriteria": [
+        "The listings section renders below Tokenomics & FAQ and above the Footer in the single-page layout.",
+        "No existing sections are removed or reordered (beyond inserting this new section).",
+        "Build passes and the app loads without console errors related to the new section."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Import and render PostPresaleListingsSection directly after <TokenomicsFaq /> and before <Footer />, preserving the existing section ordering and behavior otherwise."
+        }
+      ]
+    },
+    {
+      "id": "REQ-39",
+      "summary": "Define post-presale listing items in a typed, centralized data structure and render them as cards with a status indicator without claiming real exchanges by default.",
+      "acceptanceCriteria": [
+        "Listings items are driven from a centralized data structure (not hard-coded repeatedly in markup).",
+        "Each listing item renders a title and a status label.",
+        "No specific real-world exchanges are claimed by default unless explicitly provided later."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/constants/listingsAfterPresale.ts",
+          "operation": "create",
+          "description": "Create a small typed constant list (e.g., ListingItem[] with title, description (optional), and status such as Planned/In Progress/Announced) containing only generic placeholders (no real exchange names by default) so updates can be made without rewriting JSX."
+        },
+        {
+          "path": "frontend/src/components/presale/PostPresaleListingsSection.tsx",
+          "operation": "modify",
+          "description": "Render listing items from the centralized constants file into a responsive card grid with a clear status indicator (e.g., shadcn-ui Badge or equivalent styling without modifying immutable ui files)—Verify the component's usage instructions before implementing."
         }
       ]
     }
