@@ -8,7 +8,7 @@ export function HeroSection() {
           <img
             src="/assets/generated/icp-meme-doge-hero.dim_1600x900.png"
             alt="IcpMemeDoge - Special Meme Dog"
-            className="relative z-10 w-full h-auto rounded-3xl shadow-2xl shadow-neon-cyan/50"
+            className="relative z-10 w-full h-auto rounded-3xl shadow-2xl shadow-neon-cyan/50 motion-safe:animate-hero-float will-change-transform"
           />
         </div>
 

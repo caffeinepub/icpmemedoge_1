@@ -1,15 +1,15 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
+  "projectStateVersion": 5,
   "summary": "Build a promotional presale website for the IcpMemeDoge memecoin featuring a special meme-dog hero image, flashy but readable design, a 24h countdown, and an ICP-based presale flow with automated payment detection, progress tracking to a 515,000 ICP cap, contributor address listing, and post-presale token crediting.",
   "architectural_notes": [
     "Integrate with the Internet Computer/ICP ledger (or an indexer) to monitor the presale address for incoming transfers and compute cumulative raised ICP.",
     "Persist contribution records (sender address, amount, timestamp) to support progress calculation and contributor list display.",
-    "Enforce presale cap logic: stop accepting/acknowledging contributions once total received reaches 515,000 ICP and mark presale as ended."
+    "Enforce presale cap logic: stop accepting/acknowledging contributions once total received reaches 515,000 ICP and mark presale as ended.",
+    "Decide on approach for animated hero dog (CSS animation on layered PNG/SVG, animated SVG, Lottie/WebM) and ensure it remains lightweight and doesn’t reduce readability/performance."
   ],
   "known_issues": [],
   "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Stylized special meme dog character, neon/glow cyber-meme aesthetic, centered hero composition, transparent or dark background (icp-meme-doge-hero.dim_1600x900.png)",
   "existing_features": [
     {
       "id": "feature-create-a-single-page-presale-website-for-the-memecoin-name-icpmemedoge-with-a-hero-section-presale-status-section-contribution-instructions-contributors-list-and-tokenomics-section",
@@ -90,6 +90,22 @@
         "REQ-11"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-make-the-hero-meme-dog-image-in-the-hero-section-visibly-movable-by-adding-a-subtle-continuous-animation-e-g-floating-bobbing-with-slight-rotation-while-keeping-the-existing-image-file-path-and-overall-layout-intact",
+      "title": "Make the hero meme-dog image in the Hero section visibly movable by adding a subtle, continuous animation (e.g., floating/bobbing with slight rotation) while keeping the existing image file path and overall layout intact.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-respect-accessibility-preferences-by-disabling-or-significantly-reducing-the-hero-image-motion-when-the-user-has-enabled-reduced-motion-prefers-reduced-motion",
+      "title": "Respect accessibility preferences by disabling or significantly reducing the hero image motion when the user has enabled reduced motion (prefers-reduced-motion).",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -159,6 +175,12 @@
       "reqIds": [
         "REQ-8"
       ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Make the hero meme-dog image animated/movable (e.g., subtle motion/loop) instead of static",
+      "reqIds": [],
       "status": "pending"
     }
   ],

@@ -202,3 +202,10 @@
 html {
     scroll-behavior: smooth;
 }
+
+/* Reduced motion support - disable hero float animation */
+@media (prefers-reduced-motion: reduce) {
+    .animate-hero-float {
+        animation: none !important;
+    }
+}
