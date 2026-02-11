@@ -1,11 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Fix the Presale Progress “ICP Remaining” stat so it shows the correct remaining ICP based on a 515000 ICP cap.
+**Goal:** Format the Presale Progress “ICP Remaining” value with dot thousands separators so it displays as “515.000 ICP” when no contributions have been received, and continues to format correctly as contributions come in.
 
 **Planned changes:**
-- Update the Presale Progress UI calculation/formatting for “ICP Remaining” to display `515000 ICP` when received is `0`.
-- Ensure “ICP Remaining” updates as `max(515000 - received, 0)` as contributions come in, with no thousands separators and no decimals.
-- Keep all other Presale Status section labels/content unchanged.
+- Update the frontend formatting logic for the “ICP Remaining” statistic to use dot thousands separators (e.g., 515.000) while preserving the underlying remaining-amount calculation.
+- Ensure the displayed remaining amount is clamped to a minimum of 0 and that only numeric formatting changes (label and other UI behavior remain unchanged).
 
-**User-visible outcome:** The Presale Progress panel shows “ICP Remaining” as exactly `515000 ICP` at 0 received, and then decreases correctly (never below 0) as ICP contributions are detected.
+**User-visible outcome:** In Presale Progress, “ICP Remaining” shows “515.000 ICP” at 0 received, and thereafter shows the correctly computed remaining ICP with dot thousands separators (never below 0).

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 9,
+  "projectStateVersion": 11,
   "summary": "Build a promotional presale website for the IcpMemeDoge memecoin featuring a special meme-dog hero image, flashy but readable design, a 24h countdown, and an ICP-based presale flow with automated payment detection, progress tracking to a 515,000 ICP cap, contributor address listing, and post-presale token crediting.",
   "architectural_notes": [
     "Integrate with the Internet Computer/ICP ledger (or an indexer) to monitor the presale address for incoming transfers and compute cumulative raised ICP.",
@@ -9,7 +9,7 @@
     "Decide on approach for animated hero dog (CSS animation on layered PNG/SVG, animated SVG, Lottie/WebM) and ensure it remains lightweight and doesn’t reduce readability/performance."
   ],
   "known_issues": [
-    "UI bug: 'ICP remaining' field should display 515000 ICP (currently shows incorrect value/format)."
+    "UI bug: 'ICP remaining' field should display the cap as '515.000 ICP' (German thousands separator) when no contributions are received; currently incorrect value/format."
   ],
   "isFixRequest": true,
   "existing_features": [
@@ -122,6 +122,14 @@
       "title": "Update the Presale Progress UI so the 'ICP Remaining' value displays the correct cap amount as '515000 ICP' when no contributions have been received, and continues to display the correct remaining amount as contributions come in (cap minus received).",
       "reqIds": [
         "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-presale-progress-icp-remaining-statistic-to-display-the-value-using-a-dot-thousands-separator-so-that-when-no-contributions-have-been-received-it-renders-exactly-as-515-000-icp-and-continues-to-show-the-correct-remaining-amount-as-contributions-come-in-using-the-same-thousands-formatting",
+      "title": "Update the Presale Progress 'ICP Remaining' statistic to display the value using a dot thousands separator so that, when no contributions have been received, it renders exactly as \"515.000 ICP\" (and continues to show the correct remaining amount as contributions come in, using the same thousands formatting).",
+      "reqIds": [
+        "REQ-16"
       ],
       "version": 1
     }

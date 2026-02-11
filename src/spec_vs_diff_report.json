@@ -1,14 +1,15 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T21:41:39.716Z",
-  "summary": "Changes in PresaleProgress.tsx compute ICP amounts from e8s, clamp remaining ICP to never go below 0, and render the “ICP Remaining” value as an unformatted integer (no locale/thousands separators), defaulting to PRESALE_CAP_ICP when status is absent/loading completes.",
+  "generatedAt": "2026-02-11T21:47:08.976Z",
+  "summary": "REQ-16 appears implemented: 'ICP Remaining' now renders via a dot-thousands formatter so 515000 displays as \"515.000 ICP\", while preserving the existing label and overall PresaleProgress structure per the provided diff summary.",
   "missing_requirements": [],
   "hallucinated_features": [],
-  "confidence": 0.66,
+  "confidence": 0.78,
   "changed_files": [
     "frontend-file-summaries.txt",
     "frontend/src/components/presale/PresaleProgress.tsx",
+    "frontend/src/utils/format.ts",
     "project_state.json"
   ]
 }

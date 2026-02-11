@@ -1,7 +1,7 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T21:41:39.718Z",
+  "generatedAt": "2026-02-11T21:47:08.979Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
@@ -11,13 +11,15 @@
     "implemented": 1,
     "items": [
       {
-        "id": "REQ-15",
-        "summary": "Update the Presale Progress UI so the 'ICP Remaining' value displays the correct cap amount as '515000 ICP' when no contributions have been received, and continues to display the correct remaining amount as contributions come in (cap minus received).",
+        "id": "REQ-16",
+        "summary": "Update the Presale Progress 'ICP Remaining' statistic to display the value using a dot thousands separator so that, when no contributions have been received, it renders exactly as \"515.000 ICP\" (and continues to show the correct remaining amount as contributions come in, using the same thousands formatting).",
         "status": "implemented",
         "plannedFiles": [
+          "frontend/src/utils/format.ts",
           "frontend/src/components/presale/PresaleProgress.tsx"
         ],
         "matchedFiles": [
+          "frontend/src/utils/format.ts",
           "frontend/src/components/presale/PresaleProgress.tsx"
         ]
       }
@@ -29,6 +31,7 @@
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
     "frontend/src/components/presale/PresaleProgress.tsx",
+    "frontend/src/utils/format.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

@@ -1,21 +1,26 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix Presale 'ICP Remaining' display to show 515000 ICP correctly",
+  "title": "Format Presale Progress 'ICP Remaining' with dot thousands separators",
   "requirements": [
     {
-      "id": "REQ-15",
-      "summary": "Correct the Presale Progress 'ICP Remaining' stat to display an unformatted integer (no separators/decimals) and compute remaining as max(515000 - received, 0).",
+      "id": "REQ-16",
+      "summary": "Format the Presale Progress 'ICP Remaining' value with dot thousands separators (e.g., 515.000 ICP) while keeping the underlying remaining amount correct and clamped at 0.",
       "acceptanceCriteria": [
-        "When the presale has 0 ICP received, the 'ICP Remaining' stat shows exactly \"515000 ICP\" (no thousands separators, no decimals).",
-        "When contributions are detected, the 'ICP Remaining' stat updates to (515000 - received) ICP and never goes below 0.",
-        "No other Presale Status section labels/content are changed."
+        "When the presale has received 0 ICP, the 'ICP Remaining' value displays exactly \"515.000 ICP\".",
+        "When contributions have been received, 'ICP Remaining' displays (cap - received) with dot thousands separators (e.g., \"514.999 ICP\"), and never goes below 0.",
+        "Only the numeric formatting of the 'ICP Remaining' value is changed; the label text remains \"ICP Remaining\" and all other PresaleProgress UI behavior remains unchanged."
       ],
       "file_operations": [
         {
+          "path": "frontend/src/utils/format.ts",
+          "operation": "create",
+          "description": "Add a small number-formatting helper for ICP integers that renders dot thousands separators (e.g., using Intl.NumberFormat with a locale that uses '.' as the grouping separator) and produces no decimals."
+        },
+        {
           "path": "frontend/src/components/presale/PresaleProgress.tsx",
           "operation": "modify",
-          "description": "Update the 'ICP Remaining' calculation and formatting: derive remaining from the existing PRESALE_CAP_ICP constant minus received (prefer BigInt/e8s-safe math, then convert to an integer ICP value), clamp at 0, and render it as a plain string without toLocaleString or decimals so 0 received shows exactly \"515000 ICP\". Keep all other labels and content unchanged."
+          "description": "Update the 'ICP Remaining' statistic to use the new formatting helper so remaining ICP renders like \"515.000 ICP\" at 0 contributions and continues formatting (cap - received) with dot thousands separators while clamping at 0; do not change the label text or other UI behavior."
         }
       ]
     }

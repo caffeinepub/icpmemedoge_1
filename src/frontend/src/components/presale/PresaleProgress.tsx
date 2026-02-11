@@ -1,5 +1,6 @@
 import { usePresaleStatus } from '@/hooks/usePresaleStatus';
 import { PRESALE_CAP_ICP } from '@/constants/presale';
+import { formatIcpWithDots } from '@/utils/format';
 
 export function PresaleProgress() {
   const { data: status, isLoading } = usePresaleStatus();
@@ -44,7 +45,7 @@ export function PresaleProgress() {
         </div>
         <div className="bg-gray-900/50 rounded-xl p-4 border border-neon-cyan/30">
           <p className="text-gray-400 text-sm mb-1">ICP Remaining</p>
-          <p className="text-2xl font-bold text-neon-cyan">{remainingIcp} ICP</p>
+          <p className="text-2xl font-bold text-neon-cyan">{formatIcpWithDots(remainingIcp)} ICP</p>
         </div>
       </div>
 
