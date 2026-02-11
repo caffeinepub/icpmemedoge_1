@@ -1,0 +1,169 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Build a promotional presale website for the IcpMemeDoge memecoin featuring a special meme-dog hero image, flashy but readable design, a 24h countdown, and an ICP-based presale flow with automated payment detection, progress tracking to a 515,000 ICP cap, contributor address listing, and post-presale token crediting.",
+  "architectural_notes": [
+    "Integrate with the Internet Computer/ICP ledger (or an indexer) to monitor the presale address for incoming transfers and compute cumulative raised ICP.",
+    "Persist contribution records (sender address, amount, timestamp) to support progress calculation and contributor list display.",
+    "Enforce presale cap logic: stop accepting/acknowledging contributions once total received reaches 515,000 ICP and mark presale as ended."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Stylized special meme dog character, neon/glow cyber-meme aesthetic, centered hero composition, transparent or dark background (icp-meme-doge-hero.dim_1600x900.png)",
+  "existing_features": [
+    {
+      "id": "feature-create-a-single-page-presale-website-for-the-memecoin-name-icpmemedoge-with-a-hero-section-presale-status-section-contribution-instructions-contributors-list-and-tokenomics-section",
+      "title": "Create a single-page presale website for the memecoin name “IcpMemeDoge” with a hero section, presale status section, contribution instructions, contributors list, and tokenomics section.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-coherent-flashy-neon-meme-aesthetic-that-uses-colorful-glow-and-subtle-blinking-animations-while-maintaining-readability-accessible-contrast-for-body-text-no-rapid-flashing-include-a-colorful-glowing-blinking-headline-for-icpmemedoge",
+      "title": "Apply a coherent, flashy neon meme aesthetic that uses colorful glow and subtle blinking animations while maintaining readability (accessible contrast for body text, no rapid flashing). Include a colorful glowing/blinking headline for “IcpMemeDoge”.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-24-hour-countdown-timer-that-starts-immediately-for-each-visitor-and-counts-down-from-24-00-00-to-00-00-00",
+      "title": "Add a 24-hour countdown timer that starts immediately for each visitor and counts down from 24:00:00 to 00:00:00.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-the-presale-icp-deposit-address-exactly-as-provided-and-place-it-directly-under-the-presale-progress-indicator-with-a-copy-to-clipboard-control",
+      "title": "Display the presale ICP deposit address exactly as provided and place it directly under the presale progress indicator, with a copy-to-clipboard control.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-presale-progress-tracking-where-515-000-icp-received-equals-100-show-a-progress-indicator-from-0-to-100-including-total-icp-received-and-remaining-icp-to-cap-and-mark-the-presale-as-ended-once-100-is-reached",
+      "title": "Implement presale progress tracking where 515,000 ICP received equals 100%. Show a progress indicator from 0% to 100%, including total ICP received and remaining ICP to cap, and mark the presale as ended once 100% is reached.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-automatically-detect-incoming-icp-transfers-to-the-presale-address-by-polling-from-the-frontend-and-having-the-backend-query-the-icp-ledger-index-source-on-each-poll-updating-totals-and-the-contributors-list-accordingly",
+      "title": "Automatically detect incoming ICP transfers to the presale address by polling from the frontend and having the backend query the ICP ledger/index source on each poll, updating totals and the contributors list accordingly.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-show-a-public-continuously-updated-list-of-all-sender-wallet-addresses-that-have-contributed-icp-including-the-amount-contributed-per-address-and-a-timestamp-ordering-most-recent-first",
+      "title": "Show a public, continuously updated list of all sender wallet addresses that have contributed ICP, including the amount contributed per address and a timestamp/ordering (most recent first).",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-tokenomics-content-to-the-landing-page-including-max-supply-of-1-000-000-000-icpmemedoge-and-the-promotional-claim-100-win-chances-after-the-presale-in-english",
+      "title": "Add tokenomics content to the landing page including: max supply of 1,000,000,000 IcpMemeDoge and the promotional claim “100% win chances after the presale” (in English).",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-clear-presale-parameters-to-the-ui-in-english-hard-cap-515-000-icp-payment-currency-icp-and-that-the-presale-ends-at-100",
+      "title": "Add clear presale parameters to the UI in English: hard cap (515,000 ICP), payment currency (ICP), and that the presale ends at 100%.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-generate-and-display-a-custom-special-meme-dog-hero-image-for-icpmemedoge-as-a-static-frontend-asset",
+      "title": "Generate and display a custom “special meme dog” hero image for IcpMemeDoge as a static frontend asset.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create IcpMemeDoge presale landing page with special meme dog hero image",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Add colorful, glowing/blinking but readable UI styling (including blinking colorful headline)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Implement ICP payment flow to a fixed ICP address for presale contributions",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Add 24-hour countdown timer that starts immediately",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Track presale progress from 0% to 100% based on total received ICP (515,000 ICP = 100%) and end presale at cap",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Automatically detect incoming ICP transfers to the presale address and update the progress display",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Display the presale wallet address directly under the progress indicator",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Display a public list of all sender addresses that contributed ICP",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "After presale ends, credit purchased meme coins to investors (distribution/crediting mechanism)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Show tokenomics info including max supply of 1,000,000,000 IcpMemeDoge coins and promotional claim '100% Gewinnchancen nach dem Presale'",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Define backend presale accounting so each detected ICP contribution results in an investor allocation of IcpMemeDoge tokens, credited after the presale ends. Implement a backend endpoint to fetch an address’s allocation and a global allocation summary.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "IcpMemeDoge",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

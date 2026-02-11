@@ -1,0 +1,237 @@
+{
+  "kind": "build_request",
+  "title": "IcpMemeDoge ICP Presale Landing Page with Countdown, Progress Tracking, and Contributor List",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Create a single-page presale website for the memecoin name “IcpMemeDoge” with a hero section, presale status section, contribution instructions, contributors list, and tokenomics section.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "IcpMemeDoge\n\nErstelle ein Presale eines tierischen Memecoins"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Landing page renders without errors and includes clearly labeled sections: Hero, Presale, How to Contribute, Contributors, Tokenomics/FAQ.",
+        "All user-facing copy is in English."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Apply a coherent, flashy neon meme aesthetic that uses colorful glow and subtle blinking animations while maintaining readability (accessible contrast for body text, no rapid flashing). Include a colorful glowing/blinking headline for “IcpMemeDoge”.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Überschrift soll bunt leuchtend blinkend sein",
+          "Die Webseite soll bunt leuchten blinkend mit besonderen farben sein , es muss leserlich sein und deswegen passende farben anwenden."
+        ]
+      },
+      "acceptanceCriteria": [
+        "The main headline has a noticeable glow + gentle blinking animation.",
+        "Body text remains readable (no blinking on paragraphs; sufficient contrast on primary content).",
+        "Blinking animations are subtle (no strobe-like effect)."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add a 24-hour countdown timer that starts immediately for each visitor and counts down from 24:00:00 to 00:00:00.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Installiere ein 24h countdown , countdown soll sofort starten."
+        ]
+      },
+      "acceptanceCriteria": [
+        "On page load, the timer starts at 24:00:00 (or 23:59:59) and ticks down every second.",
+        "If the page is refreshed, the timer restarts from 24 hours (per-visitor immediate start)."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Display the presale ICP deposit address exactly as provided and place it directly under the presale progress indicator, with a copy-to-clipboard control.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Bezahlvorgang verläuft in ICP, die ICP Adresse ist \na37ba6735ce5a8221f7c35105bff9bb8fc497cc7d5adda5f93d9935558e7d368",
+          "unter der Anzeige soll direkt die überweisungswalletadresse sein."
+        ]
+      },
+      "acceptanceCriteria": [
+        "The address is shown exactly as: a37ba6735ce5a8221f7c35105bff9bb8fc497cc7d5adda5f93d9935558e7d368.",
+        "The address appears directly below the progress bar/indicator.",
+        "Copy-to-clipboard copies the full address and provides a visible confirmation state."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Implement presale progress tracking where 515,000 ICP received equals 100%. Show a progress indicator from 0% to 100%, including total ICP received and remaining ICP to cap, and mark the presale as ended once 100% is reached.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "515000 ICP Token beträgt 100%, nach 100% wird der Presale beendet.",
+          "Jede überweisung soll automatisiert erkannt werden und von 0% bis 100% in einer Anzeige angezeigt werden"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Frontend displays: percent complete, ICP received, ICP remaining, and a clear “Presale Ended” state at/above cap.",
+        "Backend exposes an API that returns current totals and computed percentage based on cap=515000 ICP.",
+        "When total received >= 515000 ICP, the presale status returned by backend is ended and UI reflects it."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Automatically detect incoming ICP transfers to the presale address by polling from the frontend and having the backend query the ICP ledger/index source on each poll, updating totals and the contributors list accordingly.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Jede überweisung soll automatisiert erkannt werden"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Frontend polls the backend at a reasonable interval (e.g., every 10–30 seconds) for updated presale status.",
+        "Backend updates totals based on detected ledger activity for the presale deposit account/address.",
+        "UI updates progress and contributor list without needing a manual refresh."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Show a public, continuously updated list of all sender wallet addresses that have contributed ICP, including the amount contributed per address and a timestamp/ordering (most recent first).",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Jede  Adresse die ICP versendet hat soll auf der Webseite angezeigt werden."
+        ]
+      },
+      "acceptanceCriteria": [
+        "UI shows a contributors table/list with at least: sender address, total contributed ICP (aggregated), and last contribution time.",
+        "New detected contributions appear in the list automatically after polling.",
+        "If multiple transfers come from the same address, they are aggregated per address (or clearly shown as multiple entries) consistently."
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Define backend presale accounting so each detected ICP contribution results in an investor allocation of IcpMemeDoge tokens, credited after the presale ends. Implement a backend endpoint to fetch an address’s allocation and a global allocation summary.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Die gekauften Meme Coins werden nach dem Presale dem Investoren gutgeschrieben."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend stores contributions and computed token allocations deterministically (no floating ambiguity).",
+        "Backend exposes methods to: (1) get allocation by contributing address, (2) get overall totals (tokens allocated, ICP received).",
+        "Allocations are only considered “final” when presale is ended."
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Add tokenomics content to the landing page including: max supply of 1,000,000,000 IcpMemeDoge and the promotional claim “100% win chances after the presale” (in English).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Maximalmenge von IcpMemeDoge ist 1 000 000 000 Coins",
+          "100% Gewinnchancen nach dem Presale"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Tokenomics section shows max supply exactly as 1,000,000,000.",
+        "Page includes the English version of the claim: “100% win chances after the presale.”"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Add clear presale parameters to the UI in English: hard cap (515,000 ICP), payment currency (ICP), and that the presale ends at 100%.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "515000 ICP Token beträgt 100%, nach 100% wird der Presale beendet.",
+          "Bezahlvorgang verläuft in ICP"
+        ]
+      },
+      "acceptanceCriteria": [
+        "UI shows: Hard cap: 515,000 ICP; Currency: ICP; End condition: 100% reached.",
+        "These parameters match backend constants used for progress calculations."
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Generate and display a custom “special meme dog” hero image for IcpMemeDoge as a static frontend asset.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Bild soll ein besonderer meme Hund sein"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A generated image exists under frontend/public/assets/generated and is used in the hero section.",
+        "Image loads correctly in production build without being served by the backend."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor (single-canister backend logic).",
+    "Do not edit files under frontend/src/components/ui or other immutablePaths; only compose and use them.",
+    "Presale deposit address must be displayed exactly as provided: a37ba6735ce5a8221f7c35105bff9bb8fc497cc7d5adda5f93d9935558e7d368.",
+    "All user-facing text in the app must be English."
+  ],
+  "nonGoals": [
+    "Implementing a real transferable on-chain token canister for IcpMemeDoge (token ledger) is out of scope unless explicitly requested.",
+    "Integrating external centralized APIs/services for payment tracking is out of scope.",
+    "Guaranteeing financial outcomes beyond displaying the requested promotional text is out of scope."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Stylized special meme dog character, neon/glow cyber-meme aesthetic, centered hero composition, transparent or dark background (icp-meme-doge-hero.dim_1600x900.png)"
+    ],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [
+      "User-facing text should be in English."
+    ],
+    "preferencesToRemove": [],
+    "miscToAdd": [
+      "Presale ICP address: a37ba6735ce5a8221f7c35105bff9bb8fc497cc7d5adda5f93d9935558e7d368",
+      "Presale hard cap: 515000 ICP = 100%"
+    ],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

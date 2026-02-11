@@ -1,0 +1,19 @@
+{
+  "frontend/src/App.tsx": "Main application component that composes all presale sections (Hero, Status, How-to, Contributors, Tokenomics) with animated neon background effects.",
+  "frontend/src/components/presale/HeroSection.tsx": "Hero section displaying the IcpMemeDoge image with animated glowing headline and key feature cards.",
+  "frontend/src/components/presale/PresaleStatusSection.tsx": "Container section for presale status including countdown timer, parameters, progress bar, and deposit address.",
+  "frontend/src/components/presale/PresaleProgress.tsx": "Displays presale progress with animated gradient bar, ICP received/remaining stats, and presale ended state.",
+  "frontend/src/components/presale/DepositAddress.tsx": "Shows the ICP deposit address with copy-to-clipboard functionality and visual confirmation.",
+  "frontend/src/components/presale/CountdownTimer.tsx": "24-hour countdown timer display with hours, minutes, and seconds in neon-styled boxes.",
+  "frontend/src/components/presale/HowToContribute.tsx": "Step-by-step contribution instructions and important presale information.",
+  "frontend/src/components/presale/ContributorsList.tsx": "Table displaying all contributors with aggregated amounts and timestamps, auto-updating via polling.",
+  "frontend/src/components/presale/TokenomicsFaq.tsx": "Tokenomics details (max supply, presale cap) and FAQ section with promotional claim.",
+  "frontend/src/components/Footer.tsx": "Footer component with copyright and caffeine.ai attribution with UTM tracking.",
+  "frontend/src/constants/presale.ts": "Centralized presale constants including deposit address, cap, max supply, and polling interval.",
+  "frontend/src/hooks/useCountdown24h.ts": "React hook that manages a 24-hour countdown timer starting from page load.",
+  "frontend/src/hooks/usePresaleStatus.ts": "React Query hook that fetches and auto-refreshes presale status from backend.",
+  "frontend/src/hooks/useContributors.ts": "React Query hook that fetches and auto-refreshes contributors list from backend.",
+  "frontend/src/utils/contributors.ts": "Utility functions to aggregate contributions by address and sort by most recent.",
+  "frontend/src/index.css": "Global styles with neon color system, animated glow effects, and custom keyframe animations for the meme aesthetic.",
+  "frontend/tailwind.config.js": "Tailwind configuration extended with neon color palette for the flashy meme design."
+}

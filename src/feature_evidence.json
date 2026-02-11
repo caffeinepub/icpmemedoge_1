@@ -1,0 +1,204 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-create-a-single-page-presale-website-for-the-memecoin-name-icpmemedoge-with-a-hero-section-presale-status-section-contribution-instructions-contributors-list-and-tokenomics-section",
+      "featureTitle": "Create a single-page presale website for the memecoin name “IcpMemeDoge” with a hero section, presale status section, contribution instructions, contributors list, and tokenomics section.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/presale/HowToContribute.tsx",
+        "frontend/src/components/presale/TokenomicsFaq.tsx",
+        "frontend/src/main.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-coherent-flashy-neon-meme-aesthetic-that-uses-colorful-glow-and-subtle-blinking-animations-while-maintaining-readability-accessible-contrast-for-body-text-no-rapid-flashing-include-a-colorful-glowing-blinking-headline-for-icpmemedoge",
+      "featureTitle": "Apply a coherent, flashy neon meme aesthetic that uses colorful glow and subtle blinking animations while maintaining readability (accessible contrast for body text, no rapid flashing). Include a colorful glowing/blinking headline for “IcpMemeDoge”.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/presale/HeroSection.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-24-hour-countdown-timer-that-starts-immediately-for-each-visitor-and-counts-down-from-24-00-00-to-00-00-00",
+      "featureTitle": "Add a 24-hour countdown timer that starts immediately for each visitor and counts down from 24:00:00 to 00:00:00.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/presale/CountdownTimer.tsx",
+        "frontend/src/hooks/useCountdown24h.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-display-the-presale-icp-deposit-address-exactly-as-provided-and-place-it-directly-under-the-presale-progress-indicator-with-a-copy-to-clipboard-control",
+      "featureTitle": "Display the presale ICP deposit address exactly as provided and place it directly under the presale progress indicator, with a copy-to-clipboard control.",
+      "files": [
+        "frontend/src/components/presale/DepositAddress.tsx",
+        "frontend/src/components/presale/PresaleStatusSection.tsx",
+        "frontend/src/constants/presale.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-presale-progress-tracking-where-515-000-icp-received-equals-100-show-a-progress-indicator-from-0-to-100-including-total-icp-received-and-remaining-icp-to-cap-and-mark-the-presale-as-ended-once-100-is-reached",
+      "featureTitle": "Implement presale progress tracking where 515,000 ICP received equals 100%. Show a progress indicator from 0% to 100%, including total ICP received and remaining ICP to cap, and mark the presale as ended once 100% is reached.",
+      "files": [
+        "frontend/src/components/presale/PresaleProgress.tsx",
+        "frontend/src/components/presale/PresaleStatusSection.tsx",
+        "frontend/src/constants/presale.ts",
+        "frontend/src/hooks/usePresaleStatus.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-automatically-detect-incoming-icp-transfers-to-the-presale-address-by-polling-from-the-frontend-and-having-the-backend-query-the-icp-ledger-index-source-on-each-poll-updating-totals-and-the-contributors-list-accordingly",
+      "featureTitle": "Automatically detect incoming ICP transfers to the presale address by polling from the frontend and having the backend query the ICP ledger/index source on each poll, updating totals and the contributors list accordingly.",
+      "files": [
+        "frontend/src/components/presale/ContributorsList.tsx",
+        "frontend/src/components/presale/PresaleStatusSection.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-show-a-public-continuously-updated-list-of-all-sender-wallet-addresses-that-have-contributed-icp-including-the-amount-contributed-per-address-and-a-timestamp-ordering-most-recent-first",
+      "featureTitle": "Show a public, continuously updated list of all sender wallet addresses that have contributed ICP, including the amount contributed per address and a timestamp/ordering (most recent first).",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/presale/ContributorsList.tsx",
+        "frontend/src/utils/contributors.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-tokenomics-content-to-the-landing-page-including-max-supply-of-1-000-000-000-icpmemedoge-and-the-promotional-claim-100-win-chances-after-the-presale-in-english",
+      "featureTitle": "Add tokenomics content to the landing page including: max supply of 1,000,000,000 IcpMemeDoge and the promotional claim “100% win chances after the presale” (in English).",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/presale/TokenomicsFaq.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-clear-presale-parameters-to-the-ui-in-english-hard-cap-515-000-icp-payment-currency-icp-and-that-the-presale-ends-at-100",
+      "featureTitle": "Add clear presale parameters to the UI in English: hard cap (515,000 ICP), payment currency (ICP), and that the presale ends at 100%.",
+      "files": [
+        "frontend/src/components/presale/PresaleStatusSection.tsx",
+        "frontend/src/constants/presale.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-generate-and-display-a-custom-special-meme-dog-hero-image-for-icpmemedoge-as-a-static-frontend-asset",
+      "featureTitle": "Generate and display a custom “special meme dog” hero image for IcpMemeDoge as a static frontend asset.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/presale/HeroSection.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

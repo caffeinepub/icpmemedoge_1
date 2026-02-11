@@ -1,0 +1,272 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "IcpMemeDoge Presale Landing Page (Frontend)",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Build a single-page presale landing page with Hero, Presale Status, How to Contribute, Contributors, and Tokenomics/FAQ sections (English copy).",
+      "acceptanceCriteria": [
+        "Landing page renders without errors and includes clearly labeled sections: Hero, Presale, How to Contribute, Contributors, Tokenomics/FAQ.",
+        "All user-facing copy is in English."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the single-page layout composing all required sections (Hero, Presale Status, How to Contribute, Contributors, Tokenomics/FAQ) and ensure all user-facing text is English. Use shadcn-ui components (e.g., Card, Separator, Table) to structure sections. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/presale/HowToContribute.tsx",
+          "operation": "create",
+          "description": "Create a dedicated section component describing contribution instructions in English and referencing the presale ICP address and key parameters. Use shadcn-ui components for consistent layout (e.g., Card). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/presale/TokenomicsFaq.tsx",
+          "operation": "create",
+          "description": "Create Tokenomics/FAQ section container (content filled by REQ-9/REQ-10) and keep copy in English. Use shadcn-ui components (e.g., Accordion) if available. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/main.tsx",
+          "operation": "modify",
+          "description": "Ensure the app renders the new App component successfully and imports the global stylesheet (index.css) for the neon theme."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Apply a flashy neon meme aesthetic with readable contrast and subtle blinking/glow animations, including a glowing/blinking “IcpMemeDoge” headline.",
+      "acceptanceCriteria": [
+        "The main headline has a noticeable glow + gentle blinking animation.",
+        "Body text remains readable (no blinking on paragraphs; sufficient contrast on primary content).",
+        "Blinking animations are subtle (no strobe-like effect)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Create global styles for a neon meme aesthetic (dark background, colorful glow accents), add subtle keyframe animations for headline glow/blink, and ensure body text remains high-contrast and non-blinking."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Extend Tailwind theme with neon-friendly colors/shadows/animations as needed to support glow and gentle blinking while maintaining readability."
+        },
+        {
+          "path": "frontend/src/components/presale/HeroSection.tsx",
+          "operation": "create",
+          "description": "Implement the hero section headline “IcpMemeDoge” with a colorful glow and gentle blinking animation (headline only, not paragraphs). Use shadcn-ui Typography primitives if present, otherwise compose with existing Tailwind patterns. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the HeroSection into the page and apply consistent neon-themed section spacing and readable typography across the page."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Add a per-visitor 24-hour countdown timer that starts immediately on page load and ticks every second.",
+      "acceptanceCriteria": [
+        "On page load, the timer starts at 24:00:00 (or 23:59:59) and ticks down every second.",
+        "If the page is refreshed, the timer restarts from 24 hours (per-visitor immediate start)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useCountdown24h.ts",
+          "operation": "create",
+          "description": "Create a React hook that initializes a 24-hour countdown on mount (no persistence across refresh) and updates remaining time every second."
+        },
+        {
+          "path": "frontend/src/components/presale/CountdownTimer.tsx",
+          "operation": "create",
+          "description": "Create a countdown display component (HH:MM:SS) powered by useCountdown24h, styled to match the neon theme without rapid flashing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Place the CountdownTimer in the Presale Status section so it is visible and clearly labeled."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Show the exact presale ICP deposit address directly under the progress indicator with copy-to-clipboard and visible confirmation.",
+      "acceptanceCriteria": [
+        "The address is shown exactly as: a37ba6735ce5a8221f7c35105bff9bb8fc497cc7d5adda5f93d9935558e7d368.",
+        "The address appears directly below the progress bar/indicator.",
+        "Copy-to-clipboard copies the full address and provides a visible confirmation state."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/constants/presale.ts",
+          "operation": "create",
+          "description": "Centralize presale constants including the exact deposit address string (a37ba6735ce5a8221f7c35105bff9bb8fc497cc7d5adda5f93d9935558e7d368) to prevent accidental edits and ensure consistent UI usage."
+        },
+        {
+          "path": "frontend/src/components/presale/DepositAddress.tsx",
+          "operation": "create",
+          "description": "Create a deposit address block rendered directly under the progress indicator, with a copy-to-clipboard control and a visible 'Copied' confirmation state. Use shadcn-ui Button (and optional Toast) for the control and feedback. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/presale/PresaleStatusSection.tsx",
+          "operation": "create",
+          "description": "Implement the Presale Status section layout so the progress indicator is followed immediately by the DepositAddress component (directly below). Use shadcn-ui Progress/Card for visual structure if available. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Display presale progress (cap=515,000 ICP) with percent complete, ICP received/remaining, and an 'Ended' state at/above 100%.",
+      "acceptanceCriteria": [
+        "Frontend displays: percent complete, ICP received, ICP remaining, and a clear “Presale Ended” state at/above cap.",
+        "Backend exposes an API that returns current totals and computed percentage based on cap=515000 ICP.",
+        "When total received >= 515000 ICP, the presale status returned by backend is ended and UI reflects it."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/constants/presale.ts",
+          "operation": "modify",
+          "description": "Add the hard cap constant (515000 ICP) and any display helpers/constants needed for consistent progress calculations and labels."
+        },
+        {
+          "path": "frontend/src/hooks/usePresaleStatus.ts",
+          "operation": "create",
+          "description": "Create a hook that retrieves presale status from the backend interface and derives UI fields (percent complete, ended state) using the hard cap constant, keeping types compatible with bigint."
+        },
+        {
+          "path": "frontend/src/components/presale/PresaleProgress.tsx",
+          "operation": "create",
+          "description": "Create a progress indicator component showing percent complete, ICP received, ICP remaining, and a prominent 'Presale Ended' badge/state when inactive or at/above cap. Use shadcn-ui Progress/Badge/Card if available. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/presale/PresaleStatusSection.tsx",
+          "operation": "modify",
+          "description": "Wire PresaleProgress into the Presale Status section above the deposit address and ensure the 'Ended' state is clearly visible."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Poll the backend from the frontend at a reasonable interval to automatically refresh presale totals and contributors list without manual refresh.",
+      "acceptanceCriteria": [
+        "Frontend polls the backend at a reasonable interval (e.g., every 10–30 seconds) for updated presale status.",
+        "Backend updates totals based on detected ledger activity for the presale deposit account/address.",
+        "UI updates progress and contributor list without needing a manual refresh."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/services/backendClient.ts",
+          "operation": "create",
+          "description": "Create a small typed wrapper around the existing canister/actor integration (from core-infrastructure) to call backendInterface methods used by the UI (presale status + contributors). Keep this frontend-only and avoid introducing authentication flows."
+        },
+        {
+          "path": "frontend/src/hooks/usePollingPresaleData.ts",
+          "operation": "create",
+          "description": "Create a polling hook (e.g., using @tanstack/react-query refetchInterval) that refreshes presale status and contributors every 10–30 seconds and exposes loading/error states for the UI."
+        },
+        {
+          "path": "frontend/src/components/presale/PresaleStatusSection.tsx",
+          "operation": "modify",
+          "description": "Switch data sourcing to usePollingPresaleData so totals automatically refresh on the chosen interval without manual reload."
+        },
+        {
+          "path": "frontend/src/components/presale/ContributorsList.tsx",
+          "operation": "modify",
+          "description": "Ensure the contributors list also uses the same polling data source so new contributions appear automatically."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Show a continuously updated public contributors list with sender address, contributed ICP amount per address, and a most-recent-first ordering by timestamp.",
+      "acceptanceCriteria": [
+        "UI shows a contributors table/list with at least: sender address, total contributed ICP (aggregated), and last contribution time.",
+        "New detected contributions appear in the list automatically after polling.",
+        "If multiple transfers come from the same address, they are aggregated per address (or clearly shown as multiple entries) consistently."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/utils/contributors.ts",
+          "operation": "create",
+          "description": "Add utilities to aggregate contributions by address, compute total contributed per address, compute last contribution time, and sort most recent first."
+        },
+        {
+          "path": "frontend/src/components/presale/ContributorsList.tsx",
+          "operation": "create",
+          "description": "Create a contributors table/list UI showing sender address, total contributed ICP (aggregated consistently), and last contribution time; sorted most recent first. Use shadcn-ui Table components if available. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the ContributorsList into the page with a clearly labeled 'Contributors' section and ensure it uses the polled data so it updates automatically."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Add tokenomics content: max supply 1,000,000,000 and the English promotional claim.",
+      "acceptanceCriteria": [
+        "Tokenomics section shows max supply exactly as 1,000,000,000.",
+        "Page includes the English version of the claim: “100% win chances after the presale.”"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/presale/TokenomicsFaq.tsx",
+          "operation": "modify",
+          "description": "Populate Tokenomics section content to include max supply exactly as 1,000,000,000 IcpMemeDoge and include the promotional claim text exactly: “100% win chances after the presale.”"
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Ensure Tokenomics/FAQ section is clearly labeled and visible on the single page."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Display presale parameters in English: hard cap (515,000 ICP), currency (ICP), and that presale ends at 100%.",
+      "acceptanceCriteria": [
+        "UI shows: Hard cap: 515,000 ICP; Currency: ICP; End condition: 100% reached.",
+        "These parameters match backend constants used for progress calculations."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/constants/presale.ts",
+          "operation": "modify",
+          "description": "Add UI-facing presale parameter constants/labels: hard cap 515,000 ICP, currency ICP, and end condition 100% reached, keeping them consistent with progress calculations."
+        },
+        {
+          "path": "frontend/src/components/presale/PresaleStatusSection.tsx",
+          "operation": "modify",
+          "description": "Add a clear English 'Presale Parameters' block listing: Hard cap: 515,000 ICP; Currency: ICP; End condition: 100% reached, near the progress indicator for clarity."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Display the generated “special meme dog” hero image as a static frontend asset in the hero section.",
+      "acceptanceCriteria": [
+        "A generated image exists under frontend/public/assets/generated and is used in the hero section.",
+        "Image loads correctly in production build without being served by the backend."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/icp-meme-doge-hero.dim_1600x900.png",
+          "operation": "create",
+          "description": "Add the generated hero image asset at exactly frontend/public/assets/generated/icp-meme-doge-hero.dim_1600x900.png so it is served as a static frontend file."
+        },
+        {
+          "path": "frontend/src/components/presale/HeroSection.tsx",
+          "operation": "modify",
+          "description": "Render the static hero image from frontend/public/assets/generated/icp-meme-doge-hero.dim_1600x900.png in the hero section alongside the animated headline, ensuring responsive sizing and readable surrounding copy."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Ensure the hero section is placed at the top of the single-page layout and the image is visible on initial load."
+        }
+      ]
+    }
+  ]
+}

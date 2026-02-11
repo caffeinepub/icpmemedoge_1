@@ -1,0 +1,204 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --radius: 0.625rem;
+        --background: 0.145 0 0;
+        --foreground: 0.985 0 0;
+        --card: 0.205 0 0;
+        --card-foreground: 0.985 0 0;
+        --popover: 0.269 0 0;
+        --popover-foreground: 0.985 0 0;
+        --primary: 0.922 0 0;
+        --primary-foreground: 0.205 0 0;
+        --secondary: 0.269 0 0;
+        --secondary-foreground: 0.985 0 0;
+        --muted: 0.269 0 0;
+        --muted-foreground: 0.708 0 0;
+        --accent: 0.371 0 0;
+        --accent-foreground: 0.985 0 0;
+        --destructive: 0.704 0.191 22.216;
+        --destructive-foreground: 0.205 0 0;
+        --border: 1 0 0 / 10%;
+        --input: 1 0 0 / 15%;
+        --ring: 0.556 0 0;
+        
+        /* Neon colors for meme aesthetic */
+        --neon-pink: 0.65 0.28 340;
+        --neon-cyan: 0.75 0.20 195;
+        --neon-yellow: 0.85 0.22 85;
+        --neon-purple: 0.60 0.25 290;
+    }
+
+    * {
+        @apply border-border;
+    }
+    
+    body {
+        @apply bg-background text-foreground;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    }
+}
+
+@layer utilities {
+    /* Neon text with animated glow and blink */
+    .neon-text-animated {
+        text-shadow: 
+            0 0 10px currentColor,
+            0 0 20px currentColor,
+            0 0 40px currentColor,
+            0 0 80px currentColor;
+        animation: neon-blink 3s ease-in-out infinite;
+    }
+
+    @keyframes neon-blink {
+        0%, 100% {
+            opacity: 1;
+            filter: brightness(1);
+        }
+        50% {
+            opacity: 0.85;
+            filter: brightness(1.2);
+        }
+    }
+
+    /* Gradient animation */
+    @keyframes gradient-x {
+        0%, 100% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+    }
+
+    .animate-gradient-x {
+        background-size: 200% 200%;
+        animation: gradient-x 3s ease infinite;
+    }
+
+    /* Blob animation for background */
+    @keyframes blob {
+        0%, 100% {
+            transform: translate(0, 0) scale(1);
+        }
+        33% {
+            transform: translate(30px, -50px) scale(1.1);
+        }
+        66% {
+            transform: translate(-20px, 20px) scale(0.9);
+        }
+    }
+
+    .animate-blob {
+        animation: blob 7s infinite;
+    }
+
+    .animation-delay-2000 {
+        animation-delay: 2s;
+    }
+
+    .animation-delay-4000 {
+        animation-delay: 4s;
+    }
+
+    /* Shimmer effect for progress bar */
+    @keyframes shimmer {
+        0% {
+            transform: translateX(-100%);
+        }
+        100% {
+            transform: translateX(100%);
+        }
+    }
+
+    .animate-shimmer {
+        animation: shimmer 2s infinite;
+    }
+
+    /* Slow pulse */
+    @keyframes pulse-slow {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.7;
+        }
+    }
+
+    .animate-pulse-slow {
+        animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    /* Fade in animation */
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fade-in 0.3s ease-out;
+    }
+}
+
+/* Custom color utilities */
+.text-neon-pink {
+    color: oklch(var(--neon-pink));
+}
+
+.text-neon-cyan {
+    color: oklch(var(--neon-cyan));
+}
+
+.text-neon-yellow {
+    color: oklch(var(--neon-yellow));
+}
+
+.text-neon-purple {
+    color: oklch(var(--neon-purple));
+}
+
+.bg-neon-pink {
+    background-color: oklch(var(--neon-pink));
+}
+
+.bg-neon-cyan {
+    background-color: oklch(var(--neon-cyan));
+}
+
+.bg-neon-yellow {
+    background-color: oklch(var(--neon-yellow));
+}
+
+.bg-neon-purple {
+    background-color: oklch(var(--neon-purple));
+}
+
+.border-neon-pink {
+    border-color: oklch(var(--neon-pink));
+}
+
+.border-neon-cyan {
+    border-color: oklch(var(--neon-cyan));
+}
+
+.border-neon-yellow {
+    border-color: oklch(var(--neon-yellow));
+}
+
+.border-neon-purple {
+    border-color: oklch(var(--neon-purple));
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}

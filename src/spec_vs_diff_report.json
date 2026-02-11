@@ -1,0 +1,97 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-11T19:14:27.645Z",
+  "summary": "The diff adds a full neon-styled single-page presale UI with countdown, progress bar, deposit address + copy control, and a contributors table that polls the backend. However, several key backend requirements are missing: no ledger/index querying for automatic detection, no backend-computed percentage, and token allocation/accounting endpoints do not match the requested token allocation behavior. There are also unrequested features like Internet Identity integration and a caffeine.ai promotional footer.",
+  "missing_requirements": [
+    {
+      "id": "REQ-5",
+      "requirement": "Backend exposes an API that returns current totals and computed percentage based on cap=515000 ICP; and returns an ended state at/above cap that UI reflects.",
+      "reason": "Backend getPresaleStatus returns totalIcp/remainingIcp/active but does not return a computed percentage. Cap is represented in e8s (515_000_000_000) but percentage is computed only in the frontend.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/components/presale/PresaleProgress.tsx"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "requirement": "Automatically detect incoming ICP transfers to the presale address by polling from the frontend and having the backend query the ICP ledger/index source on each poll, updating totals and contributors accordingly.",
+      "reason": "Frontend polling exists (react-query refetchInterval), but backend has no ledger/index query logic and instead exposes a manual updatePresaleProgress(newAmount, contributor) method that must be called to change totals.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/hooks/usePresaleStatus.ts",
+        "frontend/src/hooks/useContributors.ts"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "requirement": "Backend presale accounting should compute investor allocation of IcpMemeDoge tokens (not ICP), credited after presale ends; provide endpoint for allocation by address and a global allocation summary; allocations only final when presale is ended.",
+      "reason": "Backend stores 'allocations' as Nat incremented by contributed amount (ICP units) and exposes getTotalAllocation(address) only. There is no global allocation summary endpoint, no explicit token allocation computation, and no gating of allocations as 'final' only after presale end.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "requirement": "A generated hero image exists under frontend/public/assets/generated and is used in the hero section.",
+      "reason": "HeroSection references the required path, but the diff summary does not show the actual image file being added (omitted files exist, so it cannot be confirmed from provided evidence).",
+      "evidence": [
+        "frontend/src/components/presale/HeroSection.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Internet Identity authentication/provider and identity-aware actor recreation/invalidation logic.",
+      "reason": "The BuildRequest does not request authentication/login, but the diff adds an InternetIdentityProvider and related hooks and identity-based actor creation.",
+      "evidence": [
+        "frontend/src/main.tsx",
+        "frontend/src/hooks/useInternetIdentity.ts",
+        "frontend/src/hooks/useActor.ts"
+      ]
+    },
+    {
+      "description": "Caffeine.ai promotional footer link with referral parameters.",
+      "reason": "The BuildRequest does not ask for third-party promotional links/branding in the footer.",
+      "evidence": [
+        "frontend/src/components/Footer.tsx"
+      ]
+    },
+    {
+      "description": "Manual backend contribution update endpoint (updatePresaleProgress) that traps on exceeding cap.",
+      "reason": "The BuildRequest specifies backend detection via ledger/index polling, not a public method to push arbitrary contributions into the canister.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    }
+  ],
+  "confidence": 0.78,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/Footer.tsx",
+    "frontend/src/components/presale/ContributorsList.tsx",
+    "frontend/src/components/presale/CountdownTimer.tsx",
+    "frontend/src/components/presale/DepositAddress.tsx",
+    "frontend/src/components/presale/HeroSection.tsx",
+    "frontend/src/components/presale/HowToContribute.tsx",
+    "frontend/src/components/presale/PresaleProgress.tsx",
+    "frontend/src/components/presale/PresaleStatusSection.tsx",
+    "frontend/src/components/presale/TokenomicsFaq.tsx",
+    "frontend/src/constants/presale.ts",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useContributors.ts",
+    "frontend/src/hooks/useCountdown24h.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/usePresaleStatus.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/utils/contributors.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}
