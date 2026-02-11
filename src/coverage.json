@@ -1,7 +1,7 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T22:25:41.602Z",
+  "generatedAt": "2026-02-11T22:33:28.719Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
@@ -11,23 +11,21 @@
     "implemented": 2,
     "items": [
       {
-        "id": "REQ-23",
-        "summary": "Change the background music behavior so it does not attempt to autoplay on initial page load unless the visitor has previously opted in; instead, show a persistent, unobtrusive “Play music” control that starts playback only after an explicit user action.",
+        "id": "REQ-25",
+        "summary": "Ensure that pressing the floating Play button starts playback of the bundled 90s dance background music track using the existing audio path \"/assets/audio/background-dance.mp3\", and that the UI correctly reflects the playing state immediately after a successful start (switching from Play to the mute/volume controls).",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/hooks/useBackgroundMusic.ts",
-          "frontend/src/utils/backgroundMusicStorage.ts",
           "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx"
         ],
         "matchedFiles": [
           "frontend/src/hooks/useBackgroundMusic.ts",
-          "frontend/src/utils/backgroundMusicStorage.ts",
           "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx"
         ]
       },
       {
-        "id": "REQ-24",
-        "summary": "Keep the existing audio asset path unchanged and ensure the background music controls still support mute/unmute and volume persistence, with safe defaults that avoid unexpectedly loud playback.",
+        "id": "REQ-26",
+        "summary": "If playback cannot be started after the user presses the Play button (e.g., browser blocks playback or the audio asset fails to load), show a clear user-facing error message in English while keeping the page usable and leaving the Play button available for retry.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/hooks/useBackgroundMusic.ts",
@@ -47,7 +45,6 @@
     "frontend-implementation-plan.json",
     "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
     "frontend/src/hooks/useBackgroundMusic.ts",
-    "frontend/src/utils/backgroundMusicStorage.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

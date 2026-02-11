@@ -1,12 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Make background music user-initiated by default and less intrusive, while preserving existing mute/volume behavior and asset path.
+**Goal:** Make the floating Play button reliably start the bundled 90s dance background music and correctly reflect playback state, with clear error handling when playback cannot start.
 
 **Planned changes:**
-- Stop attempting to autoplay background music on first-time visits; only allow autoplay on subsequent visits after a stored user opt-in.
-- Add a persistent, unobtrusive “Play music” control that starts playback only after explicit user interaction and is keyboard-accessible (Enter/Space).
-- Persist the user’s explicit playback opt-in in localStorage, while keeping existing mute/unmute and volume persistence with conservative default volume.
-- When autoplay is blocked by browser policy, keep the page usable and clearly offer the “Play music” action.
+- Ensure clicking the floating Play button starts looping playback of `/assets/audio/background-dance.mp3` via the existing audio logic and immediately switches the UI from Play to the mute/volume controls on successful start.
+- Preserve first-visit behavior (no autoplay; Play button shown) and keep the existing opt-in + reload behavior (autoplay if allowed, otherwise start on next user interaction per existing unblock logic).
+- Add user-facing English error messaging when user-initiated playback fails, keeping the Play button available for retry and preventing any rendering-breaking errors.
 
-**User-visible outcome:** First-time visitors won’t hear music automatically; they can start music via a visible “Play music” control (mouse, touch, or keyboard). After opting in once, the site remembers the preference for future visits, while mute/unmute and volume continue to persist safely.
+**User-visible outcome:** On first visit, users see a Play button; pressing it starts the 90s dance track and the UI switches to mute/volume controls. If playback can’t start, an English message explains the issue and the user can retry without the page breaking.

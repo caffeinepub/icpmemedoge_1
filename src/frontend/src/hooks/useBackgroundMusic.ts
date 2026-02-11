@@ -6,9 +6,10 @@ interface UseBackgroundMusicReturn {
   isMuted: boolean;
   isBlocked: boolean;
   volume: number;
+  error: string | null;
   toggleMute: () => void;
   setVolume: (volume: number) => void;
-  userInitiatedPlay: () => void;
+  userInitiatedPlay: () => Promise<void>;
 }
 
 export function useBackgroundMusic(): UseBackgroundMusicReturn {
@@ -17,13 +18,14 @@ export function useBackgroundMusic(): UseBackgroundMusicReturn {
   const [isMuted, setIsMuted] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [volume, setVolumeState] = useState(0.3);
+  const [error, setError] = useState<string | null>(null);
   const unblockListenersAttached = useRef(false);
   const unblockCleanupRef = useRef<(() => void) | null>(null);
   const hasOptedIn = useRef(hasOptedInToMusic());
 
-  // Initialize audio element (singleton)
-  useEffect(() => {
-    if (audioRef.current) return;
+  // Initialize or get audio element
+  const getOrCreateAudio = (): HTMLAudioElement => {
+    if (audioRef.current) return audioRef.current;
 
     const audio = new Audio('/assets/audio/background-dance.mp3');
     audio.loop = true;
@@ -36,7 +38,25 @@ export function useBackgroundMusic(): UseBackgroundMusicReturn {
     setVolumeState(prefs.volume);
     setIsMuted(prefs.muted);
 
+    // Attach event listeners to sync isPlaying state
+    audio.addEventListener('playing', () => {
+      setIsPlaying(true);
+      setError(null);
+    });
+    audio.addEventListener('pause', () => setIsPlaying(false));
+    audio.addEventListener('ended', () => setIsPlaying(false));
+    audio.addEventListener('error', () => {
+      setIsPlaying(false);
+      setError('Music could not be loaded. Please try again.');
+    });
+
     audioRef.current = audio;
+    return audio;
+  };
+
+  // Initialize audio element (singleton)
+  useEffect(() => {
+    const audio = getOrCreateAudio();
 
     // Attach listeners to unblock on first user interaction (only if opted in)
     const attachUnblockListeners = () => {
@@ -50,6 +70,7 @@ export function useBackgroundMusic(): UseBackgroundMusicReturn {
           await audioRef.current.play();
           setIsPlaying(true);
           setIsBlocked(false);
+          setError(null);
           
           // Remove listeners after successful play
           removeUnblockListeners();
@@ -92,6 +113,7 @@ export function useBackgroundMusic(): UseBackgroundMusicReturn {
         await audio.play();
         setIsPlaying(true);
         setIsBlocked(false);
+        setError(null);
       } catch (error) {
         // Autoplay blocked by browser policy
         setIsBlocked(true);
@@ -109,6 +131,7 @@ export function useBackgroundMusic(): UseBackgroundMusicReturn {
           await audioRef.current.play();
           setIsPlaying(true);
           setIsBlocked(false);
+          setError(null);
           removeUnblockListeners();
         } catch (error) {
           // Still blocked
@@ -134,10 +157,10 @@ export function useBackgroundMusic(): UseBackgroundMusicReturn {
   }, []);
 
   const toggleMute = () => {
-    if (!audioRef.current) return;
+    const audio = getOrCreateAudio();
 
     const newMuted = !isMuted;
-    audioRef.current.muted = newMuted;
+    audio.muted = newMuted;
     setIsMuted(newMuted);
 
     // Persist preference
@@ -149,10 +172,10 @@ export function useBackgroundMusic(): UseBackgroundMusicReturn {
   };
 
   const setVolume = (newVolume: number) => {
-    if (!audioRef.current) return;
+    const audio = getOrCreateAudio();
 
     const clampedVolume = Math.max(0, Math.min(1, newVolume));
-    audioRef.current.volume = clampedVolume;
+    audio.volume = clampedVolume;
     setVolumeState(clampedVolume);
 
     // Persist preference
@@ -164,19 +187,23 @@ export function useBackgroundMusic(): UseBackgroundMusicReturn {
   };
 
   const userInitiatedPlay = async () => {
-    if (!audioRef.current) return;
-
     try {
-      await audioRef.current.play();
+      const audio = getOrCreateAudio();
+      
+      await audio.play();
       setIsPlaying(true);
       setIsBlocked(false);
+      setError(null);
       
       // Save opt-in preference
       hasOptedIn.current = true;
       saveOptInToMusic();
-    } catch (error) {
-      // Still blocked or other error
+    } catch (err) {
+      // Playback failed
       setIsBlocked(true);
+      setIsPlaying(false);
+      setError('Music could not be started. Please try again or check your browser settings.');
+      console.error('Failed to start background music:', err);
     }
   };
 
@@ -185,6 +212,7 @@ export function useBackgroundMusic(): UseBackgroundMusicReturn {
     isMuted,
     isBlocked,
     volume,
+    error,
     toggleMute,
     setVolume,
     userInitiatedPlay,

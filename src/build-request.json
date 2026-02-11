@@ -1,56 +1,53 @@
 {
   "kind": "build_request",
-  "title": "Adjust background music behavior to be user-initiated and less intrusive",
+  "title": "Ensure Play button reliably starts 90s dance background music",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-23",
-      "text": "Change the background music behavior so it does not attempt to autoplay on initial page load unless the visitor has previously opted in; instead, show a persistent, unobtrusive “Play music” control that starts playback only after an explicit user action.",
+      "id": "REQ-25",
+      "text": "Ensure that pressing the floating Play button starts playback of the bundled 90s dance background music track using the existing audio path \"/assets/audio/background-dance.mp3\", and that the UI correctly reflects the playing state immediately after a successful start (switching from Play to the mute/volume controls).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-3"
+          "msg-6"
         ],
         "quotes": [
-          "Bitte anpassen"
+          "Wenn ich den Play button drücke soll dance musik aus den 90s starten"
         ]
       },
       "acceptanceCriteria": [
-        "On a first-time visit (no stored preference), the site loads with background music not playing.",
-        "A visible control is available to start playback via click/tap and via keyboard (Enter/Space).",
-        "After the visitor explicitly starts playback once, the app remembers this choice (localStorage) and may attempt autoplay on subsequent visits (still subject to browser policies).",
-        "No new user-facing text is introduced in German; any labels/messages are in English."
+        "On a first-time visit (no prior opt-in), the site does not autoplay music and shows the Play button.",
+        "Clicking the Play button starts audio playback of /assets/audio/background-dance.mp3 (looping) and the UI switches to the mute/volume controls.",
+        "After a page reload (with opt-in stored), music either plays automatically or, if blocked by browser policy, starts upon the next user interaction per the existing unblock logic.",
+        "The existing mute/unmute and volume persistence behavior continues to work as before."
       ]
     },
     {
-      "id": "REQ-24",
-      "text": "Keep the existing audio asset path unchanged and ensure the background music controls still support mute/unmute and volume persistence, with safe defaults that avoid unexpectedly loud playback.",
+      "id": "REQ-26",
+      "text": "If playback cannot be started after the user presses the Play button (e.g., browser blocks playback or the audio asset fails to load), show a clear user-facing error message in English while keeping the page usable and leaving the Play button available for retry.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-3"
+          "msg-6"
         ],
         "quotes": [
-          "Bitte anpassen"
+          "Wenn ich den Play button drücke soll dance musik aus den 90s starten"
         ]
       },
       "acceptanceCriteria": [
-        "The audio file path remains exactly '/assets/audio/background-dance.mp3'.",
-        "Mute/unmute and volume controls continue to work and persist across reloads using the existing localStorage mechanism.",
-        "Default volume remains conservative (at or below the current 30%) when no stored preference exists.",
-        "If autoplay is blocked by the browser, the UI clearly offers a “Play music” action and the rest of the page remains fully usable."
+        "When userInitiatedPlay() fails, the UI shows an English message indicating music could not be started and suggests trying again.",
+        "The Play button remains visible/usable so the user can retry starting music.",
+        "No console error causes React rendering to break (page remains usable)."
       ]
     }
   ],
   "constraints": [
-    "Do not edit any files under frontend/src/components/ui (compose these components instead).",
-    "Do not modify the background audio file path '/assets/audio/background-dance.mp3'.",
-    "Keep the backend as a single Motoko actor; no backend changes are required for this request."
+    "Keep the background music asset path unchanged: /assets/audio/background-dance.mp3.",
+    "Do not modify files under frontend/src/components/ui or other immutable paths listed in SYSTEM_CONTEXT."
   ],
   "nonGoals": [
-    "Changing presale logic, ledger polling, progress tracking, or contributor listing behavior.",
-    "Adding new audio tracks or fetching audio from external URLs.",
-    "Implementing any third-party consent/analytics platform."
+    "Adding additional music tracks, a playlist, or a track selector.",
+    "Changing the overall presale page layout/sections unrelated to background music."
   ],
   "imageRequirements": {
     "required": [],

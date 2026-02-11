@@ -1,54 +1,48 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Make background music user-initiated with remembered opt-in and unobtrusive controls",
+  "title": "Make Play button reliably start bundled background dance music with correct UI + error handling",
   "requirements": [
     {
-      "id": "REQ-23",
-      "summary": "Prevent first-visit autoplay; provide a persistent Play music control and remember explicit opt-in for future visits.",
+      "id": "REQ-25",
+      "summary": "Make the floating Play button reliably start /assets/audio/background-dance.mp3 (looping) and immediately switch UI to mute/volume controls after successful start while preserving opt-in, unblock logic, and volume/mute persistence.",
       "acceptanceCriteria": [
-        "On a first-time visit (no stored preference), the site loads with background music not playing.",
-        "A visible control is available to start playback via click/tap and via keyboard (Enter/Space).",
-        "After the visitor explicitly starts playback once, the app remembers this choice (localStorage) and may attempt autoplay on subsequent visits (still subject to browser policies).",
-        "No new user-facing text is introduced in German; any labels/messages are in English."
+        "On a first-time visit (no prior opt-in), the site does not autoplay music and shows the Play button.",
+        "Clicking the Play button starts audio playback of /assets/audio/background-dance.mp3 (looping) and the UI switches to the mute/volume controls.",
+        "After a page reload (with opt-in stored), music either plays automatically or, if blocked by browser policy, starts upon the next user interaction per the existing unblock logic.",
+        "The existing mute/unmute and volume persistence behavior continues to work as before."
       ],
       "file_operations": [
         {
           "path": "frontend/src/hooks/useBackgroundMusic.ts",
           "operation": "modify",
-          "description": "Update background music initialization so autoplay is only attempted when a stored opt-in flag is present; add state/logic to record opt-in when the user explicitly starts playback; ensure user-gesture listeners are only used to recover playback when the user has opted in (or after explicit interaction)."
-        },
-        {
-          "path": "frontend/src/utils/backgroundMusicStorage.ts",
-          "operation": "modify",
-          "description": "Add a small localStorage-backed opt-in persistence helper (separate key from existing mute/volume storage) to load/save whether the visitor has explicitly chosen to play music; keep existing preferences behavior intact."
+          "description": "Harden userInitiatedPlay() so a click always attempts playback even if the audio element is not yet initialized (create/initialize the Audio instance on-demand using the unchanged path /assets/audio/background-dance.mp3), keep loop enabled, and synchronize isPlaying with audio events (e.g., playing/pause/ended) so the UI reflects the playing state immediately after a successful start while preserving existing opt-in + unblock-on-gesture behavior and volume/mute persistence."
         },
         {
           "path": "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
           "operation": "modify",
-          "description": "Adjust UI logic to always render a persistent, unobtrusive “Play music” control whenever music is not playing (including first visit), not only when autoplay is blocked; keep keyboard-accessible interaction via the shadcn-ui Button component. Verify the component's usage instructions before implementing."
+          "description": "Adjust controller rendering logic so the Play button-to-controls transition is driven by the hook’s reliable isPlaying state, ensuring the UI switches immediately after successful start; keep existing shadcn/ui Button/Popover/Slider usage (do not modify files under frontend/src/components/ui). Verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-24",
-      "summary": "Preserve the existing audio asset path and keep mute/unmute and volume persistence with safe default volume and clear play action when autoplay is blocked.",
+      "id": "REQ-26",
+      "summary": "When user-initiated playback fails, show a clear English error message while keeping the page usable and allowing Play retry.",
       "acceptanceCriteria": [
-        "The audio file path remains exactly '/assets/audio/background-dance.mp3'.",
-        "Mute/unmute and volume controls continue to work and persist across reloads using the existing localStorage mechanism.",
-        "Default volume remains conservative (at or below the current 30%) when no stored preference exists.",
-        "If autoplay is blocked by the browser, the UI clearly offers a “Play music” action and the rest of the page remains fully usable."
+        "When userInitiatedPlay() fails, the UI shows an English message indicating music could not be started and suggests trying again.",
+        "The Play button remains visible/usable so the user can retry starting music.",
+        "No console error causes React rendering to break (page remains usable)."
       ],
       "file_operations": [
         {
           "path": "frontend/src/hooks/useBackgroundMusic.ts",
           "operation": "modify",
-          "description": "Ensure the Audio instance continues to use the exact path '/assets/audio/background-dance.mp3'; preserve existing mute/volume persistence behavior; keep the default volume at 0.3 (or lower) when no stored preference exists; when autoplay fails, expose state so the UI can clearly offer “Play music” without blocking the rest of the UI."
+          "description": "Add a user-facing error state (e.g., string) to the hook that is set when playback fails due to blocked playback or load/play errors and cleared on successful play; ensure errors are caught and handled so no uncaught rejection breaks rendering, and keep existing behavior for opt-in, unblock listeners, mute/unmute, and volume persistence."
         },
         {
           "path": "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
           "operation": "modify",
-          "description": "Keep existing mute/unmute and volume UI (shadcn-ui Button/Popover/Slider) working with persisted preferences; ensure that when autoplay is blocked the Play music action remains visible and usable while the rest of the page stays interactive. Verify the component's usage instructions before implementing."
+          "description": "Render the hook’s error message in English near the floating Play button when not playing (without blocking the rest of the UI) and keep the Play button available for retry; ensure the error clears after a successful start. Keep existing shadcn/ui Button usage (do not modify files under frontend/src/components/ui). Verify the component's usage instructions before implementing."
         }
       ]
     }

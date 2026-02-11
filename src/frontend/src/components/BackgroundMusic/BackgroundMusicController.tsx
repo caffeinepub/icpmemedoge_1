@@ -1,16 +1,22 @@
-import { Volume2, VolumeX, Play } from 'lucide-react';
+import { Volume2, VolumeX, Play, AlertCircle } from 'lucide-react';
 import { useBackgroundMusic } from '../../hooks/useBackgroundMusic';
 import { Button } from '../ui/button';
 import { Slider } from '../ui/slider';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 export function BackgroundMusicController() {
-  const { isPlaying, isMuted, volume, toggleMute, setVolume, userInitiatedPlay } = useBackgroundMusic();
+  const { isPlaying, isMuted, volume, error, toggleMute, setVolume, userInitiatedPlay } = useBackgroundMusic();
 
   // Show play button whenever music is not playing (first visit or stopped)
   if (!isPlaying) {
     return (
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+        {error && (
+          <div className="bg-red-900/90 border border-red-500/50 text-red-100 px-4 py-2 rounded-lg shadow-lg backdrop-blur-sm flex items-start gap-2 max-w-xs">
+            <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+            <p className="text-sm">{error}</p>
+          </div>
+        )}
         <Button
           onClick={userInitiatedPlay}
           size="lg"

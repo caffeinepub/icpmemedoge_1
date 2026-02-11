@@ -1,16 +1,24 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T22:25:41.599Z",
-  "summary": "Diff implements an opt-in based background music flow with a persistent play control when not playing, conservative default volume (0.3), localStorage-backed preference helpers (mute/volume + opt-in), and retains the audio asset path '/assets/audio/background-dance.mp3'. No backend changes are shown.",
-  "missing_requirements": [],
+  "generatedAt": "2026-02-11T22:33:28.716Z",
+  "summary": "Diff updates the background music controller UI to show a Play button when not playing (with retryable error banner) and shows mute/volume controls when playing. The hook now creates a singleton Audio element using the required asset path, syncs isPlaying via audio events, attempts opt-in-based autoplay with unblock-on-interaction listeners, and sets a user-facing error on audio load failure. Some REQ-25 acceptance-criteria behaviors (opt-in storage, userInitiatedPlay implementation details, and persistence behavior) cannot be fully verified due to truncation of useBackgroundMusic.ts.",
+  "missing_requirements": [
+    {
+      "id": "REQ-25",
+      "requirement": "After a page reload (with opt-in stored), music either plays automatically or, if blocked by browser policy, starts upon the next user interaction per the existing unblock logic; and existing mute/unmute and volume persistence behavior continues to work as before.",
+      "reason": "The diff shows logic for opt-in-based autoplay and unblock listeners, and it loads saved preferences, but the file is truncated before showing the remainder (including userInitiatedPlay() and any opt-in/volume persistence writes). Therefore, it cannot be confirmed from the provided diff summary that opt-in is saved on Play, that the full unblock logic is correctly wired through reloads, or that mute/volume persistence 'continues to work as before' end-to-end.",
+      "evidence": [
+        "frontend/src/hooks/useBackgroundMusic.ts (truncated) — shows hasOptedIn ref, attemptAutoplay(), attachUnblockListeners(), loadMusicPreferences(), but remainder is cut off"
+      ]
+    }
+  ],
   "hallucinated_features": [],
-  "confidence": 0.7,
+  "confidence": 0.64,
   "changed_files": [
     "frontend-file-summaries.txt",
     "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
     "frontend/src/hooks/useBackgroundMusic.ts",
-    "frontend/src/utils/backgroundMusicStorage.ts",
     "project_state.json"
   ]
 }
