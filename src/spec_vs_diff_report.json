@@ -1,23 +1,46 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T22:33:28.716Z",
-  "summary": "Diff updates the background music controller UI to show a Play button when not playing (with retryable error banner) and shows mute/volume controls when playing. The hook now creates a singleton Audio element using the required asset path, syncs isPlaying via audio events, attempts opt-in-based autoplay with unblock-on-interaction listeners, and sets a user-facing error on audio load failure. Some REQ-25 acceptance-criteria behaviors (opt-in storage, userInitiatedPlay implementation details, and persistence behavior) cannot be fully verified due to truncation of useBackgroundMusic.ts.",
+  "generatedAt": "2026-02-11T22:41:47.010Z",
+  "summary": "The diff updates documentation/implementation details in the background-music hook and metadata files, and it still references the required audio path. However, there is no evidence in the diff summary that the actual bundled audio asset at /assets/audio/background-dance.mp3 was replaced or included at the correct static location, so the core “swap the track” requirement is not demonstrably implemented.",
   "missing_requirements": [
     {
-      "id": "REQ-25",
-      "requirement": "After a page reload (with opt-in stored), music either plays automatically or, if blocked by browser policy, starts upon the next user interaction per the existing unblock logic; and existing mute/unmute and volume persistence behavior continues to work as before.",
-      "reason": "The diff shows logic for opt-in-based autoplay and unblock listeners, and it loads saved preferences, but the file is truncated before showing the remainder (including userInitiatedPlay() and any opt-in/volume persistence writes). Therefore, it cannot be confirmed from the provided diff summary that opt-in is saved on Play, that the full unblock logic is correctly wired through reloads, or that mute/volume persistence 'continues to work as before' end-to-end.",
+      "id": "REQ-27",
+      "requirement": "Replace the bundled background music audio that plays when the user presses the floating Play button with “Binary Finary 1999”, while keeping the existing audio URL/path unchanged (\"/assets/audio/background-dance.mp3\").",
+      "reason": "The diff summary shows only TypeScript/metadata changes and continued use of the same audio path, but does not show any replacement of the actual audio content that would make the Play button play the new track.",
       "evidence": [
-        "frontend/src/hooks/useBackgroundMusic.ts (truncated) — shows hasOptedIn ref, attemptAutoplay(), attachUnblockListeners(), loadMusicPreferences(), but remainder is cut off"
+        "frontend/src/hooks/useBackgroundMusic.ts (truncated) (only references /assets/audio/background-dance.mp3; no asset change shown)"
+      ]
+    },
+    {
+      "id": "REQ-28",
+      "requirement": "Ensure the updated bundled audio asset is included as a static frontend asset at the existing location used by the app (\"/assets/audio/background-dance.mp3\"), without introducing additional audio files/paths for playback.",
+      "reason": "No audio/static asset file changes are shown (no added/modified .mp3 or public/assets entry), so inclusion of the updated audio at the required path cannot be verified from this diff summary.",
+      "evidence": [
+        "File diff summary: Added: 0 (no new asset files listed)",
+        "Modified files list does not include any static asset (e.g., public/assets/audio/background-dance.mp3)"
       ]
     }
   ],
-  "hallucinated_features": [],
-  "confidence": 0.64,
+  "hallucinated_features": [
+    {
+      "description": "Project metadata/versioning updates unrelated to swapping the background music track (e.g., project state version changes).",
+      "reason": "The BuildRequest is limited to swapping the bundled audio track while keeping the same path and avoiding UI/UX changes; updating project_state.json is not requested.",
+      "evidence": [
+        "project_state.json (truncated) (projectStateVersion shown/changed)"
+      ]
+    },
+    {
+      "description": "Updates to frontend-file-summaries.txt (documentation/summary content) not required to accomplish the audio asset swap.",
+      "reason": "The BuildRequest does not ask for generating/updating file summaries; it only requests swapping the audio track while keeping the path unchanged.",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    }
+  ],
+  "confidence": 0.74,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
     "frontend/src/hooks/useBackgroundMusic.ts",
     "project_state.json"
   ]

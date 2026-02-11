@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 25,
+  "projectStateVersion": 27,
   "summary": "Build a promotional presale website for the IcpMemeDoge memecoin featuring a special meme-dog hero image, flashy but readable design, a 24h countdown, and an ICP-based presale flow with automated payment detection, progress tracking to a 515,000 ICP cap, contributor address listing, and post-presale token crediting.",
   "architectural_notes": [
     "Integrate with the Internet Computer/ICP ledger (or an indexer) to monitor the presale address for incoming transfers and compute cumulative raised ICP.",
@@ -208,6 +208,14 @@
         "REQ-26"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-replace-the-bundled-background-music-audio-that-plays-when-the-user-presses-the-floating-play-button-with-the-track-requested-by-the-user-binary-finary-1999-while-keeping-the-existing-audio-url-path-used-by-the-app-unchanged-assets-audio-background-dance-mp3",
+      "title": "Replace the bundled background music audio that plays when the user presses the floating Play button with the track requested by the user (“Binary Finary 1999”), while keeping the existing audio URL/path used by the app unchanged (\"/assets/audio/background-dance.mp3\").",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -309,6 +317,20 @@
       "id": "AR-23",
       "summary": "Start 90s dance background music only when the user presses the Play button (explicit user action / opt-in)",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Update the Play-button background music track to \"Binary finary 1999\" (use this song for the explicit user-initiated playback)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Ensure the updated bundled audio asset is included as a static frontend asset at the existing location used by the app (\"/assets/audio/background-dance.mp3\"), without introducing additional audio files/paths for playback.",
+      "reqIds": [
+        "REQ-28"
+      ],
       "status": "pending"
     }
   ],

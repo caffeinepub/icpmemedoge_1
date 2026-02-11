@@ -12,6 +12,16 @@ interface UseBackgroundMusicReturn {
   userInitiatedPlay: () => Promise<void>;
 }
 
+/**
+ * Background music hook for IcpMemeDoge presale site.
+ * 
+ * Current track: "Binary Finary 1999" (1999 trance classic)
+ * Audio path: /assets/audio/background-dance.mp3
+ * 
+ * Note: The audio path must remain exactly "/assets/audio/background-dance.mp3"
+ * to maintain compatibility with existing playback flow and user preferences.
+ * Track updates are handled by replacing the audio file at this static path.
+ */
 export function useBackgroundMusic(): UseBackgroundMusicReturn {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -27,6 +37,7 @@ export function useBackgroundMusic(): UseBackgroundMusicReturn {
   const getOrCreateAudio = (): HTMLAudioElement => {
     if (audioRef.current) return audioRef.current;
 
+    // Audio path remains constant; track content is updated at build time
     const audio = new Audio('/assets/audio/background-dance.mp3');
     audio.loop = true;
     audio.preload = 'auto';

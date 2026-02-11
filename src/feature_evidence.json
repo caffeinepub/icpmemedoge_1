@@ -2,10 +2,9 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-ensure-that-pressing-the-floating-play-button-starts-playback-of-the-bundled-90s-dance-background-music-track-using-the-existing-audio-path-assets-audio-background-dance-mp3-and-that-the-ui-correctly-reflects-the-playing-state-immediately-after-a-successful-start-switching-from-play-to-the-mute-volume-controls",
-      "featureTitle": "Ensure that pressing the floating Play button starts playback of the bundled 90s dance background music track using the existing audio path \"/assets/audio/background-dance.mp3\", and that the UI correctly reflects the playing state immediately after a successful start (switching from Play to the mute/volume controls).",
+      "featureId": "feature-replace-the-bundled-background-music-audio-that-plays-when-the-user-presses-the-floating-play-button-with-the-track-requested-by-the-user-binary-finary-1999-while-keeping-the-existing-audio-url-path-used-by-the-app-unchanged-assets-audio-background-dance-mp3",
+      "featureTitle": "Replace the bundled background music audio that plays when the user presses the floating Play button with the track requested by the user (“Binary Finary 1999”), while keeping the existing audio URL/path used by the app unchanged (\"/assets/audio/background-dance.mp3\").",
       "files": [
-        "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
         "frontend/src/hooks/useBackgroundMusic.ts"
       ],
       "components": [
@@ -16,26 +15,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-25"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-if-playback-cannot-be-started-after-the-user-presses-the-play-button-e-g-browser-blocks-playback-or-the-audio-asset-fails-to-load-show-a-clear-user-facing-error-message-in-english-while-keeping-the-page-usable-and-leaving-the-play-button-available-for-retry",
-      "featureTitle": "If playback cannot be started after the user presses the Play button (e.g., browser blocks playback or the audio asset fails to load), show a clear user-facing error message in English while keeping the page usable and leaving the Play button available for retry.",
-      "files": [
-        "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
-        "frontend/src/hooks/useBackgroundMusic.ts"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-26"
+        "REQ-27"
       ],
       "confidence": "high"
     }

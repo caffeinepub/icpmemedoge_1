@@ -1,48 +1,37 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Make Play button reliably start bundled background dance music with correct UI + error handling",
+  "title": "Swap floating Play-button background music to “Binary Finary 1999” while keeping the same asset path",
   "requirements": [
     {
-      "id": "REQ-25",
-      "summary": "Make the floating Play button reliably start /assets/audio/background-dance.mp3 (looping) and immediately switch UI to mute/volume controls after successful start while preserving opt-in, unblock logic, and volume/mute persistence.",
+      "id": "REQ-27",
+      "summary": "Keep the Play-button background music flow unchanged while swapping the bundled track to “Binary Finary 1999”, continuing to reference the exact same audio path.",
       "acceptanceCriteria": [
-        "On a first-time visit (no prior opt-in), the site does not autoplay music and shows the Play button.",
-        "Clicking the Play button starts audio playback of /assets/audio/background-dance.mp3 (looping) and the UI switches to the mute/volume controls.",
-        "After a page reload (with opt-in stored), music either plays automatically or, if blocked by browser policy, starts upon the next user interaction per the existing unblock logic.",
-        "The existing mute/unmute and volume persistence behavior continues to work as before."
+        "Clicking the floating Play button starts playback of the updated track.",
+        "The code continues to reference the exact same audio path: \"/assets/audio/background-dance.mp3\" (no path changes).",
+        "Existing background music behavior remains intact: no autoplay on first visit unless previously opted-in, and the controller still switches from Play to mute/volume controls when playing.",
+        "If the audio file cannot be loaded/played, the existing English error message behavior remains visible and the Play button remains available for retry."
       ],
       "file_operations": [
         {
           "path": "frontend/src/hooks/useBackgroundMusic.ts",
           "operation": "modify",
-          "description": "Harden userInitiatedPlay() so a click always attempts playback even if the audio element is not yet initialized (create/initialize the Audio instance on-demand using the unchanged path /assets/audio/background-dance.mp3), keep loop enabled, and synchronize isPlaying with audio events (e.g., playing/pause/ended) so the UI reflects the playing state immediately after a successful start while preserving existing opt-in + unblock-on-gesture behavior and volume/mute persistence."
-        },
-        {
-          "path": "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
-          "operation": "modify",
-          "description": "Adjust controller rendering logic so the Play button-to-controls transition is driven by the hook’s reliable isPlaying state, ensuring the UI switches immediately after successful start; keep existing shadcn/ui Button/Popover/Slider usage (do not modify files under frontend/src/components/ui). Verify the component's usage instructions before implementing."
+          "description": "Add a code comment and a small in-file note to document that the background music track has been updated while the audio path string must remain exactly \"/assets/audio/background-dance.mp3\"; do not change any behavior, user-facing text, or the path literal."
         }
       ]
     },
     {
-      "id": "REQ-26",
-      "summary": "When user-initiated playback fails, show a clear English error message while keeping the page usable and allowing Play retry.",
+      "id": "REQ-28",
+      "summary": "Bundle the updated audio track at the existing static asset location \"/assets/audio/background-dance.mp3\" without adding any new playback paths/files.",
       "acceptanceCriteria": [
-        "When userInitiatedPlay() fails, the UI shows an English message indicating music could not be started and suggests trying again.",
-        "The Play button remains visible/usable so the user can retry starting music.",
-        "No console error causes React rendering to break (page remains usable)."
+        "The built frontend includes the audio file at the same location that resolves for the browser as \"/assets/audio/background-dance.mp3\".",
+        "No other code changes are required to select the new track (the existing Play button flow continues to work)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useBackgroundMusic.ts",
-          "operation": "modify",
-          "description": "Add a user-facing error state (e.g., string) to the hook that is set when playback fails due to blocked playback or load/play errors and cleared on successful play; ensure errors are caught and handled so no uncaught rejection breaks rendering, and keep existing behavior for opt-in, unblock listeners, mute/unmute, and volume persistence."
-        },
-        {
-          "path": "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
-          "operation": "modify",
-          "description": "Render the hook’s error message in English near the floating Play button when not playing (without blocking the rest of the UI) and keep the Play button available for retry; ensure the error clears after a successful start. Keep existing shadcn/ui Button usage (do not modify files under frontend/src/components/ui). Verify the component's usage instructions before implementing."
+          "path": "frontend/public/assets/audio/background-dance.mp3",
+          "operation": "create",
+          "description": "Add the updated bundled MP3 audio content for the requested track (“Binary Finary 1999”) at this exact static path so the browser resolves it as \"/assets/audio/background-dance.mp3\"; do not introduce any additional audio files or alternate paths for playback."
         }
       ]
     }

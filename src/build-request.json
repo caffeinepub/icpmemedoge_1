@@ -1,53 +1,54 @@
 {
   "kind": "build_request",
-  "title": "Ensure Play button reliably starts 90s dance background music",
+  "title": "Use “Binary Finary 1999” as the Play-button background music track",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-25",
-      "text": "Ensure that pressing the floating Play button starts playback of the bundled 90s dance background music track using the existing audio path \"/assets/audio/background-dance.mp3\", and that the UI correctly reflects the playing state immediately after a successful start (switching from Play to the mute/volume controls).",
+      "id": "REQ-27",
+      "text": "Replace the bundled background music audio that plays when the user presses the floating Play button with the track requested by the user (“Binary Finary 1999”), while keeping the existing audio URL/path used by the app unchanged (\"/assets/audio/background-dance.mp3\").",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-6"
         ],
         "quotes": [
-          "Wenn ich den Play button drücke soll dance musik aus den 90s starten"
+          "Binary finary 1999 musik auf den Playbutton hinzufügen"
         ]
       },
       "acceptanceCriteria": [
-        "On a first-time visit (no prior opt-in), the site does not autoplay music and shows the Play button.",
-        "Clicking the Play button starts audio playback of /assets/audio/background-dance.mp3 (looping) and the UI switches to the mute/volume controls.",
-        "After a page reload (with opt-in stored), music either plays automatically or, if blocked by browser policy, starts upon the next user interaction per the existing unblock logic.",
-        "The existing mute/unmute and volume persistence behavior continues to work as before."
+        "Clicking the floating Play button starts playback of the updated track.",
+        "The code continues to reference the exact same audio path: \"/assets/audio/background-dance.mp3\" (no path changes).",
+        "Existing background music behavior remains intact: no autoplay on first visit unless previously opted-in, and the controller still switches from Play to mute/volume controls when playing.",
+        "If the audio file cannot be loaded/played, the existing English error message behavior remains visible and the Play button remains available for retry."
       ]
     },
     {
-      "id": "REQ-26",
-      "text": "If playback cannot be started after the user presses the Play button (e.g., browser blocks playback or the audio asset fails to load), show a clear user-facing error message in English while keeping the page usable and leaving the Play button available for retry.",
+      "id": "REQ-28",
+      "text": "Ensure the updated bundled audio asset is included as a static frontend asset at the existing location used by the app (\"/assets/audio/background-dance.mp3\"), without introducing additional audio files/paths for playback.",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-6"
         ],
         "quotes": [
-          "Wenn ich den Play button drücke soll dance musik aus den 90s starten"
+          "Binary finary 1999 musik auf den Playbutton hinzufügen"
         ]
       },
       "acceptanceCriteria": [
-        "When userInitiatedPlay() fails, the UI shows an English message indicating music could not be started and suggests trying again.",
-        "The Play button remains visible/usable so the user can retry starting music.",
-        "No console error causes React rendering to break (page remains usable)."
+        "The built frontend includes the audio file at the same location that resolves for the browser as \"/assets/audio/background-dance.mp3\".",
+        "No other code changes are required to select the new track (the existing Play button flow continues to work)."
       ]
     }
   ],
   "constraints": [
-    "Keep the background music asset path unchanged: /assets/audio/background-dance.mp3.",
-    "Do not modify files under frontend/src/components/ui or other immutable paths listed in SYSTEM_CONTEXT."
+    "Do not change the existing audio path string \"/assets/audio/background-dance.mp3\" used in the codebase.",
+    "Do not modify any files under frontend/src/components/ui (read-only).",
+    "Keep all user-facing text in English."
   ],
   "nonGoals": [
-    "Adding additional music tracks, a playlist, or a track selector.",
-    "Changing the overall presale page layout/sections unrelated to background music."
+    "Adding a pause/stop button or changing the music controller UI/UX beyond what is required to swap the track.",
+    "Changing autoplay/opt-in, mute, or volume persistence behavior.",
+    "Backend changes."
   ],
   "imageRequirements": {
     "required": [],
