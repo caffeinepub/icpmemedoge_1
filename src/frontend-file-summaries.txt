@@ -1,8 +1,8 @@
 {
-  "frontend/src/App.tsx": "Main application component that composes all presale sections (Hero, Status, How-to, Contributors, Tokenomics) with animated neon background effects.",
+  "frontend/src/App.tsx": "Main application component that composes all presale sections (Status first, then Hero, How-to, Contributors, Tokenomics) with animated neon background effects.",
   "frontend/src/components/presale/HeroSection.tsx": "Hero section displaying the IcpMemeDoge image with animated glowing headline, subtle floating animation on the hero image (respecting reduced-motion preferences), and key feature cards.",
   "frontend/src/components/presale/PresaleStatusSection.tsx": "Container section for presale status including countdown timer, parameters, progress bar, and deposit address.",
-  "frontend/src/components/presale/PresaleProgress.tsx": "Displays presale progress with animated gradient bar, ICP received/remaining stats, and presale ended state.",
+  "frontend/src/components/presale/PresaleProgress.tsx": "Displays presale progress with animated gradient bar, ICP received/remaining stats (remaining now shows unformatted integer like \"515000 ICP\"), and presale ended state.",
   "frontend/src/components/presale/DepositAddress.tsx": "Shows the ICP deposit address with copy-to-clipboard functionality and visual confirmation.",
   "frontend/src/components/presale/CountdownTimer.tsx": "24-hour countdown timer display with hours, minutes, and seconds in neon-styled boxes.",
   "frontend/src/components/presale/HowToContribute.tsx": "Step-by-step contribution instructions and important presale information.",

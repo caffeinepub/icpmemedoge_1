@@ -1,46 +1,21 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Subtle continuous hero dog image animation with reduced-motion support",
+  "title": "Fix Presale 'ICP Remaining' display to show 515000 ICP correctly",
   "requirements": [
     {
-      "id": "REQ-12",
-      "summary": "Add a subtle continuous floating/bobbing + slight rotation animation to the existing hero dog image without changing its src or layout styling.",
+      "id": "REQ-15",
+      "summary": "Correct the Presale Progress 'ICP Remaining' stat to display an unformatted integer (no separators/decimals) and compute remaining as max(515000 - received, 0).",
       "acceptanceCriteria": [
-        "On the landing page, the hero image at /assets/generated/icp-meme-doge-hero.dim_1600x900.png animates continuously with subtle motion (not distracting).",
-        "The hero image remains responsive (keeps its current sizing, rounded corners, and shadow styling) and does not overlap or shift other sections unexpectedly.",
-        "The image src path remains exactly /assets/generated/icp-meme-doge-hero.dim_1600x900.png."
+        "When the presale has 0 ICP received, the 'ICP Remaining' stat shows exactly \"515000 ICP\" (no thousands separators, no decimals).",
+        "When contributions are detected, the 'ICP Remaining' stat updates to (515000 - received) ICP and never goes below 0.",
+        "No other Presale Status section labels/content are changed."
       ],
       "file_operations": [
         {
-          "path": "frontend/tailwind.config.js",
+          "path": "frontend/src/components/presale/PresaleProgress.tsx",
           "operation": "modify",
-          "description": "Extend Tailwind with a dedicated hero-image keyframes/animation (e.g., gentle translateY + small rotate) tuned for slow, subtle motion that uses transforms only to avoid layout shifts."
-        },
-        {
-          "path": "frontend/src/components/presale/HeroSection.tsx",
-          "operation": "modify",
-          "description": "Apply the new animation utility to the existing hero <img> while keeping the current src exactly \"/assets/generated/icp-meme-doge-hero.dim_1600x900.png\" and preserving existing responsive/rounded/shadow classes; prefer motion-safe variants and add transform-related performance hints (e.g., will-change) without affecting layout."
-        }
-      ]
-    },
-    {
-      "id": "REQ-13",
-      "summary": "Respect prefers-reduced-motion by disabling or significantly reducing the hero image motion for users who request reduced motion.",
-      "acceptanceCriteria": [
-        "With prefers-reduced-motion enabled in the browser/OS, the hero image animation is removed or reduced to near-static behavior.",
-        "No rapid flashing is introduced; motion remains smooth and slow."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/presale/HeroSection.tsx",
-          "operation": "modify",
-          "description": "Ensure the hero image animation is gated by reduced-motion handling (e.g., use motion-safe for the animation and motion-reduce to disable it) so users with prefers-reduced-motion see near-static behavior."
-        },
-        {
-          "path": "frontend/src/index.css",
-          "operation": "modify",
-          "description": "Add a prefers-reduced-motion CSS safeguard that disables (or nearly eliminates) the hero image animation class to ensure reduced motion is respected even if class variants change; keep motion smooth/slow and avoid any flashing behavior."
+          "description": "Update the 'ICP Remaining' calculation and formatting: derive remaining from the existing PRESALE_CAP_ICP constant minus received (prefer BigInt/e8s-safe math, then convert to an integer ICP value), clamp at 0, and render it as a plain string without toLocaleString or decimals so 0 received shows exactly \"515000 ICP\". Keep all other labels and content unchanged."
         }
       ]
     }

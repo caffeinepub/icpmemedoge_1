@@ -1,10 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Add a subtle, continuous “movable” animation to the existing hero meme-dog image without changing its asset path or layout.
+**Goal:** Fix the Presale Progress “ICP Remaining” stat so it shows the correct remaining ICP based on a 515000 ICP cap.
 
 **Planned changes:**
-- Apply a gentle looping animation (e.g., slow bobbing/float with slight rotation) to the hero image while preserving its current responsive sizing, rounded corners, and shadow styling.
-- Respect `prefers-reduced-motion` by disabling or significantly reducing the animation when enabled.
+- Update the Presale Progress UI calculation/formatting for “ICP Remaining” to display `515000 ICP` when received is `0`.
+- Ensure “ICP Remaining” updates as `max(515000 - received, 0)` as contributions come in, with no thousands separators and no decimals.
+- Keep all other Presale Status section labels/content unchanged.
 
-**User-visible outcome:** On the landing page, the hero image at `/assets/generated/icp-meme-doge-hero.dim_1600x900.png` gently animates to feel “movable,” and the motion is minimized or removed for users who prefer reduced motion.
+**User-visible outcome:** The Presale Progress panel shows “ICP Remaining” as exactly `515000 ICP` at 0 received, and then decreases correctly (never below 0) as ICP contributions are detected.

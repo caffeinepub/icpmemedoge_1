@@ -2,11 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-make-the-hero-meme-dog-image-in-the-hero-section-visibly-movable-by-adding-a-subtle-continuous-animation-e-g-floating-bobbing-with-slight-rotation-while-keeping-the-existing-image-file-path-and-overall-layout-intact",
-      "featureTitle": "Make the hero meme-dog image in the Hero section visibly movable by adding a subtle, continuous animation (e.g., floating/bobbing with slight rotation) while keeping the existing image file path and overall layout intact.",
+      "featureId": "feature-update-the-presale-progress-ui-so-the-icp-remaining-value-displays-the-correct-cap-amount-as-515000-icp-when-no-contributions-have-been-received-and-continues-to-display-the-correct-remaining-amount-as-contributions-come-in-cap-minus-received",
+      "featureTitle": "Update the Presale Progress UI so the 'ICP Remaining' value displays the correct cap amount as '515000 ICP' when no contributions have been received, and continues to display the correct remaining amount as contributions come in (cap minus received).",
       "files": [
-        "frontend/src/components/presale/HeroSection.tsx",
-        "frontend/tailwind.config.js"
+        "frontend/src/components/presale/PresaleProgress.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -16,26 +15,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-12"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-respect-accessibility-preferences-by-disabling-or-significantly-reducing-the-hero-image-motion-when-the-user-has-enabled-reduced-motion-prefers-reduced-motion",
-      "featureTitle": "Respect accessibility preferences by disabling or significantly reducing the hero image motion when the user has enabled reduced motion (prefers-reduced-motion).",
-      "files": [
-        "frontend/src/components/presale/HeroSection.tsx",
-        "frontend/src/index.css"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-13"
+        "REQ-15"
       ],
       "confidence": "high"
     }

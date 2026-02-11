@@ -1,53 +1,34 @@
 {
   "kind": "build_request",
-  "title": "Animate the hero meme-dog image (movable dog)",
+  "title": "Fix 'ICP Remaining' display to show 515000 ICP correctly",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-12",
-      "text": "Make the hero meme-dog image in the Hero section visibly movable by adding a subtle, continuous animation (e.g., floating/bobbing with slight rotation) while keeping the existing image file path and overall layout intact.",
+      "id": "REQ-15",
+      "text": "Update the Presale Progress UI so the 'ICP Remaining' value displays the correct cap amount as '515000 ICP' when no contributions have been received, and continues to display the correct remaining amount as contributions come in (cap minus received).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "recent-messages-6"
         ],
         "quotes": [
-          "Der Hund im Bild soll beweglich sein"
+          "Bei dem Fenster ICP remaining gehören  515000 icp geschrieben"
         ]
       },
       "acceptanceCriteria": [
-        "On the landing page, the hero image at /assets/generated/icp-meme-doge-hero.dim_1600x900.png animates continuously with subtle motion (not distracting).",
-        "The hero image remains responsive (keeps its current sizing, rounded corners, and shadow styling) and does not overlap or shift other sections unexpectedly.",
-        "The image src path remains exactly /assets/generated/icp-meme-doge-hero.dim_1600x900.png."
-      ]
-    },
-    {
-      "id": "REQ-13",
-      "text": "Respect accessibility preferences by disabling or significantly reducing the hero image motion when the user has enabled reduced motion (prefers-reduced-motion).",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-6"
-        ],
-        "quotes": [
-          "Der Hund im Bild soll beweglich sein"
-        ]
-      },
-      "acceptanceCriteria": [
-        "With prefers-reduced-motion enabled in the browser/OS, the hero image animation is removed or reduced to near-static behavior.",
-        "No rapid flashing is introduced; motion remains smooth and slow."
+        "When the presale has 0 ICP received, the 'ICP Remaining' stat shows exactly \"515000 ICP\" (no thousands separators, no decimals).",
+        "When contributions are detected, the 'ICP Remaining' stat updates to (515000 - received) ICP and never goes below 0.",
+        "No other Presale Status section labels/content are changed."
       ]
     }
   ],
   "constraints": [
-    "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, and anything under frontend/src/components/ui.",
-    "Do not change the hero image asset filename or route; keep using /assets/generated/icp-meme-doge-hero.dim_1600x900.png.",
-    "Keep the existing neon theme and avoid introducing rapid flashing or aggressive motion."
+    "Do not edit files under frontend/src/components/ui (read-only).",
+    "Keep the existing presale cap value (PRESALE_CAP_ICP = 515_000) unchanged."
   ],
   "nonGoals": [
-    "Do not replace or regenerate the hero image asset.",
-    "Do not add new backend functionality for this change.",
-    "Do not introduce new pages or sections; only adjust the hero image presentation/animation."
+    "Changing backend presale status calculations or cap enforcement.",
+    "Changing the 'Hard Cap' formatting in the Presale Parameters panel unless required to satisfy the 'ICP Remaining' display fix."
   ],
   "imageRequirements": {
     "required": [],

@@ -18,8 +18,8 @@ function App() {
 
         {/* Main content */}
         <div className="relative z-10">
-          <HeroSection />
           <PresaleStatusSection />
+          <HeroSection />
           <HowToContribute />
           <ContributorsList />
           <TokenomicsFaq />

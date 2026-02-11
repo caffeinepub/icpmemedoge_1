@@ -14,7 +14,7 @@ export function PresaleProgress() {
   }
 
   const totalIcp = status ? Number(status.totalIcp) / 100_000_000 : 0;
-  const remainingIcp = status ? Number(status.remainingIcp) / 100_000_000 : PRESALE_CAP_ICP;
+  const remainingIcp = status ? Math.max(0, Math.floor(Number(status.remainingIcp) / 100_000_000)) : PRESALE_CAP_ICP;
   const percentComplete = status ? (totalIcp / PRESALE_CAP_ICP) * 100 : 0;
   const isEnded = status ? !status.active : false;
 
@@ -44,7 +44,7 @@ export function PresaleProgress() {
         </div>
         <div className="bg-gray-900/50 rounded-xl p-4 border border-neon-cyan/30">
           <p className="text-gray-400 text-sm mb-1">ICP Remaining</p>
-          <p className="text-2xl font-bold text-neon-cyan">{remainingIcp.toLocaleString(undefined, { maximumFractionDigits: 2 })} ICP</p>
+          <p className="text-2xl font-bold text-neon-cyan">{remainingIcp} ICP</p>
         </div>
       </div>
 

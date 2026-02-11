@@ -1,24 +1,14 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T20:40:22.726Z",
-  "summary": "REQ-12 and REQ-13 appear implemented by applying a subtle continuous animation to the existing hero image via Tailwind (`motion-safe:animate-hero-float`) while keeping the exact image src path unchanged, and leveraging `motion-safe` to respect `prefers-reduced-motion`. However, the diff also includes additional Hero content changes (feature cards / other presentation changes) that were not requested under the stated non-goals.",
+  "generatedAt": "2026-02-11T21:41:39.716Z",
+  "summary": "Changes in PresaleProgress.tsx compute ICP amounts from e8s, clamp remaining ICP to never go below 0, and render the “ICP Remaining” value as an unformatted integer (no locale/thousands separators), defaulting to PRESALE_CAP_ICP when status is absent/loading completes.",
   "missing_requirements": [],
-  "hallucinated_features": [
-    {
-      "description": "Added/changed additional Hero section content beyond the hero image animation (e.g., the new 'Key Features' card grid with multiple feature tiles).",
-      "reason": "BuildRequest non-goals state to only adjust the hero image presentation/animation and not introduce new sections/changes beyond that. The diff shows added/expanded non-image UI elements within the Hero section.",
-      "evidence": [
-        "frontend/src/components/presale/HeroSection.tsx"
-      ]
-    }
-  ],
-  "confidence": 0.72,
+  "hallucinated_features": [],
+  "confidence": 0.66,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/components/presale/HeroSection.tsx",
-    "frontend/src/index.css",
-    "frontend/tailwind.config.js",
+    "frontend/src/components/presale/PresaleProgress.tsx",
     "project_state.json"
   ]
 }
