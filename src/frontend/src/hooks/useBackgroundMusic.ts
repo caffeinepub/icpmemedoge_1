@@ -5,6 +5,7 @@ interface UseBackgroundMusicReturn {
   isPlaying: boolean;
   isMuted: boolean;
   isBlocked: boolean;
+  isStarting: boolean;
   volume: number;
   error: string | null;
   toggleMute: () => void;
@@ -27,11 +28,13 @@ export function useBackgroundMusic(): UseBackgroundMusicReturn {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
+  const [isStarting, setIsStarting] = useState(false);
   const [volume, setVolumeState] = useState(0.3);
   const [error, setError] = useState<string | null>(null);
   const unblockListenersAttached = useRef(false);
   const unblockCleanupRef = useRef<(() => void) | null>(null);
   const hasOptedIn = useRef(hasOptedInToMusic());
+  const playAttemptInProgress = useRef(false);
 
   // Initialize or get audio element
   const getOrCreateAudio = (): HTMLAudioElement => {
@@ -52,20 +55,67 @@ export function useBackgroundMusic(): UseBackgroundMusicReturn {
     // Attach event listeners to sync isPlaying state
     audio.addEventListener('playing', () => {
       setIsPlaying(true);
+      setIsStarting(false);
       setError(null);
     });
     audio.addEventListener('pause', () => setIsPlaying(false));
     audio.addEventListener('ended', () => setIsPlaying(false));
-    audio.addEventListener('error', () => {
+    audio.addEventListener('error', (e) => {
       setIsPlaying(false);
+      setIsStarting(false);
       setError('Music could not be loaded. Please try again.');
+      console.error('Audio error:', e);
     });
 
     audioRef.current = audio;
     return audio;
   };
 
-  // Initialize audio element (singleton)
+  // Wait for audio to be ready with timeout
+  const waitForReady = (audio: HTMLAudioElement, timeoutMs: number = 5000): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      // If already ready, resolve immediately
+      if (audio.readyState >= 3) {
+        resolve();
+        return;
+      }
+
+      const timeout = setTimeout(() => {
+        cleanup();
+        reject(new Error('Audio loading timed out'));
+      }, timeoutMs);
+
+      const onCanPlay = () => {
+        cleanup();
+        resolve();
+      };
+
+      const onError = () => {
+        cleanup();
+        reject(new Error('Audio failed to load'));
+      };
+
+      const cleanup = () => {
+        clearTimeout(timeout);
+        audio.removeEventListener('canplaythrough', onCanPlay);
+        audio.removeEventListener('error', onError);
+      };
+
+      audio.addEventListener('canplaythrough', onCanPlay, { once: true });
+      audio.addEventListener('error', onError, { once: true });
+    });
+  };
+
+  // Reset audio element on critical failure
+  const resetAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+      audioRef.current = null;
+    }
+  };
+
+  // Initialize audio element early (singleton)
   useEffect(() => {
     const audio = getOrCreateAudio();
 
@@ -198,12 +248,53 @@ export function useBackgroundMusic(): UseBackgroundMusicReturn {
   };
 
   const userInitiatedPlay = async () => {
+    // Prevent overlapping play attempts
+    if (playAttemptInProgress.current) {
+      return;
+    }
+
+    playAttemptInProgress.current = true;
+    setIsStarting(true);
+    setError(null);
+
     try {
-      const audio = getOrCreateAudio();
+      // Get or recreate audio element (handles retry after error)
+      let audio = audioRef.current;
       
-      await audio.play();
+      // If audio element is in error state, reset and recreate
+      if (audio && audio.error) {
+        resetAudio();
+        audio = null;
+      }
+
+      audio = getOrCreateAudio();
+
+      // Re-apply persisted preferences after potential reset
+      const prefs = loadMusicPreferences();
+      audio.volume = prefs.volume;
+      audio.muted = prefs.muted;
+      setVolumeState(prefs.volume);
+      setIsMuted(prefs.muted);
+
+      // Wait for audio to be ready (with timeout)
+      try {
+        await waitForReady(audio, 5000);
+      } catch (readyError) {
+        throw new Error('Music is taking too long to load. Please check your connection and try again.');
+      }
+
+      // Attempt playback with timeout
+      const playPromise = audio.play();
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('Playback start timed out')), 3000);
+      });
+
+      await Promise.race([playPromise, timeoutPromise]);
+
+      // Success
       setIsPlaying(true);
       setIsBlocked(false);
+      setIsStarting(false);
       setError(null);
       
       // Save opt-in preference
@@ -213,8 +304,25 @@ export function useBackgroundMusic(): UseBackgroundMusicReturn {
       // Playback failed
       setIsBlocked(true);
       setIsPlaying(false);
-      setError('Music could not be started. Please try again or check your browser settings.');
+      setIsStarting(false);
+
+      // Determine error message
+      let errorMessage = 'Music could not be started. Please try again.';
+      
+      if (err instanceof Error) {
+        if (err.message.includes('load') || err.message.includes('connection')) {
+          errorMessage = 'Music could not be loaded. Please check your connection and try again.';
+        } else if (err.message.includes('timeout') || err.message.includes('timed out')) {
+          errorMessage = 'Music is taking too long to start. Please try again.';
+        } else if (err.name === 'NotAllowedError' || err.name === 'NotSupportedError') {
+          errorMessage = 'Music playback was blocked by your browser. Please check your browser settings.';
+        }
+      }
+
+      setError(errorMessage);
       console.error('Failed to start background music:', err);
+    } finally {
+      playAttemptInProgress.current = false;
     }
   };
 
@@ -222,6 +330,7 @@ export function useBackgroundMusic(): UseBackgroundMusicReturn {
     isPlaying,
     isMuted,
     isBlocked,
+    isStarting,
     volume,
     error,
     toggleMute,

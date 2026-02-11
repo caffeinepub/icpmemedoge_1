@@ -1,11 +1,11 @@
-import { Volume2, VolumeX, Play, AlertCircle } from 'lucide-react';
+import { Volume2, VolumeX, Play, AlertCircle, Loader2 } from 'lucide-react';
 import { useBackgroundMusic } from '../../hooks/useBackgroundMusic';
 import { Button } from '../ui/button';
 import { Slider } from '../ui/slider';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 export function BackgroundMusicController() {
-  const { isPlaying, isMuted, volume, error, toggleMute, setVolume, userInitiatedPlay } = useBackgroundMusic();
+  const { isPlaying, isMuted, volume, error, isStarting, toggleMute, setVolume, userInitiatedPlay } = useBackgroundMusic();
 
   // Show play button whenever music is not playing (first visit or stopped)
   if (!isPlaying) {
@@ -19,12 +19,22 @@ export function BackgroundMusicController() {
         )}
         <Button
           onClick={userInitiatedPlay}
+          disabled={isStarting}
           size="lg"
-          className="bg-neon-pink hover:bg-neon-pink/80 text-white shadow-lg shadow-neon-pink/50 rounded-full h-14 w-14 p-0 animate-pulse"
-          aria-label="Play background music"
+          className="bg-neon-pink hover:bg-neon-pink/80 text-white shadow-lg shadow-neon-pink/50 rounded-full h-14 w-14 p-0 disabled:opacity-50 disabled:cursor-not-allowed"
+          aria-label={isStarting ? 'Starting music...' : 'Play background music'}
         >
-          <Play className="h-6 w-6" />
+          {isStarting ? (
+            <Loader2 className="h-6 w-6 animate-spin" />
+          ) : (
+            <Play className={`h-6 w-6 ${!isStarting ? 'animate-pulse' : ''}`} />
+          )}
         </Button>
+        {isStarting && (
+          <div className="bg-gray-900/90 border border-neon-pink/30 text-neon-pink px-3 py-1.5 rounded-lg shadow-lg backdrop-blur-sm text-sm">
+            Starting music…
+          </div>
+        )}
       </div>
     );
   }

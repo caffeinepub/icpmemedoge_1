@@ -2,8 +2,8 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-replace-the-bundled-background-music-audio-that-plays-when-the-user-presses-the-floating-play-button-with-the-track-requested-by-the-user-binary-finary-1999-while-keeping-the-existing-audio-url-path-used-by-the-app-unchanged-assets-audio-background-dance-mp3",
-      "featureTitle": "Replace the bundled background music audio that plays when the user presses the floating Play button with the track requested by the user (“Binary Finary 1999”), while keeping the existing audio URL/path used by the app unchanged (\"/assets/audio/background-dance.mp3\").",
+      "featureId": "feature-refine-the-background-music-initialization-so-that-user-initiated-playback-starts-more-reliably-and-quickly-after-pressing-the-floating-play-button-without-changing-the-audio-asset-url-must-remain-exactly-assets-audio-background-dance-mp3",
+      "featureTitle": "Refine the background music initialization so that user-initiated playback starts more reliably and quickly after pressing the floating Play button, without changing the audio asset URL (must remain exactly \"/assets/audio/background-dance.mp3\").",
       "files": [
         "frontend/src/hooks/useBackgroundMusic.ts"
       ],
@@ -15,7 +15,45 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-27"
+        "REQ-29"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-an-explicit-starting-loading-ui-state-for-background-music-playback-attempts-that-prevents-duplicate-play-requests-and-provides-clear-english-feedback-during-startup-e-g-disable-the-play-button-while-a-start-attempt-is-in-flight-and-surface-a-short-loading-indicator-text",
+      "featureTitle": "Add an explicit “starting/loading” UI state for background music playback attempts that prevents duplicate play requests and provides clear English feedback during startup (e.g., disable the Play button while a start attempt is in flight, and surface a short loading indicator/text).",
+      "files": [
+        "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
+        "frontend/src/hooks/useBackgroundMusic.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-30"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-improve-robustness-of-background-music-error-handling-and-retry-behavior-for-failed-starts-and-failed-loads-keeping-all-user-facing-error-text-in-english-and-leaving-the-page-usable",
+      "featureTitle": "Improve robustness of background music error handling and retry behavior for failed starts and failed loads, keeping all user-facing error text in English and leaving the page usable.",
+      "files": [
+        "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
+        "frontend/src/hooks/useBackgroundMusic.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-31"
       ],
       "confidence": "high"
     }

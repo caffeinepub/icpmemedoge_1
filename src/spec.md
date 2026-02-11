@@ -1,10 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Update the floating Play button’s bundled background music to use “Binary Finary 1999” while keeping the existing audio URL/path unchanged.
+**Goal:** Make background music start faster and more reliably after the user presses the floating Play button, while preserving opt-in behavior and the existing audio URL.
 
 **Planned changes:**
-- Replace the static audio asset file served at `/assets/audio/background-dance.mp3` with the requested “Binary Finary 1999” track, without changing the path string used in code.
-- Ensure the existing Play-button playback flow and error handling remain unchanged (no autoplay changes, same English error behavior, Play-to-controls behavior preserved).
+- Refine background music initialization and start flow to improve reliability and reduce time-to-audio after the user clicks Play (keeping the audio path exactly `/assets/audio/background-dance.mp3`).
+- Add a “Starting music…” / loading UI state that disables the Play button while a start attempt is in progress to prevent overlapping `play()` requests.
+- Improve error handling and retry behavior so failures show clear English messages, allow retry without reloading, and keep existing mute/volume persistence intact.
 
-**User-visible outcome:** Clicking the floating Play button plays the updated “Binary Finary 1999” track using the same Play/mute/volume behavior as before, and failures still show the existing English error with the Play button available to retry.
+**User-visible outcome:** Pressing Play starts music audibly (or shows a clear English error) without needing multiple clicks; during startup the Play button shows a loading state and can’t be spam-clicked; if startup fails the user can retry and the page remains usable.

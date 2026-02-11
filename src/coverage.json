@@ -1,18 +1,18 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T22:41:47.013Z",
+  "generatedAt": "2026-02-11T22:46:20.997Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 1,
+    "total": 3,
+    "implemented": 3,
     "items": [
       {
-        "id": "REQ-27",
-        "summary": "Replace the bundled background music audio that plays when the user presses the floating Play button with the track requested by the user (“Binary Finary 1999”), while keeping the existing audio URL/path used by the app unchanged (\"/assets/audio/background-dance.mp3\").",
+        "id": "REQ-29",
+        "summary": "Refine the background music initialization so that user-initiated playback starts more reliably and quickly after pressing the floating Play button, without changing the audio asset URL (must remain exactly \"/assets/audio/background-dance.mp3\").",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/hooks/useBackgroundMusic.ts"
@@ -22,13 +22,30 @@
         ]
       },
       {
-        "id": "REQ-28",
-        "summary": "Ensure the updated bundled audio asset is included as a static frontend asset at the existing location used by the app (\"/assets/audio/background-dance.mp3\"), without introducing additional audio files/paths for playback.",
-        "status": "missing",
+        "id": "REQ-30",
+        "summary": "Add an explicit “starting/loading” UI state for background music playback attempts that prevents duplicate play requests and provides clear English feedback during startup (e.g., disable the Play button while a start attempt is in flight, and surface a short loading indicator/text).",
+        "status": "implemented",
         "plannedFiles": [
-          "frontend/public/assets/audio/background-dance.mp3"
+          "frontend/src/hooks/useBackgroundMusic.ts",
+          "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx"
         ],
-        "matchedFiles": []
+        "matchedFiles": [
+          "frontend/src/hooks/useBackgroundMusic.ts",
+          "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx"
+        ]
+      },
+      {
+        "id": "REQ-31",
+        "summary": "Improve robustness of background music error handling and retry behavior for failed starts and failed loads, keeping all user-facing error text in English and leaving the page usable.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useBackgroundMusic.ts",
+          "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useBackgroundMusic.ts",
+          "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx"
+        ]
       }
     ]
   },
@@ -37,6 +54,7 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
+    "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
     "frontend/src/hooks/useBackgroundMusic.ts",
     "project_state.json",
     "scratch/component-selection.json",
