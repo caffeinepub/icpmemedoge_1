@@ -1,59 +1,24 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T23:24:32.242Z",
+  "generatedAt": "2026-02-11T23:29:50.183Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 4,
-    "implemented": 4,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
-        "id": "REQ-36",
-        "summary": "Add a new landing-page section that communicates the project’s planned token listings after the presale, using English user-facing text and matching the existing neon/glow visual style.",
+        "id": "REQ-40",
+        "summary": "Ensure the Presale Progress 'ICP Remaining' statistic displays exactly \"515.000 ICP\" (dot thousands separator) when there are no contributions yet (including when presale status data is unavailable/undefined), and continues to display the correct remaining amount as contributions come in (cap minus received) using the same dot thousands formatting.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/presale/PostPresaleListingsSection.tsx"
+          "frontend/src/components/presale/PresaleProgress.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/presale/PostPresaleListingsSection.tsx"
-        ]
-      },
-      {
-        "id": "REQ-37",
-        "summary": "Make the new listings section react to presale state: when the presale is still active, show a clear \"not yet\" message; when the presale has ended, show the actual listings content.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/presale/PostPresaleListingsSection.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/presale/PostPresaleListingsSection.tsx"
-        ]
-      },
-      {
-        "id": "REQ-38",
-        "summary": "Integrate the listings section into the existing page flow by rendering it in App.tsx as a new section below the current Tokenomics/FAQ section and above the Footer, without altering existing section behavior.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/App.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/App.tsx"
-        ]
-      },
-      {
-        "id": "REQ-39",
-        "summary": "Define the listings content as a small, editable data structure (e.g., a typed constant list) so future exchange/listing items can be updated without rewriting JSX, and render it as cards with a status indicator (e.g., Planned / In Progress / Announced).",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/constants/listingsAfterPresale.ts",
-          "frontend/src/components/presale/PostPresaleListingsSection.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/constants/listingsAfterPresale.ts",
-          "frontend/src/components/presale/PostPresaleListingsSection.tsx"
+          "frontend/src/components/presale/PresaleProgress.tsx"
         ]
       }
     ]
@@ -63,9 +28,7 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/App.tsx",
-    "frontend/src/components/presale/PostPresaleListingsSection.tsx",
-    "frontend/src/constants/listingsAfterPresale.ts",
+    "frontend/src/components/presale/PresaleProgress.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

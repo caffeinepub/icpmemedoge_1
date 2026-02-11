@@ -15,7 +15,10 @@ export function PresaleProgress() {
   }
 
   const totalIcp = status ? Number(status.totalIcp) / 100_000_000 : 0;
-  const remainingIcp = status ? Math.max(0, Math.floor(Number(status.remainingIcp) / 100_000_000)) : PRESALE_CAP_ICP;
+  // Always compute remaining as (cap - received), defaulting to full cap when no status or zero received
+  const remainingIcp = status && totalIcp > 0 
+    ? Math.max(0, PRESALE_CAP_ICP - totalIcp)
+    : PRESALE_CAP_ICP;
   const percentComplete = status ? (totalIcp / PRESALE_CAP_ICP) * 100 : 0;
   const isEnded = status ? !status.active : false;
 

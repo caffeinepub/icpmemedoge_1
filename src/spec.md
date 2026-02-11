@@ -1,12 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Add a new landing-page section (“Listings After the Presale”) that explains planned post-presale token listings in English and matches the existing neon/glow style.
+**Goal:** Ensure the Presale Progress “ICP Remaining” value defaults to and displays exactly “515.000 ICP” when there are no contributions or when presale status data is missing, while continuing to correctly compute and format the remaining amount as contributions arrive.
 
 **Planned changes:**
-- Create a new landing-page section with an English heading (e.g., “Listings After the Presale”) and neon/glow styling consistent with existing sections.
-- Render the section conditionally based on presale status: show an English “not yet/announced after presale ends” message when presale is active, and show the listings cards when presale has ended.
-- Add a small, typed, centralized data structure for listing items and render them as cards with title + status label (e.g., Planned / In Progress / Announced), without naming real exchanges by default.
-- Insert the new section in `App.tsx` below the current Tokenomics/FAQ section and above the Footer, without changing existing section behavior; include a safe fallback message if presale status is unavailable.
+- Update the frontend “ICP Remaining” calculation to treat missing/undefined/null presale status data as 0 received ICP.
+- Ensure the “ICP Remaining” display uses dot thousands formatting and shows exactly “515.000 ICP” at 0 received, then (515,000 − received) thereafter (e.g., “514.900 ICP”).
+- Keep all user-facing labels in English (e.g., “ICP Remaining”) and avoid visual/layout changes beyond the value/format correction.
 
-**User-visible outcome:** Users see a new “Listings After the Presale” section in the landing page flow that updates its message/content based on whether the presale is still active, and shows editable listing cards once the presale has ended.
+**User-visible outcome:** On the Presale Progress section, users always see “ICP Remaining” render as “515.000 ICP” before any contributions (even if status data is unavailable), and then see a correctly decreasing, dot-formatted remaining ICP value as contributions come in.

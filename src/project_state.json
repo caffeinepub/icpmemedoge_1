@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 35,
+  "projectStateVersion": 37,
   "summary": "Build a promotional presale website for the IcpMemeDoge memecoin featuring a special meme-dog hero image, flashy but readable design, a 24h countdown, and an ICP-based presale flow with automated payment detection, progress tracking to a 515,000 ICP cap, contributor address listing, and post-presale token crediting.",
   "architectural_notes": [
     "Integrate with the Internet Computer/ICP ledger (or an indexer) to monitor the presale address for incoming transfers and compute cumulative raised ICP.",
@@ -18,7 +18,7 @@
     "UI bug: 'ICP remaining' field should display the cap as '515.000 ICP' (German thousands separator) when no contributions are received; currently incorrect value/format.",
     "Deployment/build failed during packaging/push to network; deployment error needs repair/enablement."
   ],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-create-a-single-page-presale-website-for-the-memecoin-name-icpmemedoge-with-a-hero-section-presale-status-section-contribution-instructions-contributors-list-and-tokenomics-section",
@@ -297,6 +297,14 @@
       "title": "Define the listings content as a small, editable data structure (e.g., a typed constant list) so future exchange/listing items can be updated without rewriting JSX, and render it as cards with a status indicator (e.g., Planned / In Progress / Announced).",
       "reqIds": [
         "REQ-39"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-presale-progress-icp-remaining-statistic-displays-exactly-515-000-icp-dot-thousands-separator-when-there-are-no-contributions-yet-including-when-presale-status-data-is-unavailable-undefined-and-continues-to-display-the-correct-remaining-amount-as-contributions-come-in-cap-minus-received-using-the-same-dot-thousands-formatting",
+      "title": "Ensure the Presale Progress 'ICP Remaining' statistic displays exactly \"515.000 ICP\" (dot thousands separator) when there are no contributions yet (including when presale status data is unavailable/undefined), and continues to display the correct remaining amount as contributions come in (cap minus received) using the same dot thousands formatting.",
+      "reqIds": [
+        "REQ-40"
       ],
       "version": 1
     }
