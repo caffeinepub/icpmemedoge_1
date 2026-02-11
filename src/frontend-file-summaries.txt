@@ -1,5 +1,5 @@
 {
-  "frontend/src/App.tsx": "Main application component that composes all presale sections (Status first, then Hero, How-to, Contributors, Tokenomics) with animated neon background effects.",
+  "frontend/src/App.tsx": "Main application component that composes all presale sections with animated neon background effects and includes the BackgroundMusicController for site-wide audio playback.",
   "frontend/src/components/presale/HeroSection.tsx": "Hero section displaying the IcpMemeDoge image with animated glowing headline, subtle floating animation on the hero image (respecting reduced-motion preferences), and key feature cards.",
   "frontend/src/components/presale/PresaleStatusSection.tsx": "Container section for presale status including countdown timer, parameters, progress bar, and deposit address.",
   "frontend/src/components/presale/PresaleProgress.tsx": "Displays presale progress with animated gradient bar, ICP received/remaining stats (remaining now formatted with dot separators like \"515.000 ICP\"), and presale ended state.",
@@ -16,5 +16,8 @@
   "frontend/src/utils/contributors.ts": "Utility functions to aggregate contributions by address and sort by most recent.",
   "frontend/src/index.css": "Global styles with neon color system, animated glow effects, custom keyframe animations for the meme aesthetic, and prefers-reduced-motion safeguard for hero image animation.",
   "frontend/tailwind.config.js": "Tailwind configuration extended with neon color palette and hero-float keyframe animation for subtle continuous floating and rotation motion.",
-  "frontend/src/utils/format.ts": "Number formatting utility that formats ICP amounts with dot thousands separators using German locale (e.g., 515000 → \"515.000\")."
+  "frontend/src/utils/format.ts": "Number formatting utility that formats ICP amounts with dot thousands separators using German locale (e.g., 515000 → \"515.000\").",
+  "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx": "Fixed-position music controller that shows a persistent pulsing play button whenever music is not playing (including first visit), records opt-in on first play, and provides mute/volume controls with neon-styled UI when playing.",
+  "frontend/src/hooks/useBackgroundMusic.ts": "React hook managing singleton HTMLAudioElement lifecycle with opt-in based autoplay that only attempts playback on subsequent visits after explicit user consent, registers document-level user-gesture listeners when opted in and blocked, and maintains persistent mute/volume state via localStorage.",
+  "frontend/src/utils/backgroundMusicStorage.ts": "Storage helper for reading/writing background music preferences (mute state, volume, and opt-in flag) to localStorage with validation and safe defaults."
 }

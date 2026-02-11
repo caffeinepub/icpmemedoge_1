@@ -1,15 +1,16 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T21:47:08.976Z",
-  "summary": "REQ-16 appears implemented: 'ICP Remaining' now renders via a dot-thousands formatter so 515000 displays as \"515.000 ICP\", while preserving the existing label and overall PresaleProgress structure per the provided diff summary.",
+  "generatedAt": "2026-02-11T22:25:41.599Z",
+  "summary": "Diff implements an opt-in based background music flow with a persistent play control when not playing, conservative default volume (0.3), localStorage-backed preference helpers (mute/volume + opt-in), and retains the audio asset path '/assets/audio/background-dance.mp3'. No backend changes are shown.",
   "missing_requirements": [],
   "hallucinated_features": [],
-  "confidence": 0.78,
+  "confidence": 0.7,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/components/presale/PresaleProgress.tsx",
-    "frontend/src/utils/format.ts",
+    "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
+    "frontend/src/hooks/useBackgroundMusic.ts",
+    "frontend/src/utils/backgroundMusicStorage.ts",
     "project_state.json"
   ]
 }

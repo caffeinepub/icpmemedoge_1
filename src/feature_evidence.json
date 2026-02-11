@@ -2,11 +2,12 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-presale-progress-icp-remaining-statistic-to-display-the-value-using-a-dot-thousands-separator-so-that-when-no-contributions-have-been-received-it-renders-exactly-as-515-000-icp-and-continues-to-show-the-correct-remaining-amount-as-contributions-come-in-using-the-same-thousands-formatting",
-      "featureTitle": "Update the Presale Progress 'ICP Remaining' statistic to display the value using a dot thousands separator so that, when no contributions have been received, it renders exactly as \"515.000 ICP\" (and continues to show the correct remaining amount as contributions come in, using the same thousands formatting).",
+      "featureId": "feature-change-the-background-music-behavior-so-it-does-not-attempt-to-autoplay-on-initial-page-load-unless-the-visitor-has-previously-opted-in-instead-show-a-persistent-unobtrusive-play-music-control-that-starts-playback-only-after-an-explicit-user-action",
+      "featureTitle": "Change the background music behavior so it does not attempt to autoplay on initial page load unless the visitor has previously opted in; instead, show a persistent, unobtrusive “Play music” control that starts playback only after an explicit user action.",
       "files": [
-        "frontend/src/components/presale/PresaleProgress.tsx",
-        "frontend/src/utils/format.ts"
+        "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
+        "frontend/src/hooks/useBackgroundMusic.ts",
+        "frontend/src/utils/backgroundMusicStorage.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -16,7 +17,26 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-16"
+        "REQ-23"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-keep-the-existing-audio-asset-path-unchanged-and-ensure-the-background-music-controls-still-support-mute-unmute-and-volume-persistence-with-safe-defaults-that-avoid-unexpectedly-loud-playback",
+      "featureTitle": "Keep the existing audio asset path unchanged and ensure the background music controls still support mute/unmute and volume persistence, with safe defaults that avoid unexpectedly loud playback.",
+      "files": [
+        "frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx",
+        "frontend/src/hooks/useBackgroundMusic.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-24"
       ],
       "confidence": "high"
     }

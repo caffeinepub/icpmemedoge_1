@@ -1,10 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Format the Presale Progress “ICP Remaining” value with dot thousands separators so it displays as “515.000 ICP” when no contributions have been received, and continues to format correctly as contributions come in.
+**Goal:** Make background music user-initiated by default and less intrusive, while preserving existing mute/volume behavior and asset path.
 
 **Planned changes:**
-- Update the frontend formatting logic for the “ICP Remaining” statistic to use dot thousands separators (e.g., 515.000) while preserving the underlying remaining-amount calculation.
-- Ensure the displayed remaining amount is clamped to a minimum of 0 and that only numeric formatting changes (label and other UI behavior remain unchanged).
+- Stop attempting to autoplay background music on first-time visits; only allow autoplay on subsequent visits after a stored user opt-in.
+- Add a persistent, unobtrusive “Play music” control that starts playback only after explicit user interaction and is keyboard-accessible (Enter/Space).
+- Persist the user’s explicit playback opt-in in localStorage, while keeping existing mute/unmute and volume persistence with conservative default volume.
+- When autoplay is blocked by browser policy, keep the page usable and clearly offer the “Play music” action.
 
-**User-visible outcome:** In Presale Progress, “ICP Remaining” shows “515.000 ICP” at 0 received, and thereafter shows the correctly computed remaining ICP with dot thousands separators (never below 0).
+**User-visible outcome:** First-time visitors won’t hear music automatically; they can start music via a visible “Play music” control (mouse, touch, or keyboard). After opting in once, the site remembers the preference for future visits, while mute/unmute and volume continue to persist safely.

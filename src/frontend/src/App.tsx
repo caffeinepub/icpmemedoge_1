@@ -4,6 +4,7 @@ import { HowToContribute } from './components/presale/HowToContribute';
 import { ContributorsList } from './components/presale/ContributorsList';
 import { TokenomicsFaq } from './components/presale/TokenomicsFaq';
 import { Footer } from './components/Footer';
+import { BackgroundMusicController } from './components/BackgroundMusic/BackgroundMusicController';
 
 function App() {
   return (
@@ -26,6 +27,9 @@ function App() {
           <Footer />
         </div>
       </div>
+
+      {/* Background music controller */}
+      <BackgroundMusicController />
     </div>
   );
 }

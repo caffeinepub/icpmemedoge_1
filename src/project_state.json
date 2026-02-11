@@ -1,17 +1,20 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 11,
+  "projectStateVersion": 23,
   "summary": "Build a promotional presale website for the IcpMemeDoge memecoin featuring a special meme-dog hero image, flashy but readable design, a 24h countdown, and an ICP-based presale flow with automated payment detection, progress tracking to a 515,000 ICP cap, contributor address listing, and post-presale token crediting.",
   "architectural_notes": [
     "Integrate with the Internet Computer/ICP ledger (or an indexer) to monitor the presale address for incoming transfers and compute cumulative raised ICP.",
     "Persist contribution records (sender address, amount, timestamp) to support progress calculation and contributor list display.",
     "Enforce presale cap logic: stop accepting/acknowledging contributions once total received reaches 515,000 ICP and mark presale as ended.",
-    "Decide on approach for animated hero dog (CSS animation on layered PNG/SVG, animated SVG, Lottie/WebM) and ensure it remains lightweight and doesn’t reduce readability/performance."
+    "Decide on approach for animated hero dog (CSS animation on layered PNG/SVG, animated SVG, Lottie/WebM) and ensure it remains lightweight and doesn’t reduce readability/performance.",
+    "Decide how to handle background audio on first visit (autoplay restrictions, user consent/controls, mute/volume, and accessibility considerations).",
+    "Background audio requirement: autoplay a “cool 90s dance” track on initial page entry (while still respecting browser autoplay restrictions and providing user controls/consent as needed)."
   ],
   "known_issues": [
-    "UI bug: 'ICP remaining' field should display the cap as '515.000 ICP' (German thousands separator) when no contributions are received; currently incorrect value/format."
+    "UI bug: 'ICP remaining' field should display the cap as '515.000 ICP' (German thousands separator) when no contributions are received; currently incorrect value/format.",
+    "Deployment/build failed during packaging/push to network; deployment error needs repair/enablement."
   ],
-  "isFixRequest": true,
+  "isFixRequest": false,
   "existing_features": [
     {
       "id": "feature-create-a-single-page-presale-website-for-the-memecoin-name-icpmemedoge-with-a-hero-section-presale-status-section-contribution-instructions-contributors-list-and-tokenomics-section",
@@ -132,6 +135,62 @@
         "REQ-16"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-add-a-bundled-background-audio-track-cool-dance-music-as-a-static-frontend-asset-and-configure-it-to-start-playing-when-a-visitor-enters-the-website-initial-page-load",
+      "title": "Add a bundled background audio track (cool dance music) as a static frontend asset and configure it to start playing when a visitor enters the website (initial page load).",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-persistent-user-controls-to-mute-unmute-and-optionally-adjust-volume-for-the-background-music-and-ensure-the-preference-persists-across-page-reloads",
+      "title": "Provide persistent user controls to mute/unmute (and optionally adjust volume) for the background music, and ensure the preference persists across page reloads.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-background-music-behavior-is-accessible-and-non-intrusive-allow-keyboard-operation-of-controls-provide-appropriate-aria-labels-and-avoid-unexpectedly-loud-default-volume",
+      "title": "Ensure background music behavior is accessible and non-intrusive: allow keyboard operation of controls, provide appropriate ARIA labels, and avoid unexpectedly loud default volume.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-identify-the-root-cause-of-the-current-deployment-failure-unable-to-complete-deployment-during-packaging-push-and-apply-the-minimal-code-config-changes-needed-so-the-project-builds-and-deploys-successfully-again",
+      "title": "Identify the root cause of the current deployment failure (\"Unable to complete deployment\" during packaging/push) and apply the minimal code/config changes needed so the project builds and deploys successfully again.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-clear-user-facing-error-handling-in-the-frontend-for-backend-polling-failures-so-that-if-presale-status-or-contributors-polling-fails-the-ui-shows-an-english-message-and-remains-usable-instead-of-silently-failing-or-breaking-rendering",
+      "title": "Add clear, user-facing error handling in the frontend for backend/polling failures so that if presale status or contributors polling fails, the UI shows an English message and remains usable (instead of silently failing or breaking rendering).",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-change-the-background-music-behavior-so-it-does-not-attempt-to-autoplay-on-initial-page-load-unless-the-visitor-has-previously-opted-in-instead-show-a-persistent-unobtrusive-play-music-control-that-starts-playback-only-after-an-explicit-user-action",
+      "title": "Change the background music behavior so it does not attempt to autoplay on initial page load unless the visitor has previously opted in; instead, show a persistent, unobtrusive “Play music” control that starts playback only after an explicit user action.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-keep-the-existing-audio-asset-path-unchanged-and-ensure-the-background-music-controls-still-support-mute-unmute-and-volume-persistence-with-safe-defaults-that-avoid-unexpectedly-loud-playback",
+      "title": "Keep the existing audio asset path unchanged and ensure the background music controls still support mute/unmute and volume persistence, with safe defaults that avoid unexpectedly loud playback.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -213,6 +272,20 @@
       "id": "AR-20",
       "summary": "Move the Presale Status section to the very top of the landing page (above the hero section)",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Play cool dance music when a visitor enters the website (landing page background audio)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Ensure the background music track that attempts to autoplay on initial page load is a cool 90s dance-style track, while keeping the existing audio URL/path used by the app unchanged (currently /assets/audio/background-dance.mp3).",
+      "reqIds": [
+        "REQ-20"
+      ],
       "status": "pending"
     }
   ],
