@@ -1,9 +1,11 @@
 import { usePresaleStatus } from '@/hooks/usePresaleStatus';
 import { PRESALE_CAP_ICP } from '@/constants/presale';
 import { formatIcpWithDots } from '@/utils/format';
+import { RefreshCw } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
 
 export function PresaleProgress() {
-  const { data: status, isLoading } = usePresaleStatus();
+  const { data: statusData, isLoading, isFetching } = usePresaleStatus();
 
   if (isLoading) {
     return (
@@ -14,6 +16,7 @@ export function PresaleProgress() {
     );
   }
 
+  const status = statusData;
   const totalIcp = status ? Number(status.totalIcp) / 100_000_000 : 0;
   // Always compute remaining as (cap - received), defaulting to full cap when no status or zero received
   const remainingIcp = status && totalIcp > 0 
@@ -24,6 +27,26 @@ export function PresaleProgress() {
 
   return (
     <div className="space-y-6">
+      {/* Auto-refresh indicator */}
+      <div className="flex items-center justify-between text-xs text-gray-400">
+        <div className="flex items-center gap-2">
+          <RefreshCw className={`w-3 h-3 ${isFetching ? 'animate-spin text-neon-cyan' : ''}`} />
+          <span>
+            {isFetching ? (
+              <span className="text-neon-cyan font-medium">Checking for deposits...</span>
+            ) : status?.lastUpdated ? (
+              <span>Last checked: {formatDistanceToNow(status.lastUpdated, { addSuffix: true })}</span>
+            ) : (
+              <span>Auto-updating every 10 seconds</span>
+            )}
+          </span>
+        </div>
+        <div className="flex items-center gap-1">
+          <div className={`w-2 h-2 rounded-full ${isFetching ? 'bg-neon-cyan animate-pulse' : 'bg-green-500'}`}></div>
+          <span className="text-xs">Live monitoring</span>
+        </div>
+      </div>
+
       {/* Progress Bar */}
       <div className="space-y-2">
         <div className="flex justify-between items-center text-sm">

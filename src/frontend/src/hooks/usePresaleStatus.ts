@@ -9,7 +9,11 @@ export function usePresaleStatus() {
     queryKey: ['presaleStatus'],
     queryFn: async () => {
       if (!actor) throw new Error('Actor not initialized');
-      return actor.getPresaleStatus();
+      const status = await actor.getPresaleStatus();
+      return {
+        ...status,
+        lastUpdated: Date.now(),
+      };
     },
     enabled: !!actor && !isFetching,
     refetchInterval: POLL_INTERVAL_MS,

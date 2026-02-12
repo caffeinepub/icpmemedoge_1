@@ -1,36 +1,17 @@
 {
   "kind": "build_request",
-  "title": "Ensure 'ICP Remaining' shows 515.000 ICP when no contributions",
+  "title": "Automatic presale deposit detection and status updates",
   "priority": "normal",
-  "requirements": [
-    {
-      "id": "REQ-40",
-      "text": "Ensure the Presale Progress 'ICP Remaining' statistic displays exactly \"515.000 ICP\" (dot thousands separator) when there are no contributions yet (including when presale status data is unavailable/undefined), and continues to display the correct remaining amount as contributions come in (cap minus received) using the same dot thousands formatting.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "Bei Icp remaining Fenster bite 515.000 ICP eintragen"
-        ]
-      },
-      "acceptanceCriteria": [
-        "When the app loads with 0 received ICP, the 'ICP Remaining' value renders exactly as \"515.000 ICP\".",
-        "When presale status polling returns no data (undefined/null) but the page still renders, the 'ICP Remaining' value renders exactly as \"515.000 ICP\".",
-        "After at least one contribution is detected, 'ICP Remaining' equals (515,000 - received) and is formatted with dot thousands separators (e.g., 514.900 ICP).",
-        "All user-facing labels remain in English (e.g., \"ICP Remaining\")."
-      ]
-    }
-  ],
+  "requirements": [],
   "constraints": [
-    "Do not change any immutable frontend paths listed in SYSTEM_CONTEXT.",
-    "Keep presale cap value as 515,000 ICP and do not alter backend presale accounting logic for this change."
+    "Use English for any user-facing text.",
+    "Do not change the presale deposit address (must remain exactly: d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9).",
+    "Respect the existing single-actor Motoko backend architecture (all backend logic in backend/main.mo).",
+    "Do not edit frontend immutable paths listed in SYSTEM_CONTEXT."
   ],
   "nonGoals": [
-    "Do not change the presale deposit address.",
-    "Do not change the visual layout or styling of the Presale Progress section beyond what is necessary to correct the displayed 'ICP Remaining' value/format.",
-    "Do not modify backend ledger polling behavior."
+    "Adding new payment rails or monitoring additional wallet addresses beyond the existing configured presale deposit address.",
+    "Implementing real-time push updates (e.g., WebSockets). The current polling-based approach remains."
   ],
   "imageRequirements": {
     "required": [],

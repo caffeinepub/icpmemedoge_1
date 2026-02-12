@@ -9,7 +9,11 @@ export function useContributors() {
     queryKey: ['contributors'],
     queryFn: async () => {
       if (!actor) throw new Error('Actor not initialized');
-      return actor.getAllContributors();
+      const contributors = await actor.getAllContributors();
+      return {
+        data: contributors,
+        lastUpdated: Date.now(),
+      };
     },
     enabled: !!actor && !isFetching,
     refetchInterval: POLL_INTERVAL_MS,

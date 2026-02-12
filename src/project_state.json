@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 37,
+  "projectStateVersion": 39,
   "summary": "Build a promotional presale website for the IcpMemeDoge memecoin featuring a special meme-dog hero image, flashy but readable design, a 24h countdown, and an ICP-based presale flow with automated payment detection, progress tracking to a 515,000 ICP cap, contributor address listing, and post-presale token crediting.",
   "architectural_notes": [
     "Integrate with the Internet Computer/ICP ledger (or an indexer) to monitor the presale address for incoming transfers and compute cumulative raised ICP.",
@@ -18,7 +18,7 @@
     "UI bug: 'ICP remaining' field should display the cap as '515.000 ICP' (German thousands separator) when no contributions are received; currently incorrect value/format.",
     "Deployment/build failed during packaging/push to network; deployment error needs repair/enablement."
   ],
-  "isFixRequest": true,
+  "isFixRequest": false,
   "existing_features": [
     {
       "id": "feature-create-a-single-page-presale-website-for-the-memecoin-name-icpmemedoge-with-a-hero-section-presale-status-section-contribution-instructions-contributors-list-and-tokenomics-section",

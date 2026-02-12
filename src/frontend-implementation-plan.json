@@ -1,24 +1,6 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix Presale Progress 'ICP Remaining' fallback and dot-thousands formatting",
-  "requirements": [
-    {
-      "id": "REQ-40",
-      "summary": "Make 'ICP Remaining' default to 515.000 ICP when presale status is missing/undefined or received ICP is zero, and compute remaining as (515,000 − received) with dot thousands separators as contributions come in.",
-      "acceptanceCriteria": [
-        "When the app loads with 0 received ICP, the 'ICP Remaining' value renders exactly as \"515.000 ICP\".",
-        "When presale status polling returns no data (undefined/null) but the page still renders, the 'ICP Remaining' value renders exactly as \"515.000 ICP\".",
-        "After at least one contribution is detected, 'ICP Remaining' equals (515,000 - received) and is formatted with dot thousands separators (e.g., 514.900 ICP).",
-        "All user-facing labels remain in English (e.g., \"ICP Remaining\")."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/presale/PresaleProgress.tsx",
-          "operation": "modify",
-          "description": "Adjust 'ICP Remaining' computation to be derived from the fixed cap (PRESALE_CAP_ICP) minus received ICP (from status.totalIcp), and ensure it falls back to exactly 515.000 ICP when status is undefined/null (including query error states where the component still renders). Keep dot thousands formatting via formatIcpWithDots and avoid layout/styling changes beyond what is necessary to correct the displayed value/format."
-        }
-      ]
-    }
-  ]
+  "title": "Automatic presale deposit detection and status updates",
+  "requirements": []
 }

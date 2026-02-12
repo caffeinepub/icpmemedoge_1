@@ -1,34 +1,28 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T23:29:50.183Z",
+  "generatedAt": "2026-02-12T06:31:07.939Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 1,
-    "implemented": 1,
-    "items": [
-      {
-        "id": "REQ-40",
-        "summary": "Ensure the Presale Progress 'ICP Remaining' statistic displays exactly \"515.000 ICP\" (dot thousands separator) when there are no contributions yet (including when presale status data is unavailable/undefined), and continues to display the correct remaining amount as contributions come in (cap minus received) using the same dot thousands formatting.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/presale/PresaleProgress.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/presale/PresaleProgress.tsx"
-        ]
-      }
-    ]
+    "total": 0,
+    "implemented": 0,
+    "items": []
   },
   "changedFiles": [
+    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
+    "frontend/src/components/presale/ContributorsList.tsx",
+    "frontend/src/components/presale/DepositAddress.tsx",
     "frontend/src/components/presale/PresaleProgress.tsx",
+    "frontend/src/constants/presale.ts",
+    "frontend/src/hooks/useContributors.ts",
+    "frontend/src/hooks/usePresaleStatus.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

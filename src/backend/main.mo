@@ -8,8 +8,6 @@ import Int "mo:core/Int";
 import Order "mo:core/Order";
 import Text "mo:core/Text";
 
-
-
 actor {
   let presaleTargetIcp : Nat = 515_000_000_000;
   let presaleDepositAddress = "d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9";

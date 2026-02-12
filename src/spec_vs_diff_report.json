@@ -1,22 +1,42 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T23:29:50.180Z",
-  "summary": "REQ-40 appears implemented in PresaleProgress: 'ICP Remaining' now defaults to the full cap when status is undefined/null or when received is zero, and it uses a dot-thousands formatter via formatIcpWithDots(). However, the diff also introduces/contains a new presale-ended badge with celebratory emoji text that was not requested.",
+  "generatedAt": "2026-02-12T06:31:07.937Z",
+  "summary": "No explicit Requirements/Acceptance Criteria were provided in the BuildRequest, so there are no spec-defined requirements to mark as missing. The diff does introduce several user-facing/frontend features not requested by the BuildRequest (e.g., background music controller, new post-presale section, and various promotional/visual additions).",
   "missing_requirements": [],
   "hallucinated_features": [
     {
-      "description": "Added/introduced a prominent 'PRESALE ENDED' badge with celebratory emoji and thank-you message in the Presale Progress component.",
-      "reason": "BuildRequest REQ-40 only asks to correct the 'ICP Remaining' displayed value/format; it explicitly lists non-goals about not changing layout/styling beyond what is necessary. The added badge content goes beyond adjusting the remaining ICP display.",
+      "description": "Background music controller / background music UX and persistence",
+      "reason": "Not requested in the BuildRequest (which focuses on presale deposit detection/status updates and includes non-goals around payment rails/real-time updates, but nothing about audio).",
       "evidence": [
-        "frontend/src/components/presale/PresaleProgress.tsx (\"🎉 PRESALE ENDED 🎉\" and \"Thank you for participating!\")"
+        "frontend-file-summaries.txt (\"frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx\", \"frontend/src/hooks/useBackgroundMusic.ts\", \"frontend/src/utils/backgroundMusicStorage.ts\")"
+      ]
+    },
+    {
+      "description": "Addition of a new 'PostPresaleListingsSection' in the main app layout",
+      "reason": "Not requested in the BuildRequest.",
+      "evidence": [
+        "frontend-file-summaries.txt (\"frontend/src/App.tsx\": \"including the new PostPresaleListingsSection...\")"
+      ]
+    },
+    {
+      "description": "Footer attribution/UTM tracking changes (caffeine.ai attribution with UTM tracking)",
+      "reason": "Not requested in the BuildRequest.",
+      "evidence": [
+        "frontend-file-summaries.txt (\"frontend/src/components/Footer.tsx\": \"caffeine.ai attribution with UTM tracking\")"
       ]
     }
   ],
-  "confidence": 0.74,
+  "confidence": 0.62,
   "changed_files": [
+    "backend/main.mo",
     "frontend-file-summaries.txt",
+    "frontend/src/components/presale/ContributorsList.tsx",
+    "frontend/src/components/presale/DepositAddress.tsx",
     "frontend/src/components/presale/PresaleProgress.tsx",
+    "frontend/src/constants/presale.ts",
+    "frontend/src/hooks/useContributors.ts",
+    "frontend/src/hooks/usePresaleStatus.ts",
     "project_state.json"
   ]
 }
