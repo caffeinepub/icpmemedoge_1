@@ -1,6 +1,59 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Automatic presale deposit detection and status updates",
-  "requirements": []
+  "title": "Wire presale monitoring UI to real backend-synced stats and contributions (10s polling)",
+  "requirements": [
+    {
+      "id": "REQ-97",
+      "summary": "Replace frontend placeholder presale polling with calls to real backend presale stats and contributions methods while preserving 10-second React Query polling and English UI text.",
+      "acceptanceCriteria": [
+        "frontend/src/hooks/usePresaleStatus.ts calls the backend presale stats method (instead of returning the placeholder defaults) and continues to refetch every 10 seconds using POLL_INTERVAL_MS.",
+        "frontend/src/hooks/useContributors.ts calls the backend contributions method (instead of returning an empty placeholder list) and continues to refetch every 10 seconds using POLL_INTERVAL_MS.",
+        "If a refresh fails, the UI remains usable, continues retrying via the existing React Query polling behavior, and can continue to show last-known-good data (React Query cache) with the existing stale/cached indicators."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/backend.d.ts",
+          "operation": "modify",
+          "description": "Extend the typed backend actor interface with the presale monitoring methods required by the hooks (presale stats + contributions), including the data shapes used by the UI (e8s bigints, nanosecond timestamps, stable transactionId)."
+        },
+        {
+          "path": "frontend/src/hooks/usePresaleStatus.ts",
+          "operation": "modify",
+          "description": "Replace the placeholder stats query function with a real call to the backend presale stats method; keep POLL_INTERVAL_MS refetch interval and existing health polling via getHealth(), preserving React Query cache behavior on failures."
+        },
+        {
+          "path": "frontend/src/hooks/useContributors.ts",
+          "operation": "modify",
+          "description": "Replace the placeholder contributions query function with a real call to the backend contributions method; keep POLL_INTERVAL_MS refetch interval and existing health polling via getHealth(), preserving cached-data warnings that rely on React Query keeping last-known-good data."
+        }
+      ]
+    },
+    {
+      "id": "REQ-98",
+      "summary": "Ensure presale monitoring sections stop showing the 'Awaiting Transaction Sync' placeholder once backend-synced contributions exist and keep displayed stats/transactions/contributors consistent.",
+      "acceptanceCriteria": [
+        "When the backend returns at least one contribution, PresaleProgress, LatestTransactionsPanel, and ContributorsList render that data (and the 'Awaiting Transaction Sync' banner does not render in those components).",
+        "LatestTransactionsPanel shows the newest-first individual deposits, including exact UTC date+time strings (already supported by formatUtcTimestamp) based on backend-provided nanosecond timestamps.",
+        "Presale progress totals match the sum of amounts in the contributions list returned by the backend (within rounding/display conventions)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/presale/PresaleProgress.tsx",
+          "operation": "modify",
+          "description": "Adjust the 'hasNoData' / 'Awaiting Transaction Sync' banner gating to rely on backend-provided contribution presence (e.g., contributorCount/totalICP) rather than only the placeholder-derived total, so the banner does not render when real synced contributions exist."
+        },
+        {
+          "path": "frontend/src/components/presale/LatestTransactionsPanel.tsx",
+          "operation": "modify",
+          "description": "Verify the transactions list consumes the backend-provided contributions as newest-first individual deposits keyed by transactionId and continues using formatUtcTimestamp for nanosecond timestamps; ensure the 'Awaiting Transaction Sync' banner remains conditional on having zero contributions."
+        },
+        {
+          "path": "frontend/src/components/presale/ContributorsList.tsx",
+          "operation": "modify",
+          "description": "Confirm contributors aggregation is derived from the same backend-provided individual contributions dataset used elsewhere; ensure the 'Awaiting Transaction Sync' banner remains conditional on having zero aggregated contributors from that dataset."
+        }
+      ]
+    }
+  ]
 }

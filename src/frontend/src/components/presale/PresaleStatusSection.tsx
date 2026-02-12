@@ -1,6 +1,7 @@
 import { PresaleProgress } from './PresaleProgress';
 import { DepositAddress } from './DepositAddress';
 import { CountdownTimer } from './CountdownTimer';
+import { LatestTransactionsPanel } from './LatestTransactionsPanel';
 import { PRESALE_CAP_ICP } from '@/constants/presale';
 
 export function PresaleStatusSection() {
@@ -44,6 +45,11 @@ export function PresaleStatusSection() {
           {/* Deposit Address */}
           <div className="mt-8">
             <DepositAddress />
+          </div>
+
+          {/* Latest Transactions Panel */}
+          <div className="mt-8">
+            <LatestTransactionsPanel />
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
+import { PRESALE_DEPOSIT_ADDRESS, IC_DASHBOARD_ACCOUNT_URL } from '@/constants/presale';
+import { Button } from '@/components/ui/button';
+import { Copy, CheckCircle2, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
-import { Copy, Check, AlertCircle } from 'lucide-react';
-import { PRESALE_DEPOSIT_ADDRESS } from '@/constants/presale';
 
 export function DepositAddress() {
   const [copied, setCopied] = useState(false);
@@ -16,43 +17,56 @@ export function DepositAddress() {
   };
 
   return (
-    <div className="space-y-3">
-      <div className="flex items-center gap-2">
-        <h3 className="text-lg font-bold text-neon-yellow">Deposit Address</h3>
-        <div className="flex items-center gap-1 text-xs text-gray-400">
+    <div className="bg-gray-900/50 rounded-2xl p-6 border border-neon-yellow/30">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-xl font-bold text-neon-yellow">ICP Deposit Address</h3>
+        <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-          <span>Monitoring active</span>
+          <span className="text-xs text-gray-400">Monitoring Active</span>
         </div>
       </div>
-      <div className="bg-gray-900/80 rounded-xl p-4 border border-neon-yellow/40">
-        <div className="flex items-center gap-3">
-          <code className="flex-1 text-xs md:text-sm text-gray-200 font-mono break-all">
-            {PRESALE_DEPOSIT_ADDRESS}
-          </code>
-          <button
-            onClick={handleCopy}
-            className="flex-shrink-0 p-2 bg-neon-yellow/20 hover:bg-neon-yellow/30 border border-neon-yellow/50 rounded-lg transition-all duration-200 hover:scale-105"
-            aria-label="Copy address"
+
+      <div className="bg-gray-800/70 rounded-lg p-4 mb-4">
+        <code className="text-sm text-gray-300 font-mono break-all block">
+          {PRESALE_DEPOSIT_ADDRESS}
+        </code>
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-3">
+        <Button
+          onClick={handleCopy}
+          className="flex-1 bg-neon-yellow/20 hover:bg-neon-yellow/30 text-neon-yellow border border-neon-yellow/50"
+        >
+          {copied ? (
+            <>
+              <CheckCircle2 className="w-4 h-4 mr-2" />
+              Copied!
+            </>
+          ) : (
+            <>
+              <Copy className="w-4 h-4 mr-2" />
+              Copy Address
+            </>
+          )}
+        </Button>
+        <Button
+          asChild
+          className="flex-1 bg-neon-cyan/20 hover:bg-neon-cyan/30 text-neon-cyan border border-neon-cyan/50"
+        >
+          <a
+            href={IC_DASHBOARD_ACCOUNT_URL}
+            target="_blank"
+            rel="noreferrer"
           >
-            {copied ? (
-              <Check className="w-5 h-5 text-neon-yellow" />
-            ) : (
-              <Copy className="w-5 h-5 text-neon-yellow" />
-            )}
-          </button>
-        </div>
-        {copied && (
-          <p className="text-neon-yellow text-sm mt-2 font-medium animate-fade-in">
-            ✓ Copied to clipboard!
-          </p>
-        )}
+            <ExternalLink className="w-4 h-4 mr-2" />
+            View on IC Dashboard
+          </a>
+        </Button>
       </div>
-      <div className="flex items-start gap-2 bg-neon-cyan/10 border border-neon-cyan/30 rounded-lg p-3">
-        <AlertCircle className="w-4 h-4 text-neon-cyan flex-shrink-0 mt-0.5" />
-        <p className="text-xs text-gray-300">
-          Deposits to this address are automatically detected and the presale status updates every 10 seconds.
-        </p>
-      </div>
+
+      <p className="text-xs text-gray-500 mt-4 text-center">
+        All deposits to this address are automatically monitored and tracked in real-time
+      </p>
     </div>
   );
 }

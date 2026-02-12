@@ -1,40 +1,60 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-12T06:31:07.937Z",
-  "summary": "No explicit Requirements/Acceptance Criteria were provided in the BuildRequest, so there are no spec-defined requirements to mark as missing. The diff does introduce several user-facing/frontend features not requested by the BuildRequest (e.g., background music controller, new post-presale section, and various promotional/visual additions).",
-  "missing_requirements": [],
-  "hallucinated_features": [
+  "generatedAt": "2026-02-12T10:42:48.407Z",
+  "summary": "The diff only updates two frontend React Query hooks, but they still return placeholder/empty data and only call getHealth(). No backend presale sync APIs, persistence, deduplication, or real health fields implementation is shown, and the frontend is not connected to real presale stats/contributions methods as requested.",
+  "missing_requirements": [
     {
-      "description": "Background music controller / background music UX and persistence",
-      "reason": "Not requested in the BuildRequest (which focuses on presale deposit detection/status updates and includes non-goals around payment rails/real-time updates, but nothing about audio).",
+      "id": "REQ-94",
+      "requirement": "Implement real backend presale monitoring APIs to sync on-chain ICP deposits to the specified deposit account, compute presale stats from the synced dataset, return newest-first individual contributions with stable transactionId, cache last-known-good on upstream failure, and deduplicate across polls.",
+      "reason": "No backend changes are present in the diff (no backend/main.mo updates) and the frontend hooks explicitly state the backend does not yet provide presale stats or contributions and return default/empty placeholder values.",
       "evidence": [
-        "frontend-file-summaries.txt (\"frontend/src/components/BackgroundMusic/BackgroundMusicController.tsx\", \"frontend/src/hooks/useBackgroundMusic.ts\", \"frontend/src/utils/backgroundMusicStorage.ts\")"
+        "frontend/src/hooks/usePresaleStatus.ts",
+        "frontend/src/hooks/useContributors.ts"
       ]
     },
     {
-      "description": "Addition of a new 'PostPresaleListingsSection' in the main app layout",
-      "reason": "Not requested in the BuildRequest.",
+      "id": "REQ-95",
+      "requirement": "Persist and deduplicate the synced contribution dataset in stable canister state (with conditional migration if required) so data survives upgrades and is stored as individual records.",
+      "reason": "No backend stable-state or migration changes are shown; there is no evidence of persistence, deduplication logic, or any conditional migration file/update.",
       "evidence": [
-        "frontend-file-summaries.txt (\"frontend/src/App.tsx\": \"including the new PostPresaleListingsSection...\")"
+        "frontend/src/hooks/useContributors.ts",
+        "frontend/src/hooks/usePresaleStatus.ts"
       ]
     },
     {
-      "description": "Footer attribution/UTM tracking changes (caffeine.ai attribution with UTM tracking)",
-      "reason": "Not requested in the BuildRequest.",
+      "id": "REQ-96",
+      "requirement": "Update backend health reporting to return real lastSuccessfulSync, lastSyncAttempt, and syncError reflecting the presale sync process, enabling the frontend to distinguish never-synced vs previously-synced-but-failing.",
+      "reason": "The frontend parses SyncHealth fields, but the diff contains no backend implementation changes to ensure getHealth() provides meaningful values tied to real presale transaction syncing.",
       "evidence": [
-        "frontend-file-summaries.txt (\"frontend/src/components/Footer.tsx\": \"caffeine.ai attribution with UTM tracking\")"
+        "frontend/src/hooks/usePresaleStatus.ts",
+        "frontend/src/hooks/useContributors.ts"
+      ]
+    },
+    {
+      "id": "REQ-97",
+      "requirement": "Connect frontend polling hooks to real backend methods for presale stats and contributions (keeping 10s polling), instead of placeholders.",
+      "reason": "Both hooks still contain placeholder queryFns: usePresaleStatus returns default empty stats and useContributors returns an empty list; neither calls a backend presale stats or contributions method (only actor.getHealth() is called).",
+      "evidence": [
+        "frontend/src/hooks/usePresaleStatus.ts",
+        "frontend/src/hooks/useContributors.ts"
+      ]
+    },
+    {
+      "id": "REQ-98",
+      "requirement": "Ensure the presale monitoring UI no longer shows the 'Awaiting Transaction Sync' placeholder when real backend-synced transactions exist, and ensure Presale Progress, Latest Transactions, and Contributors derive consistently from the same backend-synced dataset.",
+      "reason": "Because the hooks still return empty/placeholder data and are not connected to real backend-synced contributions, there is no evidence that the UI will stop showing the placeholder banner when contributions exist or that panels are driven by a single real dataset.",
+      "evidence": [
+        "frontend/src/hooks/usePresaleStatus.ts",
+        "frontend/src/hooks/useContributors.ts",
+        "frontend-file-summaries.txt"
       ]
     }
   ],
-  "confidence": 0.62,
+  "hallucinated_features": [],
+  "confidence": 0.86,
   "changed_files": [
-    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/components/presale/ContributorsList.tsx",
-    "frontend/src/components/presale/DepositAddress.tsx",
-    "frontend/src/components/presale/PresaleProgress.tsx",
-    "frontend/src/constants/presale.ts",
     "frontend/src/hooks/useContributors.ts",
     "frontend/src/hooks/usePresaleStatus.ts",
     "project_state.json"

@@ -10,27 +10,29 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
-export interface Allocation { 'address' : string, 'amount' : bigint }
-export interface Contribution {
-  'address' : string,
-  'timestamp' : Time,
-  'amount' : bigint,
+export interface SyncHealth {
+  'lastSyncAttempt' : [] | [string],
+  'syncError' : [] | [string],
+  'lastSuccessfulSync' : [] | [string],
 }
-export type Time = bigint;
+export interface TransformationInput {
+  'context' : Uint8Array,
+  'response' : http_request_result,
+}
+export interface TransformationOutput {
+  'status' : bigint,
+  'body' : Uint8Array,
+  'headers' : Array<http_header>,
+}
+export interface http_header { 'value' : string, 'name' : string }
+export interface http_request_result {
+  'status' : bigint,
+  'body' : Uint8Array,
+  'headers' : Array<http_header>,
+}
 export interface _SERVICE {
-  'getAllContributionsForAddress' : ActorMethod<[string], Array<Contribution>>,
-  'getAllContributors' : ActorMethod<[], Array<Contribution>>,
-  'getPresaleStatus' : ActorMethod<
-    [],
-    {
-      'active' : boolean,
-      'depositAddress' : string,
-      'totalIcp' : bigint,
-      'remainingIcp' : bigint,
-    }
-  >,
-  'getTotalAllocation' : ActorMethod<[string], Allocation>,
-  'updatePresaleProgress' : ActorMethod<[bigint, string, string], undefined>,
+  'getHealth' : ActorMethod<[], SyncHealth>,
+  'transform' : ActorMethod<[TransformationInput], TransformationOutput>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

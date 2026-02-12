@@ -8,72 +8,70 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const Time = IDL.Int;
-export const Contribution = IDL.Record({
-  'address' : IDL.Text,
-  'timestamp' : Time,
-  'amount' : IDL.Nat,
+export const SyncHealth = IDL.Record({
+  'lastSyncAttempt' : IDL.Opt(IDL.Text),
+  'syncError' : IDL.Opt(IDL.Text),
+  'lastSuccessfulSync' : IDL.Opt(IDL.Text),
 });
-export const Allocation = IDL.Record({
-  'address' : IDL.Text,
-  'amount' : IDL.Nat,
+export const http_header = IDL.Record({
+  'value' : IDL.Text,
+  'name' : IDL.Text,
+});
+export const http_request_result = IDL.Record({
+  'status' : IDL.Nat,
+  'body' : IDL.Vec(IDL.Nat8),
+  'headers' : IDL.Vec(http_header),
+});
+export const TransformationInput = IDL.Record({
+  'context' : IDL.Vec(IDL.Nat8),
+  'response' : http_request_result,
+});
+export const TransformationOutput = IDL.Record({
+  'status' : IDL.Nat,
+  'body' : IDL.Vec(IDL.Nat8),
+  'headers' : IDL.Vec(http_header),
 });
 
 export const idlService = IDL.Service({
-  'getAllContributionsForAddress' : IDL.Func(
-      [IDL.Text],
-      [IDL.Vec(Contribution)],
+  'getHealth' : IDL.Func([], [SyncHealth], []),
+  'transform' : IDL.Func(
+      [TransformationInput],
+      [TransformationOutput],
       ['query'],
     ),
-  'getAllContributors' : IDL.Func([], [IDL.Vec(Contribution)], ['query']),
-  'getPresaleStatus' : IDL.Func(
-      [],
-      [
-        IDL.Record({
-          'active' : IDL.Bool,
-          'depositAddress' : IDL.Text,
-          'totalIcp' : IDL.Nat,
-          'remainingIcp' : IDL.Nat,
-        }),
-      ],
-      ['query'],
-    ),
-  'getTotalAllocation' : IDL.Func([IDL.Text], [Allocation], ['query']),
-  'updatePresaleProgress' : IDL.Func([IDL.Nat, IDL.Text, IDL.Text], [], []),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
-  const Time = IDL.Int;
-  const Contribution = IDL.Record({
-    'address' : IDL.Text,
-    'timestamp' : Time,
-    'amount' : IDL.Nat,
+  const SyncHealth = IDL.Record({
+    'lastSyncAttempt' : IDL.Opt(IDL.Text),
+    'syncError' : IDL.Opt(IDL.Text),
+    'lastSuccessfulSync' : IDL.Opt(IDL.Text),
   });
-  const Allocation = IDL.Record({ 'address' : IDL.Text, 'amount' : IDL.Nat });
+  const http_header = IDL.Record({ 'value' : IDL.Text, 'name' : IDL.Text });
+  const http_request_result = IDL.Record({
+    'status' : IDL.Nat,
+    'body' : IDL.Vec(IDL.Nat8),
+    'headers' : IDL.Vec(http_header),
+  });
+  const TransformationInput = IDL.Record({
+    'context' : IDL.Vec(IDL.Nat8),
+    'response' : http_request_result,
+  });
+  const TransformationOutput = IDL.Record({
+    'status' : IDL.Nat,
+    'body' : IDL.Vec(IDL.Nat8),
+    'headers' : IDL.Vec(http_header),
+  });
   
   return IDL.Service({
-    'getAllContributionsForAddress' : IDL.Func(
-        [IDL.Text],
-        [IDL.Vec(Contribution)],
+    'getHealth' : IDL.Func([], [SyncHealth], []),
+    'transform' : IDL.Func(
+        [TransformationInput],
+        [TransformationOutput],
         ['query'],
       ),
-    'getAllContributors' : IDL.Func([], [IDL.Vec(Contribution)], ['query']),
-    'getPresaleStatus' : IDL.Func(
-        [],
-        [
-          IDL.Record({
-            'active' : IDL.Bool,
-            'depositAddress' : IDL.Text,
-            'totalIcp' : IDL.Nat,
-            'remainingIcp' : IDL.Nat,
-          }),
-        ],
-        ['query'],
-      ),
-    'getTotalAllocation' : IDL.Func([IDL.Text], [Allocation], ['query']),
-    'updatePresaleProgress' : IDL.Func([IDL.Nat, IDL.Text, IDL.Text], [], []),
   });
 };
 

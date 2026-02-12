@@ -1,26 +1,70 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-12T06:31:07.939Z",
+  "generatedAt": "2026-02-12T10:42:48.411Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 0,
-    "implemented": 0,
-    "items": []
+    "total": 5,
+    "implemented": 1,
+    "items": [
+      {
+        "id": "REQ-94",
+        "summary": "Implement real backend presale monitoring APIs (replacing placeholders) so the canister can sync and serve on-chain incoming ICP deposits for the presale deposit accountId exactly \"d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9\" and compute presale stats from that same dataset.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-95",
+        "summary": "Persist and deduplicate the synced contribution dataset in stable canister state, and add a conditional upgrade migration only if required by the new persisted schema.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-96",
+        "summary": "Update backend health reporting to support the existing frontend stale/cached UI patterns: return real values for lastSuccessfulSync, lastSyncAttempt, and syncError that reflect the actual presale transaction sync process (do not mention ic.house in user-facing strings).",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-97",
+        "summary": "Connect the frontend polling hooks to the real backend methods so the UI renders real presale stats and contributions instead of placeholders, while preserving the existing 10-second React Query polling cadence and keeping all user-facing text in English.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/backend.d.ts",
+          "frontend/src/hooks/usePresaleStatus.ts",
+          "frontend/src/hooks/useContributors.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/backend.d.ts",
+          "frontend/src/hooks/usePresaleStatus.ts",
+          "frontend/src/hooks/useContributors.ts"
+        ]
+      },
+      {
+        "id": "REQ-98",
+        "summary": "Ensure the presale monitoring UI no longer shows the 'Awaiting Transaction Sync' placeholder when real backend-synced transactions exist for the deposit account, and that Presale Progress, Latest Transactions, and Contributors stay consistent because they all derive from the same backend-synced contribution dataset.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/components/presale/PresaleProgress.tsx",
+          "frontend/src/components/presale/LatestTransactionsPanel.tsx",
+          "frontend/src/components/presale/ContributorsList.tsx"
+        ],
+        "matchedFiles": []
+      }
+    ]
   },
   "changedFiles": [
-    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/presale/ContributorsList.tsx",
-    "frontend/src/components/presale/DepositAddress.tsx",
-    "frontend/src/components/presale/PresaleProgress.tsx",
-    "frontend/src/constants/presale.ts",
+    "frontend/src/backend.d.ts",
     "frontend/src/hooks/useContributors.ts",
     "frontend/src/hooks/usePresaleStatus.ts",
     "project_state.json",

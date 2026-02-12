@@ -1,20 +1,127 @@
 {
   "kind": "build_request",
-  "title": "Automatic presale deposit detection and status updates",
-  "priority": "normal",
-  "requirements": [],
+  "title": "Implement real presale transaction sync backend and connect frontend polling to remove 'Awaiting Transaction Sync'",
+  "priority": "high",
+  "requirements": [
+    {
+      "id": "REQ-94",
+      "text": "Implement real backend presale monitoring APIs (replacing placeholders) so the canister can sync and serve on-chain incoming ICP deposits for the presale deposit accountId exactly \"d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9\" and compute presale stats from that same dataset.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "recent-messages-4",
+          "recent-messages-5"
+        ],
+        "quotes": [
+          "Das Frontend wartet auf Transaktionen, aber das Backend liefert nichts.",
+          "...alle Transaktionen von dieser Adresse automatisch geladen werden:\n  d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9\n- und alle 10 Sekunden synchronisiert werden?"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The backend exposes a presale stats method used by the UI that returns at least: totalICP (e8s), remainingICP (cap minus received, floored at 0), contributorCount, and active/ended state derived from totals vs the 515,000 ICP cap.",
+        "The backend exposes a contributions method that returns a newest-first list of individual deposits (one record per on-chain deposit, not aggregated by address), where each item includes: fromAddress, amount (e8s), timestamp (nanoseconds), and a stable transactionId.",
+        "Backend calls do not trap when the upstream transaction source is slow/unavailable; they return last-known-good cached values (or an empty list if none exists) and populate sync health metadata accordingly.",
+        "Repeated polling does not create duplicates or inflate totals; the backend deduplicates by a stable transactionId across repeated syncs."
+      ]
+    },
+    {
+      "id": "REQ-95",
+      "text": "Persist and deduplicate the synced contribution dataset in stable canister state, and add a conditional upgrade migration only if required by the new persisted schema.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "recent-messages-4"
+        ],
+        "quotes": [
+          "Das Problem im Screenshot entsteht aus einem einzigen Grund:\n\n**Der Backend‑Code liefert noch KEINE echten Transaktionsdaten.**"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Contributions are stored as multiple individual records (not one-per-address overwrites).",
+        "After a canister upgrade, previously synced contributions remain available and totals do not reset unintentionally.",
+        "If a state schema change is required, a conditional migration is added and can upgrade existing state without breaking query methods."
+      ]
+    },
+    {
+      "id": "REQ-96",
+      "text": "Update backend health reporting to support the existing frontend stale/cached UI patterns: return real values for lastSuccessfulSync, lastSyncAttempt, and syncError that reflect the actual presale transaction sync process (do not mention ic.house in user-facing strings).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "recent-messages-4"
+        ],
+        "quotes": [
+          "Die Meldung \"Awaiting Transaction Sync\" kommt, weil:\n- dein Backend aktuell **nur getHealth()** bereitstellt,"
+        ]
+      },
+      "acceptanceCriteria": [
+        "getHealth() returns meaningful timestamps (or nulls) for last successful sync and last sync attempt, and a syncError that is null on success or a provider-neutral English error string on failure.",
+        "Frontend components that display sync status can distinguish between “never synced yet” and “synced before but currently failing” using the returned health fields."
+      ]
+    },
+    {
+      "id": "REQ-97",
+      "text": "Connect the frontend polling hooks to the real backend methods so the UI renders real presale stats and contributions instead of placeholders, while preserving the existing 10-second React Query polling cadence and keeping all user-facing text in English.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages-4",
+          "recent-messages-5"
+        ],
+        "quotes": [
+          "...usePresaleStatus und useContributors deshalb immer Platzhalter‑Daten anzeigen.",
+          "Ja"
+        ]
+      },
+      "acceptanceCriteria": [
+        "frontend/src/hooks/usePresaleStatus.ts calls the backend presale stats method (instead of returning the placeholder defaults) and continues to refetch every 10 seconds using POLL_INTERVAL_MS.",
+        "frontend/src/hooks/useContributors.ts calls the backend contributions method (instead of returning an empty placeholder list) and continues to refetch every 10 seconds using POLL_INTERVAL_MS.",
+        "If a refresh fails, the UI remains usable, continues retrying via the existing React Query polling behavior, and can continue to show last-known-good data (React Query cache) with the existing stale/cached indicators."
+      ]
+    },
+    {
+      "id": "REQ-98",
+      "text": "Ensure the presale monitoring UI no longer shows the 'Awaiting Transaction Sync' placeholder when real backend-synced transactions exist for the deposit account, and that Presale Progress, Latest Transactions, and Contributors stay consistent because they all derive from the same backend-synced contribution dataset.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages-3"
+        ],
+        "quotes": [
+          "Wie kann man das Problem lösen wie im Screemshot es zu sehen ist"
+        ]
+      },
+      "acceptanceCriteria": [
+        "When the backend returns at least one contribution, PresaleProgress, LatestTransactionsPanel, and ContributorsList render that data (and the 'Awaiting Transaction Sync' banner does not render in those components).",
+        "LatestTransactionsPanel shows the newest-first individual deposits, including exact UTC date+time strings (already supported by formatUtcTimestamp) based on backend-provided nanosecond timestamps.",
+        "Presale progress totals match the sum of amounts in the contributions list returned by the backend (within rounding/display conventions)."
+      ]
+    }
+  ],
   "constraints": [
-    "Use English for any user-facing text.",
-    "Do not change the presale deposit address (must remain exactly: d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9).",
-    "Respect the existing single-actor Motoko backend architecture (all backend logic in backend/main.mo).",
-    "Do not edit frontend immutable paths listed in SYSTEM_CONTEXT."
+    "Backend must remain a single Motoko actor in backend/main.mo; keep all Motoko logic in that actor file.",
+    "Only create backend/migration.mo if required for a stable-state schema upgrade; follow the project’s conditional migration policy.",
+    "Do not edit files under frontend/src/components/ui or any other immutable frontend paths listed in SYSTEM_CONTEXT.",
+    "Preserve the presale deposit address exactly as \"d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9\" and preserve the IC Dashboard account explorer URL format (https://dashboard.internetcomputer.org/account/<address>).",
+    "Keep all user-facing UI text in English."
   ],
   "nonGoals": [
-    "Adding new payment rails or monitoring additional wallet addresses beyond the existing configured presale deposit address.",
-    "Implementing real-time push updates (e.g., WebSockets). The current polling-based approach remains."
+    "Adding new ways for users to submit transactions manually (the system must remain automatic via syncing/polling).",
+    "Changing the overall page layout or removing existing presale sections beyond what is necessary to wire in real data.",
+    "Introducing any external database or non-Motoko backend services."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

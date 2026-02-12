@@ -89,105 +89,85 @@ export class ExternalBlob {
         return this;
     }
 }
-export interface Contribution {
-    address: string;
-    timestamp: Time;
-    amount: bigint;
+export interface TransformationInput {
+    context: Uint8Array;
+    response: http_request_result;
 }
-export interface Allocation {
-    address: string;
-    amount: bigint;
+export interface SyncHealth {
+    lastSyncAttempt?: string;
+    syncError?: string;
+    lastSuccessfulSync?: string;
 }
-export type Time = bigint;
+export interface TransformationOutput {
+    status: bigint;
+    body: Uint8Array;
+    headers: Array<http_header>;
+}
+export interface http_header {
+    value: string;
+    name: string;
+}
+export interface http_request_result {
+    status: bigint;
+    body: Uint8Array;
+    headers: Array<http_header>;
+}
 export interface backendInterface {
-    getAllContributionsForAddress(address: string): Promise<Array<Contribution>>;
-    getAllContributors(): Promise<Array<Contribution>>;
-    getPresaleStatus(): Promise<{
-        active: boolean;
-        depositAddress: string;
-        totalIcp: bigint;
-        remainingIcp: bigint;
-    }>;
-    getTotalAllocation(address: string): Promise<Allocation>;
-    updatePresaleProgress(newAmount: bigint, contributor: string, depositAddress: string): Promise<void>;
+    getHealth(): Promise<SyncHealth>;
+    transform(input: TransformationInput): Promise<TransformationOutput>;
 }
+import type { SyncHealth as _SyncHealth } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
-    async getAllContributionsForAddress(arg0: string): Promise<Array<Contribution>> {
+    async getHealth(): Promise<SyncHealth> {
         if (this.processError) {
             try {
-                const result = await this.actor.getAllContributionsForAddress(arg0);
+                const result = await this.actor.getHealth();
+                return from_candid_SyncHealth_n1(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getHealth();
+            return from_candid_SyncHealth_n1(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async transform(arg0: TransformationInput): Promise<TransformationOutput> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.transform(arg0);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.getAllContributionsForAddress(arg0);
+            const result = await this.actor.transform(arg0);
             return result;
         }
     }
-    async getAllContributors(): Promise<Array<Contribution>> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getAllContributors();
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getAllContributors();
-            return result;
-        }
-    }
-    async getPresaleStatus(): Promise<{
-        active: boolean;
-        depositAddress: string;
-        totalIcp: bigint;
-        remainingIcp: bigint;
-    }> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getPresaleStatus();
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getPresaleStatus();
-            return result;
-        }
-    }
-    async getTotalAllocation(arg0: string): Promise<Allocation> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getTotalAllocation(arg0);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getTotalAllocation(arg0);
-            return result;
-        }
-    }
-    async updatePresaleProgress(arg0: bigint, arg1: string, arg2: string): Promise<void> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.updatePresaleProgress(arg0, arg1, arg2);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.updatePresaleProgress(arg0, arg1, arg2);
-            return result;
-        }
-    }
+}
+function from_candid_SyncHealth_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _SyncHealth): SyncHealth {
+    return from_candid_record_n2(_uploadFile, _downloadFile, value);
+}
+function from_candid_opt_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [string]): string | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_record_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    lastSyncAttempt: [] | [string];
+    syncError: [] | [string];
+    lastSuccessfulSync: [] | [string];
+}): {
+    lastSyncAttempt?: string;
+    syncError?: string;
+    lastSuccessfulSync?: string;
+} {
+    return {
+        lastSyncAttempt: record_opt_to_undefined(from_candid_opt_n3(_uploadFile, _downloadFile, value.lastSyncAttempt)),
+        syncError: record_opt_to_undefined(from_candid_opt_n3(_uploadFile, _downloadFile, value.syncError)),
+        lastSuccessfulSync: record_opt_to_undefined(from_candid_opt_n3(_uploadFile, _downloadFile, value.lastSuccessfulSync))
+    };
 }
 export interface CreateActorOptions {
     agent?: Agent;

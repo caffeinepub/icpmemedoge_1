@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 39,
+  "projectStateVersion": 71,
   "summary": "Build a promotional presale website for the IcpMemeDoge memecoin featuring a special meme-dog hero image, flashy but readable design, a 24h countdown, and an ICP-based presale flow with automated payment detection, progress tracking to a 515,000 ICP cap, contributor address listing, and post-presale token crediting.",
   "architectural_notes": [
     "Integrate with the Internet Computer/ICP ledger (or an indexer) to monitor the presale address for incoming transfers and compute cumulative raised ICP.",
@@ -10,15 +10,20 @@
     "Decide how to handle background audio on first visit (autoplay restrictions, user consent/controls, mute/volume, and accessibility considerations).",
     "Background audio requirement: autoplay a “cool 90s dance” track on initial page entry (while still respecting browser autoplay restrictions and providing user controls/consent as needed).",
     "Background music should start only after an explicit user action (pressing the Play button), to comply with autoplay restrictions and user consent expectations.",
-    "User request: remove the background-music Play button UI; reassess how/if background audio can be started given autoplay restrictions and consent requirements.",
     "Presale deposit address is a configurable constant used both for UI display/copy and for ledger monitoring; must be updated consistently when changed.",
-    "Clarify and implement post-presale “Listungen” behavior: whether this is a static section (planned exchanges + dates/links) or dynamic updates/admin-managed content shown after presale ends."
+    "Clarify and implement post-presale “Listungen” behavior: whether this is a static section (planned exchanges + dates/links) or dynamic updates/admin-managed content shown after presale ends.",
+    "Presale monitoring should mirror ic.house transaction history 1:1 (fields + newest-first ordering) for the deposit account, and auto-refresh via existing polling without manual submission."
   ],
   "known_issues": [
     "UI bug: 'ICP remaining' field should display the cap as '515.000 ICP' (German thousands separator) when no contributions are received; currently incorrect value/format.",
-    "Deployment/build failed during packaging/push to network; deployment error needs repair/enablement."
+    "Deployment/build failed during packaging/push to network; deployment error needs repair/enablement.",
+    "Bug: Latest Transactions / contributions monitoring is not showing current on-chain transactions (user reports at least 3 missing) for presale address d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9 compared to https://dashboard.internetcomputer.org/account/d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9",
+    "Presale status/stand (raised/remaining and transaction list) may not match the current on-chain state for the presale deposit address shown on the IC dashboard; needs reconciliation and correct syncing of transactions to displayed presale progress.",
+    "Presale/Latest Transactions/Contributors data must be reconciled against the IC dashboard transaction_flow view for the deposit account (not currently matching).",
+    "Performance issue: site loads too slowly, likely due to ic.house transaction sync/polling waiting on slow responses and blocking or delaying UI rendering.",
+    "Frontend shows “Awaiting Transaction Sync” placeholder because backend does not yet provide real presale stats/contributions endpoints (only getHealth), so usePresaleStatus/useContributors render static/empty data."
   ],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-create-a-single-page-presale-website-for-the-memecoin-name-icpmemedoge-with-a-hero-section-presale-status-section-contribution-instructions-contributors-list-and-tokenomics-section",
@@ -307,6 +312,214 @@
         "REQ-40"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-add-a-new-latest-transactions-live-monitoring-ui-panel-that-displays-the-most-recent-presale-deposits-detected-by-the-app-similar-in-spirit-to-the-internet-computer-dashboard-transaction-list-for-the-presale-account-https-dashboard-internetcomputer-org-account-d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9-the-panel-must-render-the-latest-individual-contributions-not-aggregated-per-address-using-the-existing-contributions-data-already-fetched-for-the-presale-i-e-the-same-source-that-powers-the-contributors-list",
+      "title": "Add a new “Latest Transactions” (live monitoring) UI panel that displays the most recent presale deposits detected by the app, similar in spirit to the Internet Computer dashboard transaction list for the presale account (https://dashboard.internetcomputer.org/account/d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9). The panel must render the latest individual contributions (not aggregated per address) using the existing contributions data already fetched for the presale (i.e., the same source that powers the Contributors list).",
+      "reqIds": [
+        "REQ-41"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-integrate-the-latest-transactions-panel-into-the-existing-page-flow-in-a-way-that-makes-it-feel-like-part-of-the-presale-status-monitoring-area-matching-the-existing-neon-glow-style-place-it-within-the-presale-status-section-frontend-src-components-presale-presalestatussection-tsx-preferably-below-the-deposit-address-block-without-changing-the-existing-presale-status-progress-deposit-functionality",
+      "title": "Integrate the “Latest Transactions” panel into the existing page flow in a way that makes it feel like part of the presale status monitoring area (matching the existing neon/glow style). Place it within the Presale Status section (frontend/src/components/presale/PresaleStatusSection.tsx), preferably below the Deposit Address block, without changing the existing presale status/progress/deposit functionality.",
+      "reqIds": [
+        "REQ-42"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-robust-loading-empty-error-states-for-the-latest-transactions-panel-using-english-user-facing-text-reuse-the-existing-polling-query-behavior-patterns-react-query-so-the-ui-remains-usable-if-the-backend-query-fails-or-returns-no-contributions-yet",
+      "title": "Add robust loading/empty/error states for the “Latest Transactions” panel using English user-facing text. Reuse the existing polling/query behavior patterns (React Query) so the UI remains usable if the backend query fails or returns no contributions yet.",
+      "reqIds": [
+        "REQ-43"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-presale-transaction-detection-so-the-app-reliably-shows-the-latest-on-chain-deposits-for-the-presale-account-d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9-matching-the-public-internet-computer-dashboard-transaction-list-https-dashboard-internetcomputer-org-account-d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9-the-system-must-detect-new-deposits-automatically-without-manual-submission-and-make-them-available-to-the-existing-frontend-polling-hooks",
+      "title": "Fix the presale transaction detection so the app reliably shows the latest on-chain deposits for the presale account d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9, matching the public Internet Computer dashboard transaction list (https://dashboard.internetcomputer.org/account/d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9). The system must detect new deposits automatically (without manual submission) and make them available to the existing frontend polling hooks.",
+      "reqIds": [
+        "REQ-44"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-frontend-user-facing-error-and-empty-states-remain-usable-and-in-english-when-transaction-refresh-fails-or-returns-no-results-and-add-a-clear-indicator-when-displayed-transactions-may-be-stale-e-g-last-successful-refresh-time-while-continuing-to-retry-via-the-existing-react-query-polling-pattern",
+      "title": "Ensure frontend user-facing error and empty states remain usable and in English when transaction refresh fails or returns no results, and add a clear indicator when displayed transactions may be stale (e.g., last successful refresh time) while continuing to retry via the existing React Query polling pattern.",
+      "reqIds": [
+        "REQ-46"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-frontend-presale-monitoring-ui-to-reflect-the-corrected-backend-synced-data-without-changing-the-existing-page-layout-the-contributors-list-latest-transactions-panel-and-presale-progress-must-all-update-to-show-the-synced-transactions-totals-for-the-presale-deposit-account-and-remain-usable-with-english-loading-empty-error-states",
+      "title": "Update the frontend presale monitoring UI to reflect the corrected backend-synced data without changing the existing page layout: the Contributors list, Latest Transactions panel, and Presale Progress must all update to show the synced transactions/totals for the presale deposit account and remain usable with English loading/empty/error states.",
+      "reqIds": [
+        "REQ-49"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-backend-query-methods-used-by-the-frontend-presale-status-and-contributors-contributions-so-presale-progress-latest-transactions-and-contributors-all-derive-from-the-same-backend-synced-on-chain-transaction-set-for-the-deposit-account-and-all-three-views-update-automatically-via-existing-polling",
+      "title": "Update backend query methods used by the frontend (presale status and contributors/contributions) so Presale Progress, Latest Transactions, and Contributors all derive from the same backend-synced on-chain transaction set for the deposit account, and all three views update automatically via existing polling.",
+      "reqIds": [
+        "REQ-52"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-frontend-presale-monitoring-ui-presale-progress-latest-transactions-panel-and-contributors-list-to-reflect-the-corrected-backend-synced-transaction-set-from-the-dashboard-transaction-flow-source-without-changing-the-existing-layout-and-keep-all-user-facing-error-empty-stale-text-in-english",
+      "title": "Update the frontend presale monitoring UI (Presale progress, Latest Transactions panel, and Contributors list) to reflect the corrected backend-synced transaction set from the dashboard transaction_flow source without changing the existing layout, and keep all user-facing error/empty/stale text in English.",
+      "reqIds": [
+        "REQ-56"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-frontend-continues-to-render-accurate-presale-monitoring-data-using-the-existing-polling-hooks-once-the-backend-mapping-is-corrected-without-changing-the-current-layout-of-presaleprogress-latesttransactionspanel-or-contributorslist",
+      "title": "Ensure the frontend continues to render accurate presale monitoring data using the existing polling hooks, once the backend mapping is corrected, without changing the current layout of PresaleProgress, LatestTransactionsPanel, or ContributorsList.",
+      "reqIds": [
+        "REQ-60"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-enhance-the-presale-monitoring-ui-to-display-an-exact-human-readable-utc-date-time-for-each-individual-deposit-in-addition-to-any-relative-time-ago-display-so-that-transaction-date-time-can-be-directly-verified-against-the-dashboard-screenshots",
+      "title": "Enhance the presale monitoring UI to display an exact, human-readable UTC date+time for each individual deposit (in addition to any relative “time ago” display) so that transaction date/time can be directly verified against the dashboard screenshots.",
+      "reqIds": [
+        "REQ-62"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-align-the-presale-website-s-displayed-account-overview-values-with-the-same-synced-on-chain-dataset-so-the-website-reflects-a-transaction-count-and-b-the-currently-detected-raised-amount-consistently-across-presale-progress-contributors-and-latest-transactions-matching-what-is-shown-on-the-public-dashboards-for-the-deposit-account",
+      "title": "Align the presale website’s displayed account overview values with the same synced on-chain dataset so the website reflects (a) transaction count and (b) the currently detected raised amount consistently across Presale Progress, Contributors, and Latest Transactions, matching what is shown on the public dashboards for the deposit account.",
+      "reqIds": [
+        "REQ-63"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-repair-the-deployment-build-failure-unable-to-complete-deployment-during-packaging-push-by-identifying-the-root-cause-and-applying-the-minimal-code-config-changes-needed-so-the-project-builds-and-deploys-successfully-again",
+      "title": "Repair the deployment/build failure (\"Unable to complete deployment\" during packaging/push) by identifying the root cause and applying the minimal code/config changes needed so the project builds and deploys successfully again.",
+      "reqIds": [
+        "REQ-64"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-frontend-presale-monitoring-ui-to-display-exact-human-readable-utc-date-time-for-each-individual-deposit-in-the-latest-transactions-panel-frontend-src-components-presale-latesttransactionspanel-tsx-in-addition-to-any-relative-time-ago-display-so-the-transaction-times-can-be-directly-verified-against-the-uploaded-dashboard-screenshots",
+      "title": "Update the frontend presale monitoring UI to display exact human-readable UTC date+time for each individual deposit in the Latest Transactions panel (frontend/src/components/presale/LatestTransactionsPanel.tsx), in addition to any relative “time ago” display, so the transaction times can be directly verified against the uploaded dashboard screenshots.",
+      "reqIds": [
+        "REQ-68"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-frontend-user-facing-monitoring-copy-to-accurately-reflect-the-ic-house-based-sync-source-keep-all-user-facing-text-in-english-while-preserving-the-existing-layout-and-behavior-of-presaleprogress-and-latesttransactionspanel",
+      "title": "Update frontend user-facing monitoring copy to accurately reflect the ic.house-based sync source (keep all user-facing text in English) while preserving the existing layout and behavior of PresaleProgress and LatestTransactionsPanel.",
+      "reqIds": [
+        "REQ-71"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-entire-website-s-presale-monitoring-ui-presale-progress-contributors-latest-transactions-continues-to-auto-update-using-the-existing-polling-hooks-and-reflects-the-ic-house-synced-data-from-the-backend-once-req-72-req-73-are-implemented-while-keeping-all-user-facing-ui-text-in-english",
+      "title": "Ensure the entire website’s presale monitoring UI (Presale Progress, Contributors, Latest Transactions) continues to auto-update using the existing polling hooks and reflects the ic.house-synced data from the backend once REQ-72/REQ-73 are implemented, while keeping all user-facing UI text in English.",
+      "reqIds": [
+        "REQ-74"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-preserve-correct-icp-remaining-display-behavior-when-there-are-no-detected-contributions-including-when-sync-fails-and-data-is-unavailable-the-ui-must-display-exactly-515-000-icp-for-icp-remaining-dot-thousands-separator-and-continue-to-display-the-correct-remaining-amount-as-contributions-are-detected-cap-minus-received",
+      "title": "Preserve correct ‘ICP Remaining’ display behavior: when there are no detected contributions (including when sync fails and data is unavailable), the UI must display exactly “515.000 ICP” for ICP Remaining (dot thousands separator) and continue to display the correct remaining amount as contributions are detected (cap minus received).",
+      "reqIds": [
+        "REQ-75"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-frontend-presale-monitoring-ui-to-reflect-the-1-1-ic-house-derived-transactions-list-newest-first-and-keep-it-automatically-refreshed-via-the-existing-react-query-polling-no-manual-refresh-required-keep-all-user-facing-text-in-english",
+      "title": "Update the frontend presale monitoring UI to reflect the 1:1 ic.house-derived transactions list (newest-first) and keep it automatically refreshed via the existing React Query polling (no manual refresh required). Keep all user-facing text in English.",
+      "reqIds": [
+        "REQ-78"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-change-the-frontend-polling-hooks-so-the-initial-page-render-and-subsequent-refreshes-are-not-blocked-by-waiting-for-ic-house-sync-to-finish-the-ui-should-render-immediately-using-the-backend-s-currently-available-cached-stats-contributions-and-or-last-successful-react-query-fallback-while-triggering-ic-house-sync-as-a-background-step-with-a-short-client-side-timeout-and-resilient-error-handling",
+      "title": "Change the frontend polling hooks so the initial page render and subsequent refreshes are not blocked by waiting for ic.house sync to finish. The UI should render immediately using the backend’s currently-available cached stats/contributions (and/or last successful React Query fallback), while triggering ic.house sync as a background step with a short client-side timeout and resilient error handling.",
+      "reqIds": [
+        "REQ-81"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-clear-english-ui-feedback-indicating-when-the-data-is-coming-from-cached-last-known-good-values-due-to-a-sync-slowdown-or-failure-and-show-a-last-successful-sync-timestamp-using-the-backend-provided-timestamp-when-available-reuse-existing-stale-data-indicator-patterns-in-the-presale-monitoring-ui-and-keep-layout-changes-minimal",
+      "title": "Add clear English UI feedback indicating when the data is coming from cached/last-known-good values due to a sync slowdown or failure, and show a ‘last successful sync’ timestamp (using the backend-provided timestamp when available). Reuse existing stale-data indicator patterns in the presale monitoring UI and keep layout changes minimal.",
+      "reqIds": [
+        "REQ-82"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-all-frontend-references-to-the-ic-house-transaction-explorer-with-the-internet-computer-dashboard-account-explorer-url-for-the-presale-deposit-account-https-dashboard-internetcomputer-org-account-d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9",
+      "title": "Replace all frontend references to the ic.house transaction explorer with the Internet Computer Dashboard account explorer URL for the presale deposit account: https://dashboard.internetcomputer.org/account/d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9.",
+      "reqIds": [
+        "REQ-83"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-presale-monitoring-user-facing-copy-that-mentions-ic-house-so-it-accurately-reflects-the-internet-computer-dashboard-as-the-transaction-explorer-while-keeping-all-user-facing-text-in-english-and-preserving-existing-layout-behavior",
+      "title": "Update presale monitoring user-facing copy that mentions ic.house so it accurately reflects the Internet Computer Dashboard as the transaction explorer, while keeping all user-facing text in English and preserving existing layout/behavior.",
+      "reqIds": [
+        "REQ-84"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-any-frontend-error-status-strings-in-hooks-that-explicitly-name-ic-house-e-g-sync-timeout-messages-to-provider-neutral-english-text-so-the-ui-does-not-mention-ic-house-after-the-switch",
+      "title": "Update any frontend error/status strings in hooks that explicitly name ic.house (e.g., sync timeout messages) to provider-neutral English text so the UI does not mention ic.house after the switch.",
+      "reqIds": [
+        "REQ-86"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-presale-monitoring-data-presale-progress-contributors-list-data-source-and-latest-transactions-panel-automatically-refreshes-every-10-seconds-by-using-a-single-shared-polling-interval-constant-and-ensure-the-ui-accurately-reflects-the-10-second-refresh-interval",
+      "title": "Ensure the presale monitoring data (Presale Progress, Contributors list data source, and Latest Transactions panel) automatically refreshes every 10 seconds by using a single shared polling interval constant, and ensure the UI accurately reflects the 10-second refresh interval.",
+      "reqIds": [
+        "REQ-87"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-frontend-hooks-frontend-src-hooks-usepresalestatus-ts-and-frontend-src-hooks-usecontributors-ts-to-call-the-new-backend-methods-instead-of-returning-empty-static-placeholder-data-while-preserving-the-existing-10-second-react-query-polling-behavior-and-ensuring-the-ui-renders-immediately-using-last-known-good-react-query-cache-if-a-sync-attempt-is-slow-or-fails",
+      "title": "Update the frontend hooks (frontend/src/hooks/usePresaleStatus.ts and frontend/src/hooks/useContributors.ts) to call the new backend methods instead of returning empty/static placeholder data, while preserving the existing 10-second React Query polling behavior and ensuring the UI renders immediately using last-known-good React Query cache if a sync attempt is slow or fails.",
+      "reqIds": [
+        "REQ-92"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-all-frontend-references-for-viewing-transactions-use-the-internet-computer-dashboard-account-url-exactly-as-https-dashboard-internetcomputer-org-account-d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9-and-that-the-monitoring-ui-reflects-real-backend-synced-dashboard-data-rather-than-showing-the-awaiting-transaction-sync-placeholder-when-data-exists",
+      "title": "Ensure all frontend references for viewing transactions use the Internet Computer Dashboard account URL exactly as: https://dashboard.internetcomputer.org/account/d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9, and that the monitoring UI reflects real backend-synced Dashboard data rather than showing the 'Awaiting Transaction Sync' placeholder when data exists.",
+      "reqIds": [
+        "REQ-93"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-connect-the-frontend-polling-hooks-to-the-real-backend-methods-so-the-ui-renders-real-presale-stats-and-contributions-instead-of-placeholders-while-preserving-the-existing-10-second-react-query-polling-cadence-and-keeping-all-user-facing-text-in-english",
+      "title": "Connect the frontend polling hooks to the real backend methods so the UI renders real presale stats and contributions instead of placeholders, while preserving the existing 10-second React Query polling cadence and keeping all user-facing text in English.",
+      "reqIds": [
+        "REQ-97"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -454,6 +667,298 @@
       "id": "AR-32",
       "summary": "Implement “Listungen nach dem Presale” (post-presale listings) feature/content on the site",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-33",
+      "summary": "Add visual live monitoring of latest presale transactions on the site (e.g., a 'latest transactions' list similar to the ICP dashboard)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-35",
+      "summary": "Update backend contribution timestamps and ordering to reflect on-chain transaction timestamps/order (not canister time at ingestion), so the “Latest Transactions” panel and contributors ordering are consistent with the dashboard’s newest-first ordering.",
+      "reqIds": [
+        "REQ-45"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-36",
+      "summary": "Make the backend presale contribution source of truth match the public Internet Computer dashboard transaction list for the presale deposit account https://dashboard.internetcomputer.org/account/d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9 by automatically syncing on-chain incoming ICP transfers to the presale deposit address (d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9) and using those transfers to compute presale totals and contribution history.",
+      "reqIds": [
+        "REQ-47"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-37",
+      "summary": "Ensure presale status values returned by the backend (total ICP received, remaining ICP, active/ended state) are derived from the synced on-chain transfer set for the presale deposit address so the displayed presale “current status/stand” matches the dashboard-derived totals.",
+      "reqIds": [
+        "REQ-48"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-38",
+      "summary": "Replace the backend’s simulated presale transaction source with a real on-chain sync for incoming ICP transfers to the presale deposit account d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9, so the canister’s contribution history and totals match the public Internet Computer dashboard transaction list at https://dashboard.internetcomputer.org/account/d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9.",
+      "reqIds": [
+        "REQ-50"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-39",
+      "summary": "Ensure the backend deduplicates and persists synced transactions so repeated refreshes and polling do not create duplicate contributions or inflate totals, even across canister upgrades.",
+      "reqIds": [
+        "REQ-51"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-41",
+      "summary": "Make the backend behavior safe and resilient when the on-chain transaction source is temporarily unavailable so the frontend can continue polling without breaking, and can show a usable English error/stale state with the last known successful data where applicable.",
+      "reqIds": [
+        "REQ-53"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-42",
+      "summary": "Replace the backend’s simulated presale contribution sync with a real on-chain sync that derives incoming ICP deposits from the same data source as the Internet Computer Dashboard transaction_flow view for the presale account URL: https://dashboard.internetcomputer.org/account/d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9/transaction_flow.",
+      "reqIds": [
+        "REQ-54"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-43",
+      "summary": "Ensure backend query methods used by the frontend all derive from the same backend-synced on-chain transaction set and are ordered newest-first by on-chain timestamp so the UI aligns with the dashboard’s newest-first ordering.",
+      "reqIds": [
+        "REQ-55"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-44",
+      "summary": "Update the backend presale transaction sync/mapping so that the canister derives incoming ICP deposits for the presale account from the same on-chain data shown on the Internet Computer Dashboard for https://dashboard.internetcomputer.org/account/d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9, and correctly maps each on-chain deposit into an internal Contribution record (one record per on-chain deposit, not one per address).",
+      "reqIds": [
+        "REQ-57"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-45",
+      "summary": "Refactor backend storage and query methods so all frontend presale monitoring views (Presale progress totals, Latest Transactions panel, and Contributors aggregation) are computed from the same backend-synced on-chain transaction set for the presale account, and returned newest-first with stable deduplication.",
+      "reqIds": [
+        "REQ-58"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-46",
+      "summary": "Add or update a conditional backend state migration so existing deployed canister state can be upgraded safely when changing the contribution storage model from a single record per address to a multi-record contribution history, without breaking queries.",
+      "reqIds": [
+        "REQ-59"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-47",
+      "summary": "Update the presale transaction sync/source-of-truth so the presale website’s contributions data matches the on-chain transaction list for the presale deposit account shown on the public dashboards, including correct transaction ordering and on-chain timestamps (date and time). The synced dataset must include (at minimum) the 4 deposits shown in the uploaded screenshots for accountId d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9, with timestamps matching: 2026/02/12 07:18:53 UTC, 2026/02/12 06:51:53 UTC, 2026/02/12 06:35:08 UTC, 2026/02/12 06:25:01 UTC (newest first).",
+      "reqIds": [
+        "REQ-61"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-49",
+      "summary": "Implement reliable backend syncing of incoming ICP transfers for the presale deposit accountId d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9 using the same underlying dataset as the Internet Computer Dashboard transaction_flow view (https://dashboard.internetcomputer.org/account/d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9/transaction_flow), and persist the synced deposits so repeated polling does not create duplicates (including across canister upgrades).",
+      "reqIds": [
+        "REQ-65"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-50",
+      "summary": "Ensure the backend-synced dataset includes (at minimum) the 4 deposits shown in the uploaded screenshots for accountId d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9, ordered newest-first, with on-chain UTC timestamps matching: 2026/02/12 07:18:53 UTC, 2026/02/12 06:51:53 UTC, 2026/02/12 06:35:08 UTC, 2026/02/12 06:25:01 UTC.",
+      "reqIds": [
+        "REQ-66"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-51",
+      "summary": "Align backend query methods used by the frontend (presale status and contributions/contributors) so Presale Progress, Latest Transactions, and Contributors all derive from the same backend-synced on-chain transaction set for the deposit account, and the computed totals (total ICP received, remaining ICP, active/ended state) match that dataset consistently.",
+      "reqIds": [
+        "REQ-67"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-52",
+      "summary": "Automate presale transaction syncing using the ic.house transaction history for the presale deposit wallet (d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9) as the data source",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-53",
+      "summary": "Update the backend on-chain sync source so that presale deposits are fetched from the ic.house transaction history page for the presale deposit account, and the fetched transactions are mapped into the backend’s Contribution records (one record per on-chain deposit), deduplicated, persisted, and ordered newest-first.",
+      "reqIds": [
+        "REQ-69"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-54",
+      "summary": "Ensure backend query methods used by the existing frontend polling hooks (getPresaleStats and getAllContributions) derive totals and transaction lists from the same ic.house-synced Contribution dataset, and automatically keep that dataset fresh during polling without requiring any manual submission.",
+      "reqIds": [
+        "REQ-70"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-55",
+      "summary": "Implement real parsing and mapping of the ic.house transaction history into backend Contribution records so the presale canister returns actual deposits for the presale accountId d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9 (source link: https://ic.house/ICP/address/d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9). The backend must fetch from the existing ic.house API base URL (https://api.ichouse.app/transactions?address=...) and populate Contribution { fromAddress, amount, timestamp } from the response so the returned list is non-empty when the account has deposits.",
+      "reqIds": [
+        "REQ-72"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-56",
+      "summary": "Make backend transaction syncing resilient and deduplicated so repeated polling does not create duplicates or inflate totals. fetchAndPersistUpdatedContributions must return a stable, deduplicated newest-first contribution list derived from the ic.house transaction set for the deposit address d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9, and it must remain usable even when ic.house is temporarily unavailable (return last known good data or an empty list without trapping).",
+      "reqIds": [
+        "REQ-73"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-57",
+      "summary": "Mirror ic.house transaction history 1:1 in the presale site (same fields/ordering as the ic.house page for the deposit address) and keep it automatically updated",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-58",
+      "summary": "Implement real ic.house transaction syncing in the backend so the canister mirrors the transaction list for accountId \"d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9\" (source: https://ic.house/ICP/address/d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9) by fetching from the existing API base URL \"https://api.ichouse.app/transactions?address=\" and parsing the response into persisted Contribution records.",
+      "reqIds": [
+        "REQ-76"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-59",
+      "summary": "Update backend storage so it can persist multiple individual contributions per sender (do not overwrite contributions by using fromAddress as the unique key), and add conditional state migration support if changing the persisted data model requires it.",
+      "reqIds": [
+        "REQ-77"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-60",
+      "summary": "Improve ic.house sync performance so the site doesn’t load slowly: add shorter timeouts, cache last-known-good data, and fast fallback so UI renders immediately even if ic.house is slow/unavailable",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-61",
+      "summary": "Update the backend ic.house sync flow so slow/unavailable ic.house responses do not block or trap backend calls. Add a strict timeout for the outbound ic.house HTTP request, and when the timeout is hit (or any fetch/parse error occurs), return the last-known-good persisted contribution dataset (or an empty list if none exists) instead of failing.",
+      "reqIds": [
+        "REQ-79"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-62",
+      "summary": "Implement backend-side caching metadata for sync health: record the timestamp of the last successful ic.house sync attempt and expose it to the frontend via existing stats or an additional lightweight query method, so the UI can indicate when displayed data may be stale without waiting for a fresh sync.",
+      "reqIds": [
+        "REQ-80"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-63",
+      "summary": "Switch presale transaction history/explorer source from ic.house to the Internet Computer Dashboard explorer/transaction data for displaying and syncing transaction histories",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-66",
+      "summary": "Stop using the ic.house API as the backend sync source and instead sync presale deposits using the Internet Computer Dashboard transaction dataset for the same presale account, so backend caching/sync health and all frontend polling hooks can operate without relying on ic.house.",
+      "reqIds": [
+        "REQ-85"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-67",
+      "summary": "Set presale transactions auto-refresh interval to every 10 seconds",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-68",
+      "summary": "Implement backend syncing of incoming ICP deposits for accountId \"d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9\" by fetching and parsing the Internet Computer Dashboard transaction dataset for that account (use the same dataset as the Dashboard \"transaction_flow\" view), and persist the resulting per-transaction Contribution records (one record per on-chain deposit).",
+      "reqIds": [
+        "REQ-88"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-69",
+      "summary": "Deduplicate synced on-chain deposits in the backend so repeated polling does not create duplicates or inflate totals, including across canister upgrades.",
+      "reqIds": [
+        "REQ-89"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-70",
+      "summary": "Expose backend query methods used by the frontend so Presale Progress, Contributors, and Latest Transactions all derive from the same backend-synced dataset for the presale deposit account: (1) a presale stats method returning totalICP, remainingICP (cap minus received, floored at 0), contributorCount, active, and (2) a contributions method returning the newest-first list of individual Contribution records including fromAddress, amount (e8s), timestamp (nanoseconds), and a stable transactionId.",
+      "reqIds": [
+        "REQ-90"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-71",
+      "summary": "Add backend sync health metadata suitable for the existing frontend stale/cached UI patterns: record last successful sync time, last sync attempt time, and last sync error (all user-facing text must remain in English on the frontend; backend may return raw technical strings).",
+      "reqIds": [
+        "REQ-91"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-72",
+      "summary": "Implement real backend presale monitoring APIs (replacing placeholders) so the canister can sync and serve on-chain incoming ICP deposits for the presale deposit accountId exactly \"d1850dd067fb2302bd635b0de944dcb52530490348ef1b6210bd4bdb490f0fe9\" and compute presale stats from that same dataset.",
+      "reqIds": [
+        "REQ-94"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-73",
+      "summary": "Persist and deduplicate the synced contribution dataset in stable canister state, and add a conditional upgrade migration only if required by the new persisted schema.",
+      "reqIds": [
+        "REQ-95"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-74",
+      "summary": "Update backend health reporting to support the existing frontend stale/cached UI patterns: return real values for lastSuccessfulSync, lastSyncAttempt, and syncError that reflect the actual presale transaction sync process (do not mention ic.house in user-facing strings).",
+      "reqIds": [
+        "REQ-96"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-76",
+      "summary": "Ensure the presale monitoring UI no longer shows the 'Awaiting Transaction Sync' placeholder when real backend-synced transactions exist for the deposit account, and that Presale Progress, Latest Transactions, and Contributors stay consistent because they all derive from the same backend-synced contribution dataset.",
+      "reqIds": [
+        "REQ-98"
+      ],
       "status": "pending"
     }
   ],

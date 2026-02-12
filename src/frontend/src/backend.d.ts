@@ -7,25 +7,31 @@ export interface None {
     __kind__: "None";
 }
 export type Option<T> = Some<T> | None;
-export interface Contribution {
-    address: string;
-    timestamp: Time;
-    amount: bigint;
+export interface TransformationInput {
+    context: Uint8Array;
+    response: http_request_result;
 }
-export interface Allocation {
-    address: string;
-    amount: bigint;
+export interface SyncHealth {
+    lastSyncAttempt?: string;
+    syncError?: string;
+    lastSuccessfulSync?: string;
 }
-export type Time = bigint;
+export interface TransformationOutput {
+    status: bigint;
+    body: Uint8Array;
+    headers: Array<http_header>;
+}
+export interface http_header {
+    value: string;
+    name: string;
+}
+export interface http_request_result {
+    status: bigint;
+    body: Uint8Array;
+    headers: Array<http_header>;
+}
 export interface backendInterface {
-    getAllContributionsForAddress(address: string): Promise<Array<Contribution>>;
-    getAllContributors(): Promise<Array<Contribution>>;
-    getPresaleStatus(): Promise<{
-        active: boolean;
-        depositAddress: string;
-        totalIcp: bigint;
-        remainingIcp: bigint;
-    }>;
-    getTotalAllocation(address: string): Promise<Allocation>;
-    updatePresaleProgress(newAmount: bigint, contributor: string, depositAddress: string): Promise<void>;
+    getHealth(): Promise<SyncHealth>;
+    transform(input: TransformationInput): Promise<TransformationOutput>;
 }
+
